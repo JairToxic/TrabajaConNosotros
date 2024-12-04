@@ -1,0 +1,116 @@
+{
+    "persona": {
+      "id": "12345",
+      "imagen1": "https://w7.pngwing.com/pngs/613/636/png-transparent-computer-icons-user-profile-male-avatar-avatar-heroes-logo-black-thumbnail.png",
+      "cumpleaños": "1995-08-15",
+      "direccion": "Quito, Ecuador",
+      "Nacionalidad": "Ecuatoriana",
+      "estadoCivil": "Soltera",
+      "numeroTelefono": "0983742552",
+      "Correo": "estefaniabedon@hotmail.com",
+      "EducacionColegio": [
+        {
+          "AñoFin": "2012",
+          "AñoInicio": "2005",
+          "Lugar": "Madrid, España",
+          "NombreCategoria": "Primaria",
+          "NombreInstitucion": "Colegio la Milagrosa"
+        },
+        {
+          "AñoFin": "2020",
+          "AñoInicio": "2012",
+          "Lugar": "Quito, Ecuador",
+          "NombreCategoria": "Secundaria",
+          "NombreInstitucion": "Colegio la Providencia"
+        }
+      ],
+      "EducacionDespues18": [
+        {
+          "AñoFin": "Actualidad",
+          "AñoInicio": "2020",
+          "Carrera": "Ing. en Computación",
+          "Lugar": "Quito, Ecuador",
+          "NombreCategoria": "Universidad",
+          "NombreInstitucion": "Escuela Politécnica Nacional"
+        }
+      ],
+      "NombreCategoria": "Desarrollo Web",
+      "ListaCertificaciones": [
+        {
+          "NombreCategoria": "Certificado de Aplicaciones Web",
+          "NombreInstitucion": "Escuela Politécnica Nacional"
+        },
+        {
+          "NombreCategoria": "Certificado de CCNAv7: Switching, Routing and Wireless Essentials",
+          "NombreInstitucion": "Cisco"
+        }
+      ],
+      "Expereincai": [
+        {
+          "NombreEmpresa": "Banco",
+          "FechaTrabajo": "Abril 2024 - Agosto 2024",
+          "CargoEmpresa": "Desarrollador Full-Stack",
+          "DescripcionEmpresa": [
+            "Desarrollo y diseño web.",
+            "Implementación de seguridad y verificación de usuarios.",
+            "Integración de APIS externas.",
+            "Pruebas unitarias y despliegue."
+          ]
+        },
+        {
+          "NombreEmpresa": "Tienda Your Store",
+          "FechaTrabajo": "Septiembre 2024 - Actualidad",
+          "CargoEmpresa": "Desarrollador Full-Stack",
+          "DescripcionEmpresa": [
+            "Desarrollo y diseño web.",
+            "Implementación de seguridad y verificación de usuarios.",
+            "Pruebas unitarias y despliegue."
+          ]
+        },
+        {
+          "NombreEmpresa": "Tech Solutions",
+          "FechaTrabajo": "Enero 2025 - Actualidad",
+          "CargoEmpresa": "Desarrollador Front-End",
+          "DescripcionEmpresa": [
+            "Diseño de interfaces de usuario.",
+            "Optimización de la experiencia del usuario.",
+            "Implementación de nuevas funcionalidades.",
+            "Mantenimiento de aplicaciones web."
+          ]
+        }
+      ],
+      "Lenguajes": [
+        {
+          "Lenguaje": "Español",
+          "Porcentaje": "Nativo"
+        },
+        {
+          "Lenguaje": "Inglés",
+          "Porcentaje": "B2"
+        },
+        {
+          "Lenguaje": "Francés",
+          "Porcentaje": "A2"
+        }
+      ],
+      "Proyectos": [
+        {
+          "Name": "Plataforma Web E-commerce",
+          "Customer": "Tienda Your Store",
+          "Role": "Desarrollador Full-Stack",
+          "Year": "2024",
+          "Type": "Desarrollo Web",
+          "Partner": "Equipo de Desarrollo Interno"
+        },
+        {
+          "Name": "Aplicación Móvil",
+          "Customer": "Startup Innovadora",
+          "Role": "Desarrollador Front-End",
+          "Year": "2025",
+          "Type": "Aplicación Móvil",
+          "Partner": "Equipo de Diseño"
+        }
+      ]
+    }
+  }
+  

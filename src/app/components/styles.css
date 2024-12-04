@@ -1,0 +1,136 @@
+/* Estilo general */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fb;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Contenedor del formulario */
+  .form-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #21498E;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para los títulos de cada sección */
+  h2 {
+    color: #21498E;
+    font-size: 22px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #21498E;
+    padding-bottom: 6px;
+    margin-top: 20px;
+  }
+  
+  /* Estilo para las secciones del formulario */
+  .form-section {
+    margin-bottom: 30px;
+  }
+  
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #555;
+  }
+  
+  input,
+  select,
+  textarea {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  input[type="date"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="url"],
+  input[type="text"],
+  select,
+  textarea {
+    background-color: #f9f9f9;
+  }
+  
+  input[type="date"]:focus,
+  input[type="tel"]:focus,
+  input[type="email"]:focus,
+  input[type="url"]:focus,
+  input[type="text"]:focus,
+  select:focus,
+  textarea:focus {
+    border-color: #21498E;
+    outline: none;
+    background-color: #fff;
+  }
+  
+  button {
+    padding: 12px 20px;
+    background-color: #21498E;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #173d6e;
+  }
+  
+  /* Estilo para las secciones de Educación, Experiencia y Certificaciones */
+  input[type="text"]:not([type="url"]),
+  input[type="number"] {
+    width: calc(50% - 10px);
+    display: inline-block;
+    margin-right: 20px;
+  }
+  
+  textarea {
+    width: 100%;
+    height: 100px;
+    resize: none;
+  }
+  
+  input[type="text"]:not([type="url"]) + input[type="number"],
+  input[type="number"]:not(:last-child) {
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .form-section {
+      margin-bottom: 15px;
+    }
+  
+    .form-container {
+      padding: 20px;
+      width: 90%;
+    }
+  
+    input[type="text"]:not([type="url"]),
+    input[type="number"] {
+      width: 100%;
+      margin-right: 0;
+    }
+  
+    textarea {
+      width: 100%;
+    }
+  }
+  

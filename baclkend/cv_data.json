@@ -1,0 +1,31 @@
+{
+    "NAME": "NAME",
+    "PHOTO": null,
+    "GOVERNMENT_ID": null,
+    "DATE_OF_BIRTH": null,
+    "ADDRESS": null,
+    "NATIONALITY": null,
+    "CIVIL_STATUS": null,
+    "PHONE_NUMBER": [
+        "1754516092",
+        "+593 987297703"
+    ],
+    "MAIL": [
+        "jsanchez@inovacorporation.com"
+    ],
+    "FURTHER_EDUCATION": [],
+    "IN_PROGRESS_EDUCATION": [],
+    "CERTIFICATIONS_COURSES_SEMINARS": [
+        "CERTIFICATIONS, COURSES, SEMINARS: • Microsoft Security, Compliance, and Identity Fundamentals SC-900 • Designing and Implementing a Microsoft Azure AI Solution AI-102 • Designing and Implementing a Data Science Solution on Azure DP-100 • Implementing Analytics Solutions Using Microsoft Fabric MICROSOFT DP600 • Designing and Implementing Cloud-Native Applications Using Microsoft Azure Cosmos DB DP-420 • Data Engineering on Microsoft Azure DP-203 • Developing Solutions for Microsoft Azure AZ-204 • Designing and Implementing Microsoft DevOps Solution AZ-400 EC-Council • Fundamentos de defensa de red (NDE) v1 • Certificado de Industria 4.0 y Nuevas Tendencias Tecnológicas Udemy • Ciberseguridad - CompTIA Security • Curso de Criptografía: Teoríco y Práctico Escuela Politécnica Nacional • Certificado de Inclusión Digital • Certificado de CCNAv7: Switching, Routing andWireless CISCO EssentialsPROFESSIONAL EXPERIENCE"
+    ],
+    "PROFESSIONAL_EXPERIENCE": [
+        "PROFESSIONAL EXPERIENCE CONSULTINGNOVA CIA. LTDA. – QUITO, EC April 2024 – October 2024 Artificial Intelligence Intern • Conducted research and development of AI models. Microsoft Licensing and Solutions Provider (LSP) • Focused on software development and automation using and Cloud Solutions Provider with a focus in small AI technologies. and medium-sized customers. Located in Quito and • Developed web applications, including the company’s Guayaquil, Inova Solutions offers a variety of intranet system. Microsoft-related products and services. • Worked on key projects, such as People Connect, improving internal and client-facing processes. Provided training and technical support to teams on AI implementations and tools. Smart Lab – National Polytechnic School (EPN) – Quito, EC Neural Networks Project July 2023 – November 2023 • Led an artificial intelligence project focused on the development and implementation of neural networks. • Conducted initial research to define project objectives and methodologies. • Designed the architecture of the neural network, The Smart Lab is an artificial intelligence laboratory optimizing parameters to enhance performance. at the National Polytechnic School, dedicated to the • Implemented the model using advanced tools and research and development of innovative solutions technologies, ensuring its functionality and effectiveness. in the field of AI. The laboratory focuses on creating • Conducted extensive testing to validate the model, making and applying advanced technologies, such as neural adjustments based on the results obtained. networks, machine learning, and data processing. • Coordinated and collaborated with a multidisciplinary team, facilitating the exchange of ideas and knowledge. • Presented the project's results and findings to the academic community, highlighting its potential impact on various applications. • Documented the development process and created manuals for future implementation and use. National Polytechnic School – Quito, EC LudoLab Laboratory – Digital Inclusion Project The LudoLab Laboratory, part of EPN, specializes in April 2023 – September 2023 training individuals through digital inclusion and • Trained senior citizens in the use of computers, promoting educational projects. Our goal is to empower digital inclusion. various community groups, especially senior • Planned and designed customized lessons tailored to citizens, by providing them with tools and participants' needs. knowledge that enable them to integrate into the • Organized a variety of interactive educational activities to digital world. Through our initiatives, we aim to reinforce learning. create a positive impact on society by promoting learning and access to technology.• Coordinated and led key events, such as the graduation ceremony. • Ensured that the digital inclusion goals were met, facilitating access to technology for older adults. • Monitored participants' progress and adjusted educational content based on their development. Technology Sales Advisor APP Soluciones January 2022 - July 2022 Metropolitan District of Quito, Pichincha, Ecuador • Expert Advice: Provided detailed guidance on a wide range of technology products, helping customers make informed APP Soluciones is a company located in the decisions based on their specific needs and preferences. Metropolitan District of Quito, Ecuador, specializing • Customer Service: Delivered exceptional service, ensuring in providing comprehensive technology solutions. that each customer received personalized assistance, Its focus is on delivering high-quality products and addressing inquiries, and guaranteeing a positive shopping services in the field of technology, including experience at all times. hardware, software, and technical support services. • Basic Technical Support: Offered basic technical assistance to customers, helping them with initial device setup, software installation, and troubleshooting minor issues to strengthen customer relationships. LANGUAGES"
+    ],
+    "LANGUAGES": [
+        {
+            "language": "ENGLISH",
+            "proficiency": "65%"
+        }
+    ],
+    "RELEVANT_PROJECTS": []
+}

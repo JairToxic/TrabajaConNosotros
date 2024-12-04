@@ -1,0 +1,111 @@
+Jair Sànchez
+AI Developer
+Work experience
+Asesor Comercial de Tecnología Enero2022-Julio2022
+APP Soluciones
+# • Asesoramiento experto: Proporcioné orientación detallada sobre una
+alexis151270sanchez@gmail.com ampliagamadeproductostecnológicos,ayudandoalosclientesatomar
+decisiones informadas basadas en sus necesidades específicas y pre-
+fencias.
+I +593 987297703
+• Atención al cliente: Ofrecí un servicio excepcional, garantizando que
++ Ecuador,Quito cada cliente recibiera asistencia personalizada, resolviendo consultas
+yasegurandounaexperienciadecomprapositivaentodomomento
+(cid:239) J.Sanchez
+• Soporte técnico básico: Brindé asistencia técnica básica a los clientes,
+§ JairToxic ayudándolosconlaconfiguracióninicialdedispositivos,lainstalaciónde
+softwareylaresolucióndeproblemasmenoresparafortalecerlarelación
+conelcliente.
+Spanish Native
+English B2 Pintura Electrostática Enero2023-Julio2023
+CerrAlumVid
+• Manejoadecuadodeequiposymateriales
+• Contribuíalcumplimientodelosestándaresdeproducciónyaseguréla
+eficienciaenelflujodetrabajo.
+• Apoyar en el proceso de preparación y aplicación de pintura en piezas
+metálicasmedianteelmétododepinturaelectrostática
+ProyectodeReconocimientoFacialcon
+Julio2023-Nov2023
+Redes Neuronales Convolucionales
+Escuala Politecnica Nacional
+• Recopilaciónypreparacióndedatos.
+• Diseñoyconfiguracióndelaredneuronalconvolucional.
+• Entrenamientodelmodeloyajustedehiperparámetros.
+• Evaluacióndelrendimientoymejoradelmodelo.
+Proyecto Web de Hotel con PHP, SQL y
+Nov2023-Feb2024
+APIs
+Escuala Politecnica Nacional
+• Desarrolloydiseñoweb.
+• Implementacióndefuncionalidadesdinámicas.
+• IntegracióndeAPIsexternas.
+• Pruebasydesplieguedelsitio.Desarrollador de IA Abril2024-Actualmente
+Inova Solutions
+• Investigación y Desarrollo: Lidero proyectos de investigación y desarrollo de aplicaciones con inteligencia ar-
+tificial generativa, explorando y aplicando nuevas ideas para soluciones tecnológicas innovadoras con Azure y
+Copilot.
+• AsesoramientoExperto: Proporcioné orientacióndetalladasobreunaampliagamadeproductostecnológicos,
+ayudandoalosclientesatomardecisionesinformadasbasadasensusnecesidadesespecíficasypreferencias.
+• AtenciónalCliente: Ofrecíunservicioexcepcional,garantizandoquecadaclienterecibieraasistenciapersonal-
+izada,resolviendoconsultasyasegurandounaexperienciadecomprapositivaentodomomento.
+• SoporteTécnicoBásico: Brindéasistenciatécnicabásicaalosclientes,ayudándolosconlaconfiguracióninicial
+dedispositivos,lainstalacióndesoftwareylaresolucióndeproblemasmenores,fortaleciendoasílarelacióncon
+elcliente.
+• BúsquedadeOportunidadesdeNegocio:Identificoyevalúonuevasoportunidadesdenegocioycolaboraciones
+estratégicasparalaimplementacióndesolucionesdeinteligenciaartificial.
+Education
+• Bachillerato en Ciencias
+Sep 2011 - Jul 2020
+Julio Tobar Donoso
+• Ingeniería en Ciencias de la Computación
+Sep 2020 - actual
+Escuela Politécnica Nacional
+Certifications
+Microsoft Certified: Azure Data Engineer Associate 9ago2024
+Microsoft
+Microsoft Certified: Azure Cosmos DB Developer Specialty 22julio2024
+Microsoft
+Microsoft Certified: Azure Data Scientist Associate 1julio2024
+Microsoft
+Microsoft Certified: Azure Cosmos DB Developer Specialty 19julio2024
+Microsoft
+Fundamentos de defensa de red (NDE) v1 22Junio2024
+EC-Council
+Copilot for M365 Technical Champion 19Junio2024
+Microsoft
+Microsoft Certified: Azure AI Engineer Associate 17Junio2024
+Microsoft
+Microsoft Certified: Security, Compliance, and Identity Fun-
+17Mayo2024
+damentals
+Microsoft
+Certificado de Industria 4.0 y Nuevas Tendencias Tecnologi-
+14Feb2024
+cas
+UdemyCertificado de Inclusión Digital 08sep2023
+Escuela Politécnica Nacional
+Inclusióndepersonasmayoresalmundodigital
+CertificadodeCCNAv7: Switching,RoutingandWirelessEs-
+27mar2023
+sentials
+CISCO
+Skills
+Desarrollo Web
+Front-END
+Experiencia en HTML, CSS, Bootstrap y JavaScript, con capacidad para crear sitios
+webatractivosyfuncionales.
+Backend
+Experiencia sólida en el desarrollo de aplicaciones web utilizando PHP y MySQL, in-
+cluyendolacreaciónyadministracióndebasesdedatos,asícomolaimplementación
+delógicadelladodelservidorparagarantizarelfuncionamientocorrectoysegurode
+lasaplicacionesweb.
+Comunicación efectiva
+Creatividad
+Competencia en herramientas tecnológicas
+Software
+PHP Python (Jupyter)
+JS
+Microsoft Office
+CSS HTML
+CopilotStudio Azure
+PowerApps IAGenerativa
