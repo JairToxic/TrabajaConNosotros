@@ -1,129 +1,248 @@
 'use client';
 
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import './CurriculumVitae.css';
 
 const CurriculumVitae = () => {
-  return (
-    <div className="cv-container">
-      {/* Encabezado con fondo de imagen */}
-      <div className="header">
-        <h1>Datos de Curriculum Vitae</h1>
-      </div>
+  const [personalInfo, setPersonalInfo] = useState({});
+  const [bachillerato, setBachillerato] = useState([]);
+  const [educacionSuperior, setEducacionSuperior] = useState([]);
+  const [certificaciones, setCertificaciones] = useState([]);
+  const [experienciaLaboral, setExperienciaLaboral] = useState([]);
+  const [proyectosRelevantes, setProyectosRelevantes] = useState([]);
+  const [idiomas, setIdiomas] = useState([]);
+  
+  // Obtener los datos del CV por id desde el backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/cvs/cv123456');  // Cambia la URL por la correcta
+        const data = await response.json()
 
-      {/* Sección de Datos Personales */}
-      <div className="section">
+        if (response.ok) {
+          setPersonalInfo(data.personalInfo);
+          setBachillerato(data.educacion.bachillerato);
+          setEducacionSuperior(data.educacion.educacionSuperior);
+          setCertificaciones(data.certificaciones);
+          setExperienciaLaboral(data.experienciaLaboral);
+          setProyectosRelevantes(data.proyectosRelevantes);
+          setIdiomas(data.idiomas);
+        } else {
+          console.error('Error al obtener los datos', data.error);
+        }
+      } catch (error) {
+        console.error('Error al conectar con el servidor', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange = (setter, index, field, value) => {
+    const updatedArray = [...setter];
+    updatedArray[index][field] = value;
+    setter(updatedArray);
+  };
+
+  const handleAdd = (setter, defaultObject) => setter((prev) => [...prev, defaultObject]);
+
+  const handleRemove = (setter, index) => {
+    setter((prev) => (prev.length > 1 ? prev.filter((_, i) => i !== index) : prev));
+  };
+
+  return (
+    <div className="form-container">
+      <h1 className="form-title">Datos de Curriculum Vitae</h1>
+
+      <div className="section personal-section">
         <h2 className="section-title">Datos Personales:</h2>
         <div className="personal-info">
           <div className="form-grid">
-            <InputField label="Nombre" value="Juan José" />
-            <InputField label="Apellido" value="Perez" />
-            <InputField label="Día de nacimiento" value="09/09/1999" />
-            <InputField label="Cédula" value="173456789" />
-            <InputField label="Nacionalidad" value="Ecuatoriana" />
-            <InputField label="Estado Civil" value="Casado" />
-            <InputField label="Teléfono" value="0957213456" />
-            <InputField label="Correo" value="jose@gmail.com" />
-            <InputField label="Dirección" value="Juan José" />
+            {Object.entries(personalInfo).map(([key, value]) => (
+              <InputField
+                key={key}
+                label={key.replace(/([A-Z])/g, ' $1').toUpperCase()}
+                value={value}
+                onChange={(e) => setPersonalInfo({ ...personalInfo, [key]: e.target.value })}
+              />
+            ))}
           </div>
           <div className="photo-section">
-            <Image src="/perfil.png" alt="Foto" width={250} height={250} className="profile-photo" />
-            <button>Cambiar Foto</button>
+            <Image src="/perfil.png" alt="Foto" width={180} height={180} className="profile-photo" />
+            <button className="blue-button">Cambiar Foto</button>
           </div>
         </div>
       </div>
 
-      {/* Estilos */}
-      <style jsx>{`
-        .cv-container {
-          background-color: #ffffff;
-          padding: 20px;
-        }
+      {[{
+        title: 'Educación',
+        items: bachillerato,
+        setter: setBachillerato,
+        defaultObject: { grado: '', institucion: '' },
+      },
+      {
+        title: 'Educación Superior',
+        items: educacionSuperior,
+        setter: setEducacionSuperior,
+        defaultObject: { grado: '', institucion: '' },
+      },
+      {
+        title: 'Certificaciones o Cursos',
+        items: certificaciones,
+        setter: setCertificaciones,
+        defaultObject: { curso: '', entidad: '' },
+      }].map((section, index) => (
+        <div className="section" key={index}>
+          <h2 className="section-title">{section.title}:</h2>
+          {section.items.map((entry, idx) => (
+            <div className="form-row" key={idx}>
+              {Object.entries(entry).map(([field, value]) => (
+                <InputField
+                  key={field}
+                  label={field}
+                  value={value}
+                  onChange={(e) => handleChange(section.items, idx, field, e.target.value)}
+                />
+              ))}
+              <div className="button-group">
+                {idx > 0 && (
+                  <button className="remove-button" onClick={() => handleRemove(section.setter, idx)}>
+                    -
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+          <button className="add-button" onClick={() => handleAdd(section.setter, section.defaultObject)}>
+            +
+          </button>
+        </div>
+      ))}
 
-        .header {
-          background: url('/fondo.png') no-repeat center center;
-          background-size: cover;
-          padding: 40px;
-          text-align: center;
-          color: white;
-        }
+      <div className="section">
+        <h2 className="section-title">Experiencia Laboral:</h2>
+        {experienciaLaboral.map((entry, index) => (
+          <div className="experience-section" key={index}>
+            <div className="form-row">
+              {Object.entries(entry).map(([field, value]) => (
+                field !== 'actividades' && (
+                  <InputField
+                    key={field}
+                    label={field}
+                    value={value}
+                    onChange={(e) => handleChange(experienciaLaboral, index, field, e.target.value)}
+                  />
+                )
+              ))}
+            </div>
+            {entry.actividades.map((actividad, i) => (
+              <InputField
+                key={i}
+                label={`Actividad ${i + 1}`}
+                value={actividad}
+                onChange={(e) => {
+                  const updatedActivities = [...entry.actividades];
+                  updatedActivities[i] = e.target.value;
+                  handleChange(experienciaLaboral, index, 'actividades', updatedActivities);
+                }}
+              />
+            ))}
+            <div className="button-group">
+              {index > 0 && (
+                <button className="remove-button" onClick={() => handleRemove(setExperienciaLaboral, index)}>
+                  -
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+        <button className="add-button" onClick={() => handleAdd(setExperienciaLaboral, {
+          empresa: '',
+          lugar: '',
+          fechaInicio: '',
+          fechaFin: '',
+          cargo: '',
+          descripcionEmpresa: '',
+          actividades: ['', '', ''],
+        })}>
+          +
+        </button>
+      </div>
 
-        h1 {
-          font-size: 28px;
-          margin: 0;
-        }
+      <div className="section">
+        <h2 className="section-title">Proyectos Relevantes:</h2>
+        {proyectosRelevantes.map((entry, index) => (
+          <div className="project-section" key={index}>
+            <h3 className="project-title">Proyecto {index + 1}</h3>
+            <div className="form-row">
+              {Object.entries(entry).map(([field, value]) => (
+                <InputField
+                  key={field}
+                  label={field}
+                  value={value}
+                  onChange={(e) => handleChange(proyectosRelevantes, index, field, e.target.value)}
+                />
+              ))}
+            </div>
+            <div className="button-group">
+              {index > 0 && (
+                <button className="remove-button" onClick={() => handleRemove(setProyectosRelevantes, index)}>
+                  -
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+        <button className="add-button" onClick={() => handleAdd(setProyectosRelevantes, {
+          proyecto: '',
+          cliente: '',
+          rol: '',
+          ano: '',
+          partner: '',
+          descripcion: '',
+        })}>
+          +
+        </button>
+      </div>
 
-        .section-title {
-          color: black;
-          font-size: 24px;
-          margin-bottom: 20px;
-          font-weight: bold;
-        }
-
-        .section {
-          margin: 20px 0;
-        }
-
-        .personal-info {
-          display: flex;
-          justify-content: space-between;
-        }
-
-        .form-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 15px;
-          width: 65%;
-          color:black;
-        }
-
-        .photo-section {
-          width: 30%;
-          text-align: center;
-        }
-
-        .profile-photo {
-          width: 100%;
-          height: auto;
-          border-radius: 10px;
-        }
-
-        button {
-          background-color: #397fc7;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          margin-top: 10px;
-        }
-
-        .input-group label {
-          color: black;
-          font-weight: bold;
-        }
-      `}</style>
+      <div className="section">
+        <h2 className="section-title">Idiomas:</h2>
+        {idiomas.map((entry, index) => (
+          <div className="language-section" key={index}>
+            <div className="form-row">
+              <InputField
+                label="Idioma"
+                value={entry.idioma}
+                onChange={(e) => handleChange(idiomas, index, 'idioma', e.target.value)}
+              />
+              <InputField
+                label="Porcentaje de fluidez"
+                value={entry.fluidez}
+                onChange={(e) => handleChange(idiomas, index, 'fluidez', e.target.value)}
+              />
+            </div>
+            <div className="button-group">
+              {index > 0 && (
+                <button className="remove-button" onClick={() => handleRemove(setIdiomas, index)}>
+                  -
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+        <button className="add-button" onClick={() => handleAdd(setIdiomas, { idioma: '', fluidez: '' })}>
+          +
+        </button>
+      </div>
     </div>
   );
 };
 
-// Componente reutilizable para los campos de entrada
-const InputField = ({ label, value }) => (
+const InputField = ({ label, value, onChange }) => (
   <div className="input-group">
     <label>{label}:</label>
-    <input type="text" value={value} readOnly />
-    <style jsx>{`
-      .input-group {
-        display: flex;
-        flex-direction: column;
-      }
-
-      input {
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f3f3f3;
-      }
-    `}</style>
+    <input type="text" value={value} onChange={onChange} />
   </div>
 );
 
