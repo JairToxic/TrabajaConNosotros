@@ -1,151 +1,106 @@
 {
-    "cvs": [
+  "cvs": [
       {
-        "id": "cv123456",
-        "personalInfo": {
-          "nombre": "Juan José patricio",
-          "apellido": "Perez",
-          "nacimiento": "09/09/1999",
-          "cedula": "173456789",
-          "nacionalidad": "Ecuatoriana",
-          "estadoCivil": "Casado",
-          "telefono": "0957213456",
-          "correo": "jose@gmail.com",
-          "direccion": "Juan José"
-        },
-        "educacion": {
-          "bachillerato": [
-            {
-              "grado": "Bachillerato en ciencias",
-              "institucion": "Colegio Mariana de Jesús",
-              "ano": "2016"
-            },  {
-                "grado": "Bachillerato en domenica",
-                "institucion": "Colegio Mariana de Jesús",
-                "ano": "2016"
+          "certificaciones": [
+              {
+                  "ano": "",
+                  "curso": "Aplicaciones Web",
+                  "entidad": "Escuela Politécnica Nacional"
+              },
+              {
+                  "ano": "",
+                  "curso": "CCNAv7: Switching, Routing and Wireless Essentials",
+                  "entidad": "Cisco"
               }
           ],
-          "educacionSuperior": [
-            {
-              "grado": "Ingeniería en Computación",
-              "institucion": "Escuela Politécnica Nacional",
-              "anoInicio": "2019",
-              "anoFin": "2023"
-            }
-          ]
-        },
-        "certificaciones": [
-          {
-            "curso": "Curso de React",
-            "entidad": "Platzi",
-            "ano": "2022"
-          }
-        ],
-        "experienciaLaboral": [
-          {
-            "empresa": "Empresa Ejemplo",
-            "lugar": "Ciudad Ejemplo",
-            "fechaInicio": "01/01/2020",
-            "fechaFin": "01/01/2022",
-            "cargo": "Desarrollador",
-            "descripcionEmpresa": "Empresa dedicada a la tecnología.",
-            "actividades": [
-              "Desarrollo de software.",
-              "Mantenimiento de aplicaciones.",
-              "Gestión de proyectos."
-            ]
-          }
-        ],
-        "proyectosRelevantes": [
-          {
-            "proyecto": "Desarrollo de Plataforma E-commerce",
-            "cliente": "Cliente X",
-            "rol": "Desarrollador Backend",
-            "ano": "2023",
-            "partner": "Partner Y",
-            "descripcion": "Plataforma web para ventas en línea."
-          }
-        ],
-        "idiomas": [
-          {
-            "idioma": "Inglés",
-            "fluidez": "80%"
-          }
-        ]
-      },
-      {
-        "id": "cv7891011",
-        "personalInfo": {
-          "nombre": "Ana María",
-          "apellido": "Gómez",
-          "nacimiento": "15/07/1995",
-          "cedula": "987654321",
-          "nacionalidad": "Ecuatoriana",
-          "estadoCivil": "Soltera",
-          "telefono": "096543210",
-          "correo": "ana@gmail.com",
-          "direccion": "Avenida Quito"
-        },
-        "educacion": {
-          "bachillerato": [
-            {
-              "grado": "Bachillerato en ciencias sociales",
-              "institucion": "Colegio Los Andes",
-              "ano": "2013"
-            }
-          ],
-          "educacionSuperior": [
-            {
-              "grado": "Licenciatura en Psicología",
-              "institucion": "Universidad Central",
-              "anoInicio": "2016",
-              "anoFin": "2020"
-            }
-          ]
-        },
-        "certificaciones": [
-          {
-            "curso": "Curso de Neurociencia aplicada",
-            "entidad": "Coursera",
-            "ano": "2021"
-          }
-        ],
-        "experienciaLaboral": [
-          {
-            "empresa": "Psicología para Todos",
-            "lugar": "Quito",
-            "fechaInicio": "01/02/2021",
-            "fechaFin": "Actualidad",
-            "cargo": "Psicóloga",
-            "descripcionEmpresa": "Consultoría psicológica.",
-            "actividades": [
-              "Atención clínica.",
-              "Evaluaciones psicológicas.",
-              "Asesoramiento a empresas."
-            ]
-          }
-        ],
-        "proyectosRelevantes": [
-          {
-            "proyecto": "Desarrollo de Programa de Bienestar Laboral",
-            "cliente": "Empresa XYZ",
-            "rol": "Consultora",
-            "ano": "2022",
-            "partner": "Partner Z",
-            "descripcion": "Programa enfocado en el bienestar emocional de empleados."
-          }
-        ],
-        "idiomas": [
-          {
-            "idioma": "Español",
-            "fluidez": "100%"
+          "educacion": {
+              "bachillerato": [
+                  {
+                      "ano": "2005/2012",
+                      "grado": "Primaria",
+                      "institucion": "Colegio la Milagrosa/ Madrid, España"
+                  }
+              ],
+              "educacionSuperior": [
+                  {
+                      "anoFin": "Actualidad",
+                      "anoInicio": "2020",
+                      "grado": "Ing. en computación",
+                      "institucion": "Escuela Politécnica Nacional/ Quito, Ecuador"
+                  }
+              ]
           },
-          {
-            "idioma": "Inglés",
-            "fluidez": "70%"
-          }
-        ]
+          "experienciaLaboral": [
+              {
+                  "actividades": [
+                      "Implementación de seguridad y verificación de usuarios",
+                      "Integración de APIS externas",
+                      "Pruebas unitarias y despliegue"
+                  ],
+                  "cargo": "Desarrollo y diseño web",
+                  "descripcionEmpresa": "Escuela Politécnica Nacional",
+                  "empresa": "Proyecto Web de Banco con arquitectura MEAN",
+                  "fechaFin": "AGOS 2024",
+                  "fechaInicio": "ABRIL 2024",
+                  "lugar": "QUITO, ECUADOR"
+              },
+              {
+                  "actividades": [
+                      "Desarrollo y diseño web",
+                      "Implementación de seguridad y verificación de usuarios",
+                      "Pruebas unitarias y despliegue"
+                  ],
+                  "cargo": "Full-Stack",
+                  "descripcionEmpresa": "",
+                  "empresa": "Proyecto Web de Tienda “Your Store” con arquitectura MEAN",
+                  "fechaFin": "ACTUALIDAD",
+                  "fechaInicio": "SEP 2024",
+                  "lugar": "QUITO, ECUADOR"
+              },
+              {
+                  "actividades": [
+                      "Apoyo en producción de obras teatrales",
+                      "Cuidado de niños con necesidades especiales"
+                  ],
+                  "cargo": "",
+                  "descripcionEmpresa": "Fundación Cecilia Rivadeneira",
+                  "empresa": "Voluntariado",
+                  "fechaFin": "ACTUALIDAD",
+                  "fechaInicio": "JULIO 2016",
+                  "lugar": "QUITO, ECUADOR"
+              }
+          ],
+          "id": "cv123456",
+          "idiomas": [
+              {
+                  "fluidez": "Native",
+                  "idioma": "Español"
+              },
+              {
+                  "fluidez": "B2",
+                  "idioma": "Inglés"
+              }
+          ],
+          "personalInfo": {
+              "apellido": "Bedón",
+              "cedula": "",
+              "correo": "estefaniabedon@hotmail.com",
+              "direccion": "",
+              "estadoCivil": "",
+              "foto": "",
+              "nacimiento": "",
+              "nacionalidad": "",
+              "nombre": "Estefanía",
+              "telefono": "0983742552"
+          },
+          "proyectosRelevantes": []
       }
-    ]
-  }
-  
+  ],
+  "imagenes": [
+      {
+          "filename": "X5.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_0_X5.png"
+      }
+  ]
+}

@@ -1,116 +1,140 @@
+*{
+
+  background-color: white;
+
+}
+.input-group.error input {
+  border-color: red !important;
+  background-color: #ffebee !important;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
 .form-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-title {
-    text-align: center;
-    color: #397fc7;
-    margin-bottom: 20px;
-    font-size: 26px;
-  }
-  
-  .section {
-    margin-bottom: 30px;
-  }
-  
-  .section-title, .project-title {
-    color: #397fc7;
-    font-size: 20px;
-    margin-bottom: 15px;
-    font-weight: bold;
-  }
-  
-  .personal-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  
-  .form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    flex: 1;
-  }
-  
-  .photo-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: 20px;
-  }
-  
-  .profile-photo {
-    border-radius: 50%;
-    margin-bottom: 10px;
-  }
-  
-  .blue-button {
-    background-color: #397fc7;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .input-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f3f3f3;
-  }
-  
-  .add-button, .remove-button {
-    font-size: 18px;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-  }
-  
-  .add-button {
-    background-color: #28a745;
-  }
-  
-  .remove-button {
-    background-color: #dc3545;
-  }
-  
-  .form-row {
-    display: grid;
-    gap: 15px;
-  }
-  
-  .experience-section .form-row.full-width, 
-  .project-section .form-row.full-width {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .experience-section .form-row.full-width input,
-  .project-section .form-row.full-width input,
-  .language-section .form-row input {
-    width: 100%;
-    margin-bottom: 15px;
-  }
-  
-  .project-section .form-row, 
-  .language-section .form-row,
-  .experience-section .form-row {
-    grid-template-columns: 1fr 1fr;
-  }
-  
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  text-align: center;
+  color: #397fc7;
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.section-title, .project-title {
+  color: #397fc7;
+  font-size: 20px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.personal-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  flex: 1;
+}
+
+.input-group label {
+  font-weight: bold;
+  color: black;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  color: black;
+}
+
+.photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.profile-photo {
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.blue-button {
+  background-color: #397fc7;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f3f3f3;
+}
+
+.add-button, .remove-button {
+  font-size: 18px;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.add-button {
+  background-color: #28a745;
+}
+
+.remove-button {
+  background-color: #dc3545;
+}
+
+.form-row {
+  display: grid;
+  gap: 15px;
+}
+
+.experience-section .form-row.full-width, 
+.project-section .form-row.full-width {
+  display: flex;
+  flex-direction: column;
+}
+
+.experience-section .form-row.full-width input,
+.project-section .form-row.full-width input,
+.language-section .form-row input {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.project-section .form-row, 
+.language-section .form-row,
+.experience-section .form-row {
+  grid-template-columns: 1fr 1fr;
+}

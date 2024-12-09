@@ -1,0 +1,199 @@
+{
+    "cvs": [
+        {
+            "personalInfo": {
+                "nombre": "Jair",
+                "apellido": "S�nchez",
+                "nacimiento": "",
+                "cedula": "",
+                "nacionalidad": "",
+                "estadoCivil": "",
+                "telefono": "+593 987297703",
+                "correo": "alexis151270sanchez@gmail.com",
+                "direccion": "+ Ecuador, Quito",
+                "foto": ""
+            },
+            "educacion": {
+                "bachillerato": [
+                    {
+                        "grado": "Ciencias",
+                        "institucion": "Julio Tobar Donoso",
+                        "ano": "2011-2020"
+                    }
+                ],
+                "educacionSuperior": [
+                    {
+                        "grado": "Ingenier�a en Ciencias de la Computaci�n",
+                        "institucion": "Escuela Polit�cnica Nacional",
+                        "anoInicio": "2020",
+                        "anoFin": "actual"
+                    }
+                ]
+            },
+            "certificaciones": [
+                {
+                    "curso": "Microsoft Certified: Azure Data Engineer Associate",
+                    "entidad": "Microsoft",
+                    "ano": "9ago2024"
+                },
+                {
+                    "curso": "Microsoft Certified: Azure Cosmos DB Developer Specialty",
+                    "entidad": "Microsoft",
+                    "ano": "22julio2024"
+                },
+                {
+                    "curso": "Microsoft Certified: Azure Data Scientist Associate",
+                    "entidad": "Microsoft",
+                    "ano": "1julio2024"
+                },
+                {
+                    "curso": "Microsoft Certified: Azure Cosmos DB Developer Specialty",
+                    "entidad": "Microsoft",
+                    "ano": "19julio2024"
+                },
+                {
+                    "curso": "Fundamentos de defensa de red (NDE) v1",
+                    "entidad": "EC-Council",
+                    "ano": "22Junio2024"
+                },
+                {
+                    "curso": "Copilot for M365 Technical Champion",
+                    "entidad": "Microsoft",
+                    "ano": "19Junio2024"
+                },
+                {
+                    "curso": "Microsoft Certified: Azure AI Engineer Associate",
+                    "entidad": "Microsoft",
+                    "ano": "17Junio2024"
+                },
+                {
+                    "curso": "Microsoft Certified: Security, Compliance, and Identity Fundamentals",
+                    "entidad": "Microsoft",
+                    "ano": "17Mayo2024"
+                },
+                {
+                    "curso": "Certificado de Industria 4.0 y Nuevas Tendencias Tecnol�gicas",
+                    "entidad": "Udemy",
+                    "ano": "14Feb2024"
+                },
+                {
+                    "curso": "Certificado de Inclusi�n Digital",
+                    "entidad": "Escuela Polit�cnica Nacional",
+                    "ano": "08sep2023"
+                },
+                {
+                    "curso": "Certificado de CCNAv7: Switching, Routing and Wireless Essentials",
+                    "entidad": "CISCO",
+                    "ano": "27mar2023"
+                }
+            ],
+            "experienciaLaboral": [
+                {
+                    "empresa": "Inova Solutions",
+                    "lugar": "",
+                    "fechaInicio": "Abril2024",
+                    "fechaFin": "Actualmente",
+                    "cargo": "Desarrollador de IA",
+                    "descripcionEmpresa": "",
+                    "actividades": [
+                        "Investigaci�n y Desarrollo: Lidero proyectos de investigaci�n y desarrollo de aplicaciones con inteligencia artificial generativa, explorando y aplicando nuevas ideas para soluciones tecnol�gicas innovadoras con Azure y Copilot.",
+                        "Asesoramiento Experto: Proporcion� orientaci�n detallada sobre una amplia gama de productos tecnol�gicos, ayudando a los clientes a tomar decisiones informadas basadas en sus necesidades espec�ficas y preferencias.",
+                        "Atenci�n al Cliente: Ofrec� un servicio excepcional, garantizando que cada cliente recibiera asistencia personalizada, resolviendo consultas y asegurando una experiencia de compra positiva en todo momento.",
+                        "Soporte T�cnico B�sico: Brind� asistencia t�cnica b�sica a los clientes, ayud�ndolos con la configuraci�n inicial de dispositivos, la instalaci�n de software y la resoluci�n de problemas menores, fortaleciendo as� la relaci�n con el cliente.",
+                        "B�squeda de Oportunidades de Negocio: Identifico y eval�o nuevas oportunidades de negocio y colaboraciones estrat�gicas para la implementaci�n de soluciones de inteligencia artificial."
+                    ]
+                },
+                {
+                    "empresa": "APP Soluciones",
+                    "lugar": "",
+                    "fechaInicio": "Enero2022",
+                    "fechaFin": "Julio2022",
+                    "cargo": "Asesor Comercial de Tecnolog�a",
+                    "descripcionEmpresa": "",
+                    "actividades": [
+                        "Proporcion� orientaci�n detallada sobre una amplia gama de productos tecnol�gicos, ayudando a los clientes a tomar decisiones informadas basadas en sus necesidades espec�ficas y preferencias.",
+                        "Ofrec� un servicio excepcional, garantizando que cada cliente recibiera asistencia personalizada, resolviendo consultas y asegurando una experiencia de compra positiva en todo momento.",
+                        "Brind� asistencia t�cnica b�sica a los clientes, ayud�ndolos con la configuraci�n inicial de dispositivos, la instalaci�n de software y la resoluci�n de problemas menores para fortalecer la relaci�n con el cliente."
+                    ]
+                },
+                {
+                    "empresa": "CerrAlumVid",
+                    "lugar": "",
+                    "fechaInicio": "Enero2023",
+                    "fechaFin": "Julio2023",
+                    "cargo": "Pintura Electrost�tica",
+                    "descripcionEmpresa": "",
+                    "actividades": [
+                        "Manejo adecuado de equipos y materiales",
+                        "Contribu� al cumplimiento de los est�ndares de producci�n y asegur� la eficiencia en el flujo de trabajo.",
+                        "Apoy� en el proceso de preparaci�n y aplicaci�n de pintura en piezas met�licas mediante el m�todo de pintura electrost�tica."
+                    ]
+                },
+                {
+                    "empresa": "",
+                    "lugar": "Redes Neuronales Convolucionales",
+                    "fechaInicio": "Julio2023",
+                    "fechaFin": "Nov2023",
+                    "cargo": "",
+                    "descripcionEmpresa": "Escuela Polit�cnica Nacional",
+                    "actividades": [
+                        "Recopilaci�n y preparaci�n de datos.",
+                        "Dise�o y configuraci�n de la red neuronal convolucional.",
+                        "Entrenamiento del modelo y ajuste de hiperpar�metros.",
+                        "Evaluaci�n del rendimiento y mejora del modelo."
+                    ]
+                },
+                {
+                    "empresa": "",
+                    "lugar": "Proyecto Web de Hotel con PHP, SQL y APIs",
+                    "fechaInicio": "Nov2023",
+                    "fechaFin": "Feb2024",
+                    "cargo": "",
+                    "descripcionEmpresa": "Escuela Polit�cnica Nacional",
+                    "actividades": [
+                        "Desarrollo y dise�o web.",
+                        "Implementaci�n de funcionalidades din�micas.",
+                        "Integraci�n de APIs externas.",
+                        "Pruebas y despliegue del sitio."
+                    ]
+                }
+            ],
+            "proyectosRelevantes": [
+                {
+                    "proyecto": "Proyecto de Reconocimiento Facial con Redes Neuronales Convolucionales",
+                    "cliente": "",
+                    "rol": "",
+                    "ano": "Julio2023 - Nov2023",
+                    "partner": "",
+                    "descripcion": "Desarrollo de un modelo de reconocimiento facial utilizando redes neuronales convolucionales para la identificaci�n de personas en tiempo real."
+                },
+                {
+                    "proyecto": "Proyecto Web de Hotel con PHP, SQL y APIs",
+                    "cliente": "",
+                    "rol": "",
+                    "ano": "Nov2023 - Feb2024",
+                    "partner": "",
+                    "descripcion": "Desarrollo de un sitio web para un hotel, con funcionalidades para reservas, pagos y administraci�n de habitaciones."
+                }
+            ],
+            "idiomas": [
+                {
+                    "idioma": "Espa�ol",
+                    "fluidez": "Nativo"
+                },
+                {
+                    "idioma": "Ingl�s",
+                    "fluidez": "B2"
+                }
+            ],
+            "id": "cv123456"
+        }
+    ],
+    "imagenes": [
+        {
+            "filename": "Im1.png",
+            "page": 0,
+            "path": "http://127.0.0.1:5000/temp_images/page_0_image_0_Im1.png"
+        }
+    ]
+}
