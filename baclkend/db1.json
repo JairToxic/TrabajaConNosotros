@@ -1,199 +1,283 @@
 {
-    "cvs": [
+  "cvs": [
+    {
+      "id": "cv123456",
+      "personalInfo": {
+        "nombre": "Estefanía",
+        "apellido": "Bedón",
+        "cedula": "1723456789",
+        "nacionalidad": "Ecuatoriana",
+        "correo": "estefaniabedon@hotmail.com",
+        "telefono": [
+          "0983742552",
+          "0998765432"
+        ],
+        "linkedIn": "https://www.linkedin.com/in/estefaniabedon",
+        "aspiracionSalarial": "2000 USD mensuales",
+        "tiempoIngreso": "Inmediato",
+        "diaNacimiento": "1995-06-15",
+        "estadoCivil": "Soltera",
+        "direccion": "Calle Ficticia 123, Quito, Ecuador",
+        "foto": "http://example.com/foto.jpg",
+        "genero": "Femenino",
+        "autoidentificacionEtcnica": "Mestizo",
+        "discapacidad": {
+          "tieneDiscapacidad": false,
+          "tipo": "",
+          "porcentaje": ""
+        },
+        "expectativasTrabajo": "Busco oportunidades para crecer profesionalmente y contribuir con soluciones tecnológicas innovadoras.",
+        "actividadesTiempoLibre": "Me gusta leer, practicar deportes y aprender nuevas tecnologías.",
+        "cantidadHijos": 0,
+        "tieneDiscapacidad": "on"
+      },
+      "educacion": {
+        "bachillerato": [
+          {
+            "grado": "Bachiller en Ciencias",
+            "institucion": "Colegio La Providencia",
+            "ano": "2012"
+          }
+        ],
+        "educacionSuperiorNoUniversitaria": [
+          {
+            "grado": "Técnico en Desarrollo Web",
+            "institucion": "Instituto Tecnológico del Ecuador",
+            "anoInicio": "2016",
+            "anoFin": "2018"
+          }
+        ],
+        "educacionSuperior": [
+          {
+            "grado": "Ingeniera en Computación",
+            "institucion": "Escuela Politécnica Nacional",
+            "anoInicio": "2020",
+            "anoFin": ""
+          }
+        ],
+        "educacionDe4toNivel": [
+          {
+            "grado": "Maestría en Inteligencia Artificial",
+            "institucion": "Universidad Central del Ecuador",
+            "anoInicio": "2025",
+            "anoFin": ""
+          }
+        ]
+      },
+      "certificaciones": [
         {
-            "personalInfo": {
-                "nombre": "Jair",
-                "apellido": "S�nchez",
-                "nacimiento": "",
-                "cedula": "",
-                "nacionalidad": "",
-                "estadoCivil": "",
-                "telefono": "+593 987297703",
-                "correo": "alexis151270sanchez@gmail.com",
-                "direccion": "+ Ecuador, Quito",
-                "foto": ""
-            },
-            "educacion": {
-                "bachillerato": [
-                    {
-                        "grado": "Ciencias",
-                        "institucion": "Julio Tobar Donoso",
-                        "ano": "2011-2020"
-                    }
-                ],
-                "educacionSuperior": [
-                    {
-                        "grado": "Ingenier�a en Ciencias de la Computaci�n",
-                        "institucion": "Escuela Polit�cnica Nacional",
-                        "anoInicio": "2020",
-                        "anoFin": "actual"
-                    }
-                ]
-            },
-            "certificaciones": [
-                {
-                    "curso": "Microsoft Certified: Azure Data Engineer Associate",
-                    "entidad": "Microsoft",
-                    "ano": "9ago2024"
-                },
-                {
-                    "curso": "Microsoft Certified: Azure Cosmos DB Developer Specialty",
-                    "entidad": "Microsoft",
-                    "ano": "22julio2024"
-                },
-                {
-                    "curso": "Microsoft Certified: Azure Data Scientist Associate",
-                    "entidad": "Microsoft",
-                    "ano": "1julio2024"
-                },
-                {
-                    "curso": "Microsoft Certified: Azure Cosmos DB Developer Specialty",
-                    "entidad": "Microsoft",
-                    "ano": "19julio2024"
-                },
-                {
-                    "curso": "Fundamentos de defensa de red (NDE) v1",
-                    "entidad": "EC-Council",
-                    "ano": "22Junio2024"
-                },
-                {
-                    "curso": "Copilot for M365 Technical Champion",
-                    "entidad": "Microsoft",
-                    "ano": "19Junio2024"
-                },
-                {
-                    "curso": "Microsoft Certified: Azure AI Engineer Associate",
-                    "entidad": "Microsoft",
-                    "ano": "17Junio2024"
-                },
-                {
-                    "curso": "Microsoft Certified: Security, Compliance, and Identity Fundamentals",
-                    "entidad": "Microsoft",
-                    "ano": "17Mayo2024"
-                },
-                {
-                    "curso": "Certificado de Industria 4.0 y Nuevas Tendencias Tecnol�gicas",
-                    "entidad": "Udemy",
-                    "ano": "14Feb2024"
-                },
-                {
-                    "curso": "Certificado de Inclusi�n Digital",
-                    "entidad": "Escuela Polit�cnica Nacional",
-                    "ano": "08sep2023"
-                },
-                {
-                    "curso": "Certificado de CCNAv7: Switching, Routing and Wireless Essentials",
-                    "entidad": "CISCO",
-                    "ano": "27mar2023"
-                }
-            ],
-            "experienciaLaboral": [
-                {
-                    "empresa": "Inova Solutions",
-                    "lugar": "",
-                    "fechaInicio": "Abril2024",
-                    "fechaFin": "Actualmente",
-                    "cargo": "Desarrollador de IA",
-                    "descripcionEmpresa": "",
-                    "actividades": [
-                        "Investigaci�n y Desarrollo: Lidero proyectos de investigaci�n y desarrollo de aplicaciones con inteligencia artificial generativa, explorando y aplicando nuevas ideas para soluciones tecnol�gicas innovadoras con Azure y Copilot.",
-                        "Asesoramiento Experto: Proporcion� orientaci�n detallada sobre una amplia gama de productos tecnol�gicos, ayudando a los clientes a tomar decisiones informadas basadas en sus necesidades espec�ficas y preferencias.",
-                        "Atenci�n al Cliente: Ofrec� un servicio excepcional, garantizando que cada cliente recibiera asistencia personalizada, resolviendo consultas y asegurando una experiencia de compra positiva en todo momento.",
-                        "Soporte T�cnico B�sico: Brind� asistencia t�cnica b�sica a los clientes, ayud�ndolos con la configuraci�n inicial de dispositivos, la instalaci�n de software y la resoluci�n de problemas menores, fortaleciendo as� la relaci�n con el cliente.",
-                        "B�squeda de Oportunidades de Negocio: Identifico y eval�o nuevas oportunidades de negocio y colaboraciones estrat�gicas para la implementaci�n de soluciones de inteligencia artificial."
-                    ]
-                },
-                {
-                    "empresa": "APP Soluciones",
-                    "lugar": "",
-                    "fechaInicio": "Enero2022",
-                    "fechaFin": "Julio2022",
-                    "cargo": "Asesor Comercial de Tecnolog�a",
-                    "descripcionEmpresa": "",
-                    "actividades": [
-                        "Proporcion� orientaci�n detallada sobre una amplia gama de productos tecnol�gicos, ayudando a los clientes a tomar decisiones informadas basadas en sus necesidades espec�ficas y preferencias.",
-                        "Ofrec� un servicio excepcional, garantizando que cada cliente recibiera asistencia personalizada, resolviendo consultas y asegurando una experiencia de compra positiva en todo momento.",
-                        "Brind� asistencia t�cnica b�sica a los clientes, ayud�ndolos con la configuraci�n inicial de dispositivos, la instalaci�n de software y la resoluci�n de problemas menores para fortalecer la relaci�n con el cliente."
-                    ]
-                },
-                {
-                    "empresa": "CerrAlumVid",
-                    "lugar": "",
-                    "fechaInicio": "Enero2023",
-                    "fechaFin": "Julio2023",
-                    "cargo": "Pintura Electrost�tica",
-                    "descripcionEmpresa": "",
-                    "actividades": [
-                        "Manejo adecuado de equipos y materiales",
-                        "Contribu� al cumplimiento de los est�ndares de producci�n y asegur� la eficiencia en el flujo de trabajo.",
-                        "Apoy� en el proceso de preparaci�n y aplicaci�n de pintura en piezas met�licas mediante el m�todo de pintura electrost�tica."
-                    ]
-                },
-                {
-                    "empresa": "",
-                    "lugar": "Redes Neuronales Convolucionales",
-                    "fechaInicio": "Julio2023",
-                    "fechaFin": "Nov2023",
-                    "cargo": "",
-                    "descripcionEmpresa": "Escuela Polit�cnica Nacional",
-                    "actividades": [
-                        "Recopilaci�n y preparaci�n de datos.",
-                        "Dise�o y configuraci�n de la red neuronal convolucional.",
-                        "Entrenamiento del modelo y ajuste de hiperpar�metros.",
-                        "Evaluaci�n del rendimiento y mejora del modelo."
-                    ]
-                },
-                {
-                    "empresa": "",
-                    "lugar": "Proyecto Web de Hotel con PHP, SQL y APIs",
-                    "fechaInicio": "Nov2023",
-                    "fechaFin": "Feb2024",
-                    "cargo": "",
-                    "descripcionEmpresa": "Escuela Polit�cnica Nacional",
-                    "actividades": [
-                        "Desarrollo y dise�o web.",
-                        "Implementaci�n de funcionalidades din�micas.",
-                        "Integraci�n de APIs externas.",
-                        "Pruebas y despliegue del sitio."
-                    ]
-                }
-            ],
-            "proyectosRelevantes": [
-                {
-                    "proyecto": "Proyecto de Reconocimiento Facial con Redes Neuronales Convolucionales",
-                    "cliente": "",
-                    "rol": "",
-                    "ano": "Julio2023 - Nov2023",
-                    "partner": "",
-                    "descripcion": "Desarrollo de un modelo de reconocimiento facial utilizando redes neuronales convolucionales para la identificaci�n de personas en tiempo real."
-                },
-                {
-                    "proyecto": "Proyecto Web de Hotel con PHP, SQL y APIs",
-                    "cliente": "",
-                    "rol": "",
-                    "ano": "Nov2023 - Feb2024",
-                    "partner": "",
-                    "descripcion": "Desarrollo de un sitio web para un hotel, con funcionalidades para reservas, pagos y administraci�n de habitaciones."
-                }
-            ],
-            "idiomas": [
-                {
-                    "idioma": "Espa�ol",
-                    "fluidez": "Nativo"
-                },
-                {
-                    "idioma": "Ingl�s",
-                    "fluidez": "B2"
-                }
-            ],
-            "id": "cv123456"
-        }
-    ],
-    "imagenes": [
+          "curso": "Aplicaciones Web",
+          "entidad": "Escuela Politécnica Nacional",
+          "ano": "2023"
+        },
         {
-            "filename": "Im1.png",
-            "page": 0,
-            "path": "http://127.0.0.1:5000/temp_images/page_0_image_0_Im1.png"
+          "curso": "CCNAv7: Switching, Routing and Wireless Essentials",
+          "entidad": "Cisco",
+          "ano": "2022"
         }
-    ]
+      ],
+      "experienciaLaboral": [
+        {
+          "empresa": "Escuela Politécnica Nacional",
+          "lugar": "QUITO, ECUADOR",
+          "fechaInicio": "ABRIL 2024",
+          "fechaFin": "AGOS 2024",
+          "cargo": "Desarrolladora Web",
+          "descripcionRol": "Desarrollo y diseño de aplicaciones web. Implementación de seguridad y verificación de usuarios. Integración de APIs externas. Pruebas unitarias y despliegue de proyectos. Desarrollo Front y Back-end.",
+          "remuneracionBruta": "1500 USD mensuales",
+          "beneficios": "Seguro médico, bonificaciones por desempeño",
+          "referenciaLaboral": {
+            "cargo": "Director de TI",
+            "numero": "+593 999999999",
+            "nombre": "Juan Pérez"
+          }
+        },
+        {
+          "empresa": "Tech Solutions",
+          "lugar": "QUITO, ECUADOR",
+          "fechaInicio": "SEP 2024",
+          "fechaFin": "ACTUALIDAD",
+          "cargo": "Full-Stack Developer",
+          "descripcionRol": "Desarrollo de plataformas web escalables. Implementación de servicios RESTful. Optimización del rendimiento de aplicaciones. Coordinación con el equipo de diseño para crear interfaces de usuario efectivas.",
+          "remuneracionBruta": "1800 USD mensuales",
+          "beneficios": "Seguro de vida, capacitación continua, home office",
+          "referenciaLaboral": {
+            "cargo": "Gerente de Desarrollo",
+            "numero": "+593 988888888",
+            "nombre": "Ana López"
+          }
+        }
+      ],
+      "proyectosRelevantes": [
+        {
+          "proyecto": "Desarrollo de plataforma de banca en línea",
+          "cliente": "Banco XYZ",
+          "rol": "Desarrolladora Front-End",
+          "ano": "2023",
+          "partner": "Tech Solutions",
+          "descripcion": "Creación de una plataforma bancaria con funcionalidades de consulta de saldo, pagos, transferencias y gestión de cuentas."
+        },
+        {
+          "proyecto": "Desarrollo de tienda en línea 'Your Store'",
+          "cliente": "Comercio ABC",
+          "rol": "Desarrolladora Full-Stack",
+          "ano": "2024",
+          "partner": "Innovative Solutions",
+          "descripcion": "Desarrollo de una tienda en línea con sistema de pagos integrados, gestión de inventarios y reportes analíticos."
+        }
+      ],
+      "logrosRelevantes": [
+        "Implementación de un sistema de seguridad mejorado en las aplicaciones web desarrolladas.",
+        "Liderazgo en la creación de una API RESTful que facilitó la integración con aplicaciones externas."
+      ],
+      "competencias": [
+        "Desarrollo web Full-Stack",
+        "Gestión de bases de datos",
+        "Optimización de rendimiento de aplicaciones",
+        "Gestión de proyectos ágiles"
+      ],
+      "idiomas": [
+        {
+          "idioma": "Inglés",
+          "fluidez": "B2",
+          "porcentaje": "80%"
+        },
+        {
+          "idioma": "Español",
+          "fluidez": "Native",
+          "porcentaje": "100%"
+        }
+      ],
+      "imagenes": [
+        {
+          "filename": "X5.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/cv123456_page_0_image_0_X5.png"
+        }
+      ]
+    },
+    {
+      "id": "cv7891011",
+      "personalInfo": {
+        "nombre": "Carlos",
+        "apellido": "Sánchez",
+        "cedula": "1712345678",
+        "nacionalidad": "Ecuatoriano",
+        "correo": "carlos.sanchez@example.com",
+        "telefono": [
+          "0967456789"
+        ],
+        "linkedIn": "https://www.linkedin.com/in/carlossanchez",
+        "aspiracionSalarial": "3000 USD mensuales",
+        "tiempoIngreso": "3 meses",
+        "diaNacimiento": "1990-08-22",
+        "estadoCivil": "Casado",
+        "direccion": "Av. Libertador 456, Quito, Ecuador",
+        "foto": "http://example.com/foto2.jpg",
+        "genero": "Masculino",
+        "autoidentificacionEtcnica": "Afrodescendiente",
+        "discapacidad": {
+          "tieneDiscapacidad": true,
+          "tipo": "Discapacidad visual",
+          "porcentaje": "40%"
+        },
+        "expectativasTrabajo": "Busco contribuir con mi experiencia en desarrollo de software y seguir aprendiendo sobre nuevas tecnologías.",
+        "actividadesTiempoLibre": "Disfruto de la música, la lectura y los videojuegos.",
+        "cantidadHijos": 2
+      },
+      "educacion": {
+        "bachillerato": [
+          {
+            "grado": "Bachiller en Ciencias Sociales",
+            "institucion": "Colegio Los Andes",
+            "ano": "2008"
+          }
+        ],
+        "educacionSuperiorNoUniversitaria": [
+          {
+            "grado": "Técnico en Redes y Telecomunicaciones",
+            "institucion": "Instituto Técnico de Redes",
+            "anoInicio": "2011",
+            "anoFin": "2013"
+          }
+        ],
+        "educacionSuperior": [
+          {
+            "grado": "Licenciado en Ciencias de la Computación",
+            "institucion": "Universidad Central del Ecuador",
+            "anoInicio": "2014",
+            "anoFin": "2018"
+          }
+        ],
+        "educacionDe4toNivel": []
+      },
+      "certificaciones": [
+        {
+          "curso": "Desarrollo de Aplicaciones Móviles",
+          "entidad": "Universidad de Tecnología",
+          "ano": "2021"
+        },
+        {
+          "curso": "Redes Avanzadas",
+          "entidad": "Cisco",
+          "ano": "2020"
+        }
+      ],
+      "experienciaLaboral": [
+        {
+          "empresa": "Tech Solutions",
+          "lugar": "QUITO, ECUADOR",
+          "fechaInicio": "ENERO 2019",
+          "fechaFin": "DIC 2021",
+          "cargo": "Administrador de Redes",
+          "descripcionRol": "Instalación y mantenimiento de redes. Gestión de servidores y dispositivos de red. Resolución de problemas y soporte técnico a usuarios.",
+          "remuneracionBruta": "2500 USD mensuales",
+          "beneficios": "Bonificaciones por desempeño, seguro de vida",
+          "referenciaLaboral": {
+            "cargo": "Director de Redes",
+            "numero": "+593 992222222",
+            "nombre": "Carlos García"
+          }
+        }
+      ],
+      "proyectosRelevantes": [
+        {
+          "proyecto": "Implementación de Red Corporativa",
+          "cliente": "Empresa XYZ",
+          "rol": "Líder de Proyecto",
+          "ano": "2020",
+          "partner": "Redes Globales",
+          "descripcion": "Diseño e implementación de la red corporativa para mejorar la conectividad entre sucursales y oficinas remotas."
+        }
+      ],
+      "logrosRelevantes": [
+        "Implementación de soluciones de red que aumentaron la velocidad de transferencia de datos en un 30%.",
+        "Liderazgo en proyectos de expansión de infraestructura de red a nivel nacional."
+      ],
+      "competencias": [
+        "Redes y telecomunicaciones",
+        "Administración de servidores",
+        "Diagnóstico y solución de problemas de red"
+      ],
+      "idiomas": [
+        {
+          "idioma": "Inglés",
+          "fluidez": "C1",
+          "porcentaje": "90%"
+        },
+        {
+          "idioma": "Español",
+          "fluidez": "Native",
+          "porcentaje": "100%"
+        }
+      ],
+      "imagenes": [
+        {
+          "filename": "X5.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/cv7891011_page_0_image_0_X5.png"
+        }
+      ]
+    }
+  ]
 }

@@ -14,14 +14,17 @@
     "bootstrap": "^5.3.3",
     "docxtemplater": "^3.54.1",
     "file-saver": "^2.0.5",
+    "html-to-image": "^1.11.11",
     "jszip": "^3.10.1",
     "next": "15.0.3",
     "pdf-lib": "^1.17.1",
     "pizzip": "^3.1.7",
     "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106"
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react-to-print": "^3.0.2"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.26.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

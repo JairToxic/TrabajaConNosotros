@@ -3,200 +3,135 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import './CurriculumVitae.css';
-import ConfirmacionPopup from '../popUp/popUp'; 
+import ConfirmacionPopup from '../popUp/popUp';
+
+const SECTIONS = [
+  { name: 'bachillerato', defaultObject: { grado: '', institucion: '', año: '' } },
+  { name: 'educacionSuperior', defaultObject: { grado: '', institucion: '', año: '', areaDeTitulo: '' } },
+  { name: 'certificaciones', defaultObject: { curso: '', entidad: '', año: '' } },
+  { name: 'proyectosRelevantes', defaultObject: { proyecto: '', cliente: '', año: '', descripcion: '', tecnologiasUtilizadas: '', rolDesempeñado: '' } },
+  { name: 'idiomas', defaultObject: { idioma: '', nivel: '', añoObtencion: '' } }
+];
 
 const CurriculumVitae = () => {
-  const [personalInfo, setPersonalInfo] = useState({});
-  const [bachillerato, setBachillerato] = useState([]);
-  const [educacionSuperior, setEducacionSuperior] = useState([]);
-  const [certificaciones, setCertificaciones] = useState([]);
-  const [experienciaLaboral, setExperienciaLaboral] = useState([]);
-  const [proyectosRelevantes, setProyectosRelevantes] = useState([]);
-  const [idiomas, setIdiomas] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [pendingSubmit, setPendingSubmit] = useState(null);
-  const [errors, setErrors] = useState({});
-  const [profileImage, setProfileImage] = useState(null);
+  const [state, setState] = useState({
+    personalInfo: {},
+    bachillerato: [],
+    educacionSuperior: [],
+    certificaciones: [],
+    experienciaLaboral: [],
+    proyectosRelevantes: [],
+    idiomas: [],
+    profileImage: null,
+    showPopup: false,
+    pendingSubmit: null,
+    errors: {}
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/cvs/cv123456');
-        const data = await response.json();
-        if (response.ok) {
-          setPersonalInfo(data.personalInfo);
-          setBachillerato(data.educacion.bachillerato);
-          setEducacionSuperior(data.educacion.educacionSuperior);
-          setCertificaciones(data.certificaciones);
-          setExperienciaLaboral(data.experienciaLaboral);
-          setProyectosRelevantes(data.proyectosRelevantes);
-          setIdiomas(data.idiomas);
-        } else {
-          console.error('Error al obtener los datos', data.error);
+        const cvResponse = await fetch('http://localhost:5000/cvs/cv123456');
+        const imageResponse = await fetch('http://localhost:5000/imagenes');
+        
+        if (cvResponse.ok) {
+          const data = await cvResponse.json();
+          setState(prev => ({
+            ...prev,
+            ...Object.fromEntries(
+              Object.entries(data).map(([key, value]) => 
+                key === 'educacion' 
+                  ? ['bachillerato', value.bachillerato] 
+                  : [key, value]
+              )
+            )
+          }));
+        }
+        
+        const images = await imageResponse.json();
+        if (images?.length) {
+          setState(prev => ({ ...prev, profileImage: images[0].path }));
         }
       } catch (error) {
-        console.error('Error al conectar con el servidor', error);
+        console.error('Fetch error', error);
       }
     };
-
-    const fetchProfileImage = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/imagenes');
-        const images = await response.json();
-        if (images && images.length > 0) {
-          setProfileImage(images[0].path);
-        }
-      } catch (error) {
-        console.error('Error al obtener la imagen de perfil', error);
-      }
-    };
-
+    
     fetchData();
-    fetchProfileImage();
   }, []);
 
-  const handleChange = (state, setter, index, field, value) => {
-    const updatedArray = [...state];
-    updatedArray[index][field] = value;
-    setter(updatedArray);
-    
-    const newErrors = {...errors};
-    delete newErrors[`${state}.${index}.${field}`];
-    setErrors(newErrors);
-  };
-
-  const handleAdd = (setter, defaultObject) => {
-    setter((prev) => [...prev, defaultObject]);
-  };
-
-  const handleRemove = (setter, index) => {
-    setter((prev) => (prev.length > 1 ? prev.filter((_, i) => i !== index) : prev));
+  const updateState = (section, action, data, index) => {
+    setState(prev => {
+      const newState = { ...prev };
+      if (action === 'add') {
+        newState[section] = [...prev[section], data];
+      } else if (action === 'remove' && prev[section].length > 1) {
+        newState[section] = prev[section].filter((_, i) => i !== index);
+      } else if (action === 'update') {
+        const newSection = [...prev[section]];
+        newSection[index] = { ...newSection[index], ...data };
+        newState[section] = newSection;
+      }
+      newState.errors = {};
+      return newState;
+    });
   };
 
   const validateForm = () => {
-    const newErrors = {};
-
-    Object.entries(personalInfo).forEach(([key, value]) => {
-      if (!value || !value.trim()) {
-        newErrors[`personalInfo.${key}`] = true;
-      }
-    });
-
-    const sectionsToValidate = [
-      { name: 'bachillerato', data: bachillerato },
-      { name: 'educacionSuperior', data: educacionSuperior },
-      { name: 'certificaciones', data: certificaciones },
-      { name: 'proyectosRelevantes', data: proyectosRelevantes },
-      { name: 'idiomas', data: idiomas }
-    ];
-
-    sectionsToValidate.forEach(section => {
-      section.data.forEach((entry, index) => {
+    const errors = {};
+    const validateSection = (section, fields = []) => {
+      state[section].forEach((entry, index) => {
         Object.entries(entry).forEach(([field, value]) => {
-          if (field === 'actividades') {
-            value.forEach((actividad, actIndex) => {
-              if (!actividad || !actividad.trim()) {
-                newErrors[`${section.name}.${index}.actividades.${actIndex}`] = true;
-              }
-            });
-          } else if (field !== section.name && (!value || !value.trim())) {
-            newErrors[`${section.name}.${index}.${field}`] = true;
+          if ((fields.includes(field) || !fields.length) && (!value || !value.trim())) {
+            errors[`${section}.${index}.${field}`] = true;
           }
         });
       });
+    };
+
+    Object.entries(state.personalInfo).forEach(([key, value]) => {
+      if (!value || !value.trim()) errors[`personalInfo.${key}`] = true;
     });
 
-    experienciaLaboral.forEach((exp, index) => {
-      Object.entries(exp).forEach(([field, value]) => {
-        if (field === 'actividades') {
-          value.forEach((actividad, actIndex) => {
-            if (!actividad || !actividad.trim()) {
-              newErrors[`experienciaLaboral.${index}.actividades.${actIndex}`] = true;
-            }
-          });
-        } else if (field !== 'experienciaLaboral' && (!value || !value.trim())) {
-          newErrors[`experienciaLaboral.${index}.${field}`] = true;
-        }
-      });
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    SECTIONS.forEach(section => validateSection(section.name));
+    validateSection('experienciaLaboral', ['actividades']);
+    
+    setState(prev => ({ ...prev, errors }));
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmitRequest = () => {
     if (validateForm()) {
-      setPendingSubmit(() => handleSubmit);
-      setShowPopup(true);
+      setState(prev => ({ ...prev, showPopup: true, pendingSubmit: handleSubmit }));
     }
   };
 
   const handleSubmit = async () => {
-    const updatedData = {
-      personalInfo,
-      educacion: { bachillerato, educacionSuperior },
-      certificaciones,
-      experienciaLaboral,
-      proyectosRelevantes,
-      idiomas,
-    };
-
     try {
       const response = await fetch('http://localhost:5000/cvs/cv123456', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify({
+          personalInfo: state.personalInfo,
+          educacion: { 
+            bachillerato: state.bachillerato, 
+            educacionSuperior: state.educacionSuperior 
+          },
+          certificaciones: state.certificaciones,
+          experienciaLaboral: state.experienciaLaboral,
+          proyectosRelevantes: state.proyectosRelevantes,
+          idiomas: state.idiomas
+        })
       });
 
       response.ok 
-        ? console.log('Datos actualizados correctamente')
-        : console.error('Error al actualizar los datos');
+        ? console.log('Datos actualizados') 
+        : console.error('Error al actualizar');
     } catch (error) {
-      console.error('Error al conectar con el servidor', error);
+      console.error('Error de conexión', error);
     }
-    setShowPopup(false);
+    setState(prev => ({ ...prev, showPopup: false }));
   };
-
-  const renderSectionWithSubtitle = (
-    items, 
-    setter, 
-    sectionName, 
-    renderInputs, 
-    defaultObject
-  ) => (
-    <div className="section">
-      <h2 className="section-title">{sectionName}:</h2>
-      {items.map((entry, index) => (
-        <div className="form-row" key={index}>
-          <h3 style={{
-            color: '#00ADEF', 
-            marginBottom: '10px', 
-            borderBottom: '2px solid #00ADEF', 
-            paddingBottom: '5px'
-          }}>
-            {sectionName} {index + 1}
-          </h3>
-          {renderInputs(entry, index)}
-          {index > 0 && (
-            <div className="button-group">
-              <button 
-                className="remove-button" 
-                onClick={() => handleRemove(setter, index)}
-              >
-                -
-              </button>
-            </div>
-          )}
-        </div>
-      ))}
-      <button 
-        className="add-button" 
-        onClick={() => handleAdd(setter, defaultObject)}
-      >
-        +
-      </button>
-    </div>
-  );
 
   const InputField = ({ label, value, onChange, error }) => (
     <div className={`input-group ${error ? 'error' : ''}`}>
@@ -214,6 +149,35 @@ const CurriculumVitae = () => {
     </div>
   );
 
+  const renderSection = (sectionName, renderInputs) => {
+    const items = state[sectionName];
+    const section = SECTIONS.find(s => s.name === sectionName);
+
+    return (
+      <div className="section">
+        <h2 className="section-title">{sectionName}:</h2>
+        {items.map((entry, index) => (
+          <div key={index} className="form-row">
+            <h3 style={{ color: '#00ADEF', marginBottom: '10px', borderBottom: '2px solid #00ADEF' }}>
+              {sectionName} {index + 1}
+            </h3>
+            {renderInputs(entry, index)}
+            {index > 0 && (
+              <button 
+                className="remove-button" 
+                onClick={() => updateState(sectionName, 'remove', null, index)}
+              >-</button>
+            )}
+          </div>
+        ))}
+        <button 
+          className="add-button" 
+          onClick={() => updateState(sectionName, 'add', section.defaultObject)}
+        >+</button>
+      </div>
+    );
+  };
+
   return (
     <div className="form-container">
       <h1 className="form-title">Datos de Curriculum Vitae</h1>
@@ -222,25 +186,22 @@ const CurriculumVitae = () => {
         <h2 className="section-title">Datos Personales:</h2>
         <div className="personal-info">
           <div className="form-grid">
-            {Object.entries(personalInfo).map(([key, value]) => (
+            {Object.entries(state.personalInfo).map(([key, value]) => (
               <InputField
                 key={key}
                 label={key.replace(/([A-Z])/g, ' $1').toUpperCase()}
                 value={value}
                 onChange={(e) => {
-                  setPersonalInfo({ ...personalInfo, [key]: e.target.value });
-                  const newErrors = {...errors};
-                  delete newErrors[`personalInfo.${key}`];
-                  setErrors(newErrors);
+                  updateState('personalInfo', 'update', { [key]: e.target.value });
                 }}
-                error={errors[`personalInfo.${key}`]}
+                error={state.errors[`personalInfo.${key}`]}
               />
             ))}
           </div>
           <div className="photo-section">
-            {profileImage ? (
+            {state.profileImage ? (
               <Image 
-                src={profileImage} 
+                src={state.profileImage} 
                 alt="Foto de perfil" 
                 width={180} 
                 height={180} 
@@ -264,10 +225,8 @@ const CurriculumVitae = () => {
         </div>
       </div>
 
-      {renderSectionWithSubtitle(
-        bachillerato, 
-        setBachillerato, 
-        'Educación', 
+      {renderSection(
+        'bachillerato', 
         (entry, index) => Object.entries(entry)
           .filter(([field]) => field !== 'educacion')
           .map(([field, value]) => (
@@ -275,20 +234,14 @@ const CurriculumVitae = () => {
               key={field}
               label={field}
               value={value}
-              onChange={(e) => handleChange(bachillerato, setBachillerato, index, field, e.target.value)}
-              error={errors[`bachillerato.${index}.${field}`]}
+              onChange={(e) => updateState('bachillerato', 'update', { [field]: e.target.value }, index)}
+              error={state.errors[`bachillerato.${index}.${field}`]}
             />
-          )),
-        { 
-          grado: '', 
-          institucion: '', 
-          año: ''        }
+          ))
       )}
 
-      {renderSectionWithSubtitle(
-        educacionSuperior, 
-        setEducacionSuperior, 
-        'Educación Superior', 
+      {renderSection(
+        'educacionSuperior', 
         (entry, index) => Object.entries(entry)
           .filter(([field]) => field !== 'educacionSuperior')
           .map(([field, value]) => (
@@ -296,22 +249,14 @@ const CurriculumVitae = () => {
               key={field}
               label={field}
               value={value}
-              onChange={(e) => handleChange(educacionSuperior, setEducacionSuperior, index, field, e.target.value)}
-              error={errors[`educacionSuperior.${index}.${field}`]}
+              onChange={(e) => updateState('educacionSuperior', 'update', { [field]: e.target.value }, index)}
+              error={state.errors[`educacionSuperior.${index}.${field}`]}
             />
-          )),
-        { 
-          grado: '', 
-          institucion: '', 
-          año: '', 
-          areaDeTitulo: ''
-        }
+          ))
       )}
 
-      {renderSectionWithSubtitle(
-        certificaciones, 
-        setCertificaciones, 
-        'Certificación', 
+      {renderSection(
+        'certificaciones', 
         (entry, index) => Object.entries(entry)
           .filter(([field]) => field !== 'certificacion')
           .map(([field, value]) => (
@@ -319,67 +264,14 @@ const CurriculumVitae = () => {
               key={field}
               label={field}
               value={value}
-              onChange={(e) => handleChange(certificaciones, setCertificaciones, index, field, e.target.value)}
-              error={errors[`certificaciones.${index}.${field}`]}
+              onChange={(e) => updateState('certificaciones', 'update', { [field]: e.target.value }, index)}
+              error={state.errors[`certificaciones.${index}.${field}`]}
             />
-          )),
-        { 
-          curso: '', 
-          entidad: '', 
-          año: ''
-        }
+          ))
       )}
 
-      {renderSectionWithSubtitle(
-        experienciaLaboral, 
-        setExperienciaLaboral, 
-        'Experiencia Laboral', 
-        (entry, index) => (
-          <>
-            {Object.entries(entry)
-              .filter(([field]) => 
-                field !== 'actividades' && field !== 'experienciaLaboral'
-              )
-              .map(([field, value]) => (
-                <InputField
-                  key={field}
-                  label={field}
-                  value={value}
-                  onChange={(e) => handleChange(experienciaLaboral, setExperienciaLaboral, index, field, e.target.value)}
-                  error={errors[`experienciaLaboral.${index}.${field}`]}
-                />
-              ))}
-            {entry.actividades.map((actividad, i) => (
-              <InputField
-                key={i}
-                label={`Actividad ${i + 1}`}
-                value={actividad}
-                onChange={(e) => {
-                  const updatedActivities = [...entry.actividades];
-                  updatedActivities[i] = e.target.value;
-                  handleChange(experienciaLaboral, setExperienciaLaboral, index, 'actividades', updatedActivities);
-                }}
-                error={errors[`experienciaLaboral.${index}.actividades.${i}`]}
-              />
-            ))}
-          </>
-        ),
-        {
-          empresa: '',
-          lugar: '',
-          fechaInicio: '',
-          fechaFin: '',
-          cargo: '',
-          descripcionEmpresa: '',
-          actividades: ['', '', ''],
-          logrosDestacados: ''
-        }
-      )}
-
-      {renderSectionWithSubtitle(
-        proyectosRelevantes, 
-        setProyectosRelevantes, 
-        'Proyecto', 
+      {renderSection(
+        'proyectosRelevantes', 
         (entry, index) => Object.entries(entry)
           .filter(([field]) => field !== 'proyectoRelevante')
           .map(([field, value]) => (
@@ -387,24 +279,14 @@ const CurriculumVitae = () => {
               key={field}
               label={field}
               value={value}
-              onChange={(e) => handleChange(proyectosRelevantes, setProyectosRelevantes, index, field, e.target.value)}
-              error={errors[`proyectosRelevantes.${index}.${field}`]}
+              onChange={(e) => updateState('proyectosRelevantes', 'update', { [field]: e.target.value }, index)}
+              error={state.errors[`proyectosRelevantes.${index}.${field}`]}
             />
-          )),
-        {
-          proyecto: '',
-          cliente: '',
-          año: '',
-          descripcion: '',
-          tecnologiasUtilizadas: '',
-          rolDesempeñado: ''
-        }
+          ))
       )}
 
-      {renderSectionWithSubtitle(
-        idiomas, 
-        setIdiomas, 
-        'Idioma', 
+      {renderSection(
+        'idiomas', 
         (entry, index) => Object.entries(entry)
           .filter(([field]) => field !== 'language')
           .map(([field, value]) => (
@@ -412,16 +294,65 @@ const CurriculumVitae = () => {
               key={field}
               label={field}
               value={value}
-              onChange={(e) => handleChange(idiomas, setIdiomas, index, field, e.target.value)}
-              error={errors[`idiomas.${index}.${field}`]}
+              onChange={(e) => updateState('idiomas', 'update', { [field]: e.target.value }, index)}
+              error={state.errors[`idiomas.${index}.${field}`]}
             />
-          )),
-        { 
-          idioma: '', 
-          nivel: '', 
-          añoObtencion: ''
-        }
+          ))
       )}
+
+      <div className="section">
+        <h2 className="section-title">Experiencia Laboral:</h2>
+        {state.experienciaLaboral.map((entry, index) => (
+          <div key={index} className="form-row">
+            <h3 style={{ color: '#00ADEF', marginBottom: '10px', borderBottom: '2px solid #00ADEF' }}>
+              Experiencia Laboral {index + 1}
+            </h3>
+            {Object.entries(entry)
+              .filter(([field]) => field !== 'actividades' && field !== 'experienciaLaboral')
+              .map(([field, value]) => (
+                <InputField
+                  key={field}
+                  label={field}
+                  value={value}
+                  onChange={(e) => updateState('experienciaLaboral', 'update', { [field]: e.target.value }, index)}
+                  error={state.errors[`experienciaLaboral.${index}.${field}`]}
+                />
+              ))}
+            {entry.actividades.map((actividad, actIndex) => (
+              <InputField
+                key={actIndex}
+                label={`Actividad ${actIndex + 1}`}
+                value={actividad}
+                onChange={(e) => {
+                  const updatedActivities = [...entry.actividades];
+                  updatedActivities[actIndex] = e.target.value;
+                  updateState('experienciaLaboral', 'update', { actividades: updatedActivities }, index);
+                }}
+                error={state.errors[`experienciaLaboral.${index}.actividades.${actIndex}`]}
+              />
+            ))}
+            {index > 0 && (
+              <button 
+                className="remove-button" 
+                onClick={() => updateState('experienciaLaboral', 'remove', null, index)}
+              >-</button>
+            )}
+          </div>
+        ))}
+        <button 
+          className="add-button" 
+          onClick={() => updateState('experienciaLaboral', 'add', {
+            empresa: '',
+            lugar: '',
+            fechaInicio: '',
+            fechaFin: '',
+            cargo: '',
+            descripcionEmpresa: '',
+            actividades: ['', '', ''],
+            logrosDestacados: ''
+          })}
+        >+</button>
+      </div>
 
       <div className="submit-section">
         <button className="blue-button" onClick={handleSubmitRequest}>
@@ -429,11 +360,11 @@ const CurriculumVitae = () => {
         </button>
       </div>
 
-      {showPopup && (
+      {state.showPopup && (
         <ConfirmacionPopup
           mensaje="¿Estás seguro de que quieres enviar los datos actualizados?"
-          onConfirm={pendingSubmit}
-          onCancel={() => setShowPopup(false)}
+          onConfirm={state.pendingSubmit}
+          onCancel={() => setState(prev => ({ ...prev, showPopup: false }))}
         />
       )}
     </div>
