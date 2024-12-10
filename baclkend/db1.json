@@ -3,26 +3,23 @@
     {
       "id": "cv123456",
       "personalInfo": {
-        "nombre": "Estefanía",
+        "nombre": "Estefanía jair",
         "apellido": "Bedón",
         "cedula": "1723456789",
         "nacionalidad": "Ecuatoriana",
         "correo": "estefaniabedon@hotmail.com",
-        "telefono": [
-          "0983742552",
-          "0998765432"
-        ],
+        "telefono": [],
         "linkedIn": "https://www.linkedin.com/in/estefaniabedon",
         "aspiracionSalarial": "2000 USD mensuales",
         "tiempoIngreso": "Inmediato",
         "diaNacimiento": "1995-06-15",
         "estadoCivil": "Soltera",
         "direccion": "Calle Ficticia 123, Quito, Ecuador",
-        "foto": "http://example.com/foto.jpg",
+        "foto": "",
         "genero": "Femenino",
         "autoidentificacionEtcnica": "Mestizo",
         "discapacidad": {
-          "tieneDiscapacidad": false,
+          "tieneDiscapacidad": true,
           "tipo": "",
           "porcentaje": ""
         },
@@ -76,78 +73,14 @@
           "ano": "2022"
         }
       ],
-      "experienciaLaboral": [
-        {
-          "empresa": "Escuela Politécnica Nacional",
-          "lugar": "QUITO, ECUADOR",
-          "fechaInicio": "ABRIL 2024",
-          "fechaFin": "AGOS 2024",
-          "cargo": "Desarrolladora Web",
-          "descripcionRol": "Desarrollo y diseño de aplicaciones web. Implementación de seguridad y verificación de usuarios. Integración de APIs externas. Pruebas unitarias y despliegue de proyectos. Desarrollo Front y Back-end.",
-          "remuneracionBruta": "1500 USD mensuales",
-          "beneficios": "Seguro médico, bonificaciones por desempeño",
-          "referenciaLaboral": {
-            "cargo": "Director de TI",
-            "numero": "+593 999999999",
-            "nombre": "Juan Pérez"
-          }
-        },
-        {
-          "empresa": "Tech Solutions",
-          "lugar": "QUITO, ECUADOR",
-          "fechaInicio": "SEP 2024",
-          "fechaFin": "ACTUALIDAD",
-          "cargo": "Full-Stack Developer",
-          "descripcionRol": "Desarrollo de plataformas web escalables. Implementación de servicios RESTful. Optimización del rendimiento de aplicaciones. Coordinación con el equipo de diseño para crear interfaces de usuario efectivas.",
-          "remuneracionBruta": "1800 USD mensuales",
-          "beneficios": "Seguro de vida, capacitación continua, home office",
-          "referenciaLaboral": {
-            "cargo": "Gerente de Desarrollo",
-            "numero": "+593 988888888",
-            "nombre": "Ana López"
-          }
-        }
-      ],
-      "proyectosRelevantes": [
-        {
-          "proyecto": "Desarrollo de plataforma de banca en línea",
-          "cliente": "Banco XYZ",
-          "rol": "Desarrolladora Front-End",
-          "ano": "2023",
-          "partner": "Tech Solutions",
-          "descripcion": "Creación de una plataforma bancaria con funcionalidades de consulta de saldo, pagos, transferencias y gestión de cuentas."
-        },
-        {
-          "proyecto": "Desarrollo de tienda en línea 'Your Store'",
-          "cliente": "Comercio ABC",
-          "rol": "Desarrolladora Full-Stack",
-          "ano": "2024",
-          "partner": "Innovative Solutions",
-          "descripcion": "Desarrollo de una tienda en línea con sistema de pagos integrados, gestión de inventarios y reportes analíticos."
-        }
-      ],
+      "experienciaLaboral": [],
+      "proyectosRelevantes": [],
       "logrosRelevantes": [
-        "Implementación de un sistema de seguridad mejorado en las aplicaciones web desarrolladas.",
-        "Liderazgo en la creación de una API RESTful que facilitó la integración con aplicaciones externas."
+        "",
+        ""
       ],
-      "competencias": [
-        "Desarrollo web Full-Stack",
-        "Gestión de bases de datos",
-        "Optimización de rendimiento de aplicaciones",
-        "Gestión de proyectos ágiles"
-      ],
-      "idiomas": [
-        {
-          "idioma": "Inglés",
-          "fluidez": "B2",
-          "porcentaje": "80%"
-        },
-        {
-          "idioma": "Español",
-          "fluidez": "Native",
-          "porcentaje": "100%"
-        }
-      ],
+      "competencias": [],
+      "idiomas": [],
       "imagenes": [
         {
           "filename": "X5.png",
