@@ -3,12 +3,14 @@
     {
       "id": "cv123456",
       "personalInfo": {
-        "nombre": "Estefanía jair",
-        "apellido": "Bedón",
-        "cedula": "1723456789",
-        "nacionalidad": "Ecuatoriana",
-        "correo": "estefaniabedon@hotmail.com",
-        "telefono": [],
+        "nombre": "Jair Joshue",
+        "apellido": "Sanchez Yanza",
+        "cedula": "1754516092",
+        "nacionalidad": "Ecuatoriano",
+        "correo": "alexis151270sanchez@gmail.com",
+        "telefono": [
+          "0987297703"
+        ],
         "linkedIn": "https://www.linkedin.com/in/estefaniabedon",
         "aspiracionSalarial": "2000 USD mensuales",
         "tiempoIngreso": "Inmediato",
@@ -26,7 +28,9 @@
         "expectativasTrabajo": "Busco oportunidades para crecer profesionalmente y contribuir con soluciones tecnológicas innovadoras.",
         "actividadesTiempoLibre": "Me gusta leer, practicar deportes y aprender nuevas tecnologías.",
         "cantidadHijos": 0,
-        "tieneDiscapacidad": "on"
+        "tieneDiscapacidad": "on",
+        "tipo": "a",
+        "porcentaje": "d"
       },
       "educacion": {
         "bachillerato": [
@@ -73,14 +77,83 @@
           "ano": "2022"
         }
       ],
-      "experienciaLaboral": [],
-      "proyectosRelevantes": [],
-      "logrosRelevantes": [
-        "",
-        ""
+      "experienciaLaboral": [
+        {
+          "empresa": "jair",
+          "lugar": "jair",
+          "fechaInicio": "2024-07",
+          "fechaFin": "2024-07",
+          "cargo": "dsa",
+          "descripcionRol": "jair",
+          "remuneracionBruta": "jair",
+          "beneficios": "jair",
+          "referenciaLaboral": {
+            "nombre": "jair",
+            "cargo": "jair",
+            "telefono": "jair"
+          }
+        },
+        {
+          "empresa": "",
+          "lugar": "",
+          "fechaInicio": "",
+          "fechaFin": "",
+          "cargo": "",
+          "descripcionRol": "",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        },
+        {
+          "empresa": "jair",
+          "lugar": "",
+          "fechaInicio": "",
+          "fechaFin": "",
+          "cargo": "",
+          "descripcionRol": "",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        },
+        {
+          "empresa": "",
+          "lugar": "",
+          "fechaInicio": "",
+          "fechaFin": "",
+          "cargo": "",
+          "descripcionRol": "",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        }
       ],
-      "competencias": [],
-      "idiomas": [],
+      "proyectosRelevantes": [
+        "jair"
+      ],
+      "logrosRelevantes": [
+        "jair",
+        "jair",
+        "jair"
+      ],
+      "competencias": [
+        "jair",
+        "jair"
+      ],
+      "idiomas": [
+        "jair"
+      ],
       "imagenes": [
         {
           "filename": "X5.png",

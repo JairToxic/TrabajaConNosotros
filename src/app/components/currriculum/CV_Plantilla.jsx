@@ -141,14 +141,18 @@ const CV = () => {
 };
 
 const styles = {
+  body :{
+    backgroundColor:'white'
+  },
+
   container: {
-    fontFamily: '"Roboto", sans-serif',
+    fontFamily: '"Poppins", sans-serif',
     maxWidth: '900px',
     margin: '40px auto',
     padding: '30px',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f7f7f7',
     borderRadius: '12px',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)',
     color: '#333',
   },
   header: {
@@ -156,7 +160,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     marginBottom: '30px',
-    borderBottom: '2px solid #ddd',
+    borderBottom: '2px solid #4CAF50',
     paddingBottom: '20px',
   },
   profileSection: {
@@ -165,13 +169,14 @@ const styles = {
     justifyContent: 'center',
   },
   profileImage: {
-    width: '150px',
-    height: '150px',
+    width: '160px',
+    height: '160px',
     borderRadius: '50%',
     objectFit: 'cover',
     marginRight: '20px',
-    border: '4px solid #4CAF50',
+    border: '5px solid #4CAF50',
     transition: 'transform 0.3s ease',
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
   },
   nameAndContact: {
     display: 'flex',
@@ -179,7 +184,7 @@ const styles = {
     justifyContent: 'center',
   },
   name: {
-    fontSize: '2.4em',
+    fontSize: '2.5em',
     marginBottom: '15px',
     color: '#4CAF50',
     fontWeight: '600',
@@ -191,13 +196,14 @@ const styles = {
   link: {
     color: '#4CAF50',
     textDecoration: 'none',
+    transition: 'color 0.3s ease',
   },
   section: {
     marginBottom: '30px',
   },
   sectionTitle: {
-    fontSize: '1.8em',
-    fontWeight: '700',
+    fontSize: '2em',
+    fontWeight: '600',
     color: '#333',
     marginBottom: '12px',
     borderBottom: '2px solid #4CAF50',
@@ -206,28 +212,28 @@ const styles = {
   grid: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gap: '15px',
+    gap: '20px',
   },
   card: {
-    backgroundColor: '#f4f4f4',
-    padding: '15px',
+    backgroundColor: '#ffffff',
+    padding: '20px',
     borderRadius: '8px',
-    boxShadow: '0 3px 10px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 3px 12px rgba(0, 0, 0, 0.1)',
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
   },
   jobCard: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#ffffff',
     padding: '20px',
     borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
     marginBottom: '20px',
     transition: 'transform 0.3s ease',
   },
   projectCard: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#ffffff',
     padding: '20px',
     borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
     marginBottom: '20px',
     transition: 'transform 0.3s ease',
   },
