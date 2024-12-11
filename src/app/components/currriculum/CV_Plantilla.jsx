@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const CV = () => {
+const UltimateElegantCV = () => {
   const [cvData, setCvData] = useState(null);
+  const [hovered, setHovered] = useState(false); // Estado para manejar el hover
 
   useEffect(() => {
     const fetchCVData = async () => {
@@ -18,234 +19,288 @@ const CV = () => {
         const data = await response.json();
         setCvData(data);
       } catch (error) {
-        console.error(error);
+        console.error('Error al obtener los datos:', error);
       }
     };
 
     fetchCVData();
   }, []);
 
+  const styles = {
+    container: {
+      fontFamily: "'Roboto', sans-serif",
+      maxWidth: '1100px',
+      margin: '40px auto',
+      backgroundColor: '#1A1A2E',
+      boxShadow: '0 15px 45px rgba(0, 0, 0, 0.2)',
+      borderRadius: '20px',
+      padding: '40px',
+      color: '#f5f5f5',
+    },
+    header: {
+      background: 'linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '40px',
+      position: 'relative',
+      borderRadius: '20px',
+      boxShadow: '0 15px 45px rgba(0, 0, 0, 0.3)',
+    },
+    profileImage: {
+      width: '200px',
+      height: '200px',
+      borderRadius: '50%',
+      objectFit: 'cover',
+      marginBottom: '20px',
+      border: '4px solid rgba(255, 255, 255, 0.4)',
+      transition: 'all 0.3s ease',
+    },
+    profileImageHover: {
+      transform: 'scale(1.1)', // Efecto de zoom cuando se pasa el ratón
+    },
+    nameSection: {
+      textAlign: 'center',
+    },
+    name: {
+      fontSize: '2.8em',
+      fontWeight: '900',
+      marginBottom: '10px',
+      color: '#fff',
+      letterSpacing: '1px',
+    },
+    jobTitle: {
+      fontSize: '1.5em',
+      opacity: '0.8',
+      marginBottom: '20px',
+      color: '#D1D3D8',
+    },
+    contactInfo: {
+      display: 'flex',
+      gap: '20px',
+      justifyContent: 'center',
+      marginBottom: '20px',
+    },
+    contactItem: {
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      padding: '12px 20px',
+      borderRadius: '25px',
+      color: 'white',
+      transition: 'background-color 0.3s ease',
+    },
+    contactItemHovered: {
+      backgroundColor: '#00c6ff', // Color de hover
+    },
+    sectionContainer: {
+      marginBottom: '30px',
+    },
+    sectionTitle: {
+      borderBottom: '3px solid #00c6ff',
+      paddingBottom: '10px',
+      marginBottom: '20px',
+      color: '#D1D3D8',
+      fontSize: '1.8em',
+      fontWeight: '700',
+      textTransform: 'uppercase',
+    },
+    sectionContent: {
+      padding: '20px',
+      backgroundColor: '#2A2A3C',
+      borderRadius: '15px',
+      color: '#f5f5f5',
+      marginTop: '20px',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    },
+    list: {
+      listStyleType: 'none',
+      paddingLeft: '20px',
+    },
+    listItem: {
+      marginBottom: '15px',
+      color: '#bbb',
+      padding: '15px',
+      border: '1px solid #444',
+      borderRadius: '10px',
+      backgroundColor: '#1F1F2E',
+      transition: '0.3s ease',
+    },
+    listItemHovered: {
+      backgroundColor: '#333',
+    },
+    divider: {
+      borderBottom: '1px solid #444',
+      marginBottom: '30px',
+    },
+  };
+
   if (!cvData) {
-    return <div>Cargando CV...</div>;
+    return <div style={{ textAlign: 'center', padding: '20px', color: '#f5f5f5' }}>Cargando CV...</div>;
   }
 
-  const { personalInfo, educacion, certificaciones, experienciaLaboral, proyectosRelevantes, logrosRelevantes, competencias, idiomas, foto } = cvData;
+  const {
+    personalInfo,
+    educacion,
+    certificaciones,
+    experienciaLaboral,
+    proyectosRelevantes,
+    logrosRelevantes,
+    competencias,
+    idiomas,
+    imagenes,
+  } = cvData;
 
   return (
     <div style={styles.container}>
+      {/* Header */}
       <div style={styles.header}>
-        <div style={styles.profileSection}>
-          <img src={foto} alt="Foto de perfil" style={styles.profileImage} />
-          <div style={styles.nameAndContact}>
-            <h1 style={styles.name}>{personalInfo.nombre} {personalInfo.apellido}</h1>
-            <p style={styles.contactInfo}><strong>Email:</strong> <a href={`mailto:${personalInfo.correo}`} style={styles.link}>{personalInfo.correo}</a></p>
-            <p style={styles.contactInfo}><strong>Teléfono:</strong> {personalInfo.telefono.join(', ')}</p>
-            <p style={styles.contactInfo}><strong>LinkedIn:</strong> <a href={personalInfo.linkedIn} target="_blank" rel="noopener noreferrer" style={styles.link}>{personalInfo.linkedIn}</a></p>
+        <img 
+          src={personalInfo.foto} 
+          alt="Foto de perfil" 
+          style={{
+            ...styles.profileImage,
+            ...(hovered ? styles.profileImageHover : {}),
+          }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        />
+        <div style={styles.nameSection}>
+          <h1 style={styles.name}>{personalInfo.nombre} {personalInfo.apellido}</h1>
+          <div style={styles.jobTitle}>{personalInfo.aspiracionSalarial}</div>
+          <div style={styles.contactInfo}>
+            {[ 
+              { icon: '📧', text: personalInfo.correo },
+              { icon: '📱', text: personalInfo.telefono.join(', ') },
+              { icon: '🔗', text: personalInfo.linkedIn }
+            ].map((contact, index) => (
+              <div 
+                key={index} 
+                style={styles.contactItem}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
+              >
+                {contact.icon} {contact.text}
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <section style={styles.section}>
+      {/* Secciones del CV */}
+      <div style={styles.sectionContainer}>
         <h2 style={styles.sectionTitle}>Información Personal</h2>
-        <div style={styles.grid}>
-          <div><strong>Cédula:</strong> {personalInfo.cedula}</div>
-          <div><strong>Nacionalidad:</strong> {personalInfo.nacionalidad}</div>
-          <div><strong>Fecha de nacimiento:</strong> {personalInfo.diaNacimiento}</div>
-          <div><strong>Estado civil:</strong> {personalInfo.estadoCivil}</div>
-          <div><strong>Dirección:</strong> {personalInfo.direccion}</div>
-          <div><strong>Aspiración salarial:</strong> {personalInfo.aspiracionSalarial}</div>
-          <div><strong>Tiempo de ingreso:</strong> {personalInfo.tiempoIngreso}</div>
+        <div style={styles.sectionContent}>
+          <p><strong>Estado Civil:</strong> {personalInfo.estadoCivil}</p>
+          <p><strong>Fecha de Nacimiento:</strong> {personalInfo.diaNacimiento}</p>
+          <p><strong>Cantidad de Hijos:</strong> {personalInfo.cantidadHijos}</p>
+          <p><strong>Dirección:</strong> {personalInfo.direccion}</p>
+          <p><strong>Género:</strong> {personalInfo.genero}</p>
+          <p><strong>Autoidentificación Técnica:</strong> {personalInfo.autoidentificacionEtcnica}</p>
+          {personalInfo.discapacidad && (
+            <p><strong>Discapacidad:</strong> {personalInfo.discapacidad.tipo} ({personalInfo.discapacidad.porcentaje})</p>
+          )}
+          <p><strong>Expectativas de Trabajo:</strong> {personalInfo.expectativasTrabajo}</p>
+          <p><strong>Actividades en Tiempo Libre:</strong> {personalInfo.actividadesTiempoLibre}</p>
         </div>
-      </section>
+      </div>
 
-      <section style={styles.section}>
+      {/* Experiencia Profesional */}
+      <div style={styles.sectionContainer}>
+        <h2 style={styles.sectionTitle}>Experiencia Profesional</h2>
+        <div style={styles.sectionContent}>
+          {experienciaLaboral.map((job, index) => (
+            <div key={index}>
+              <div style={styles.listItem}>
+                <h3>{job.cargo} - {job.empresa}</h3>
+                <p>{job.fechaInicio} - {job.fechaFin}</p>
+                <p>{job.descripcionRol}</p>
+              </div>
+              {index < experienciaLaboral.length - 1 && <div style={styles.divider}></div>}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Educación */}
+      <div style={styles.sectionContainer}>
         <h2 style={styles.sectionTitle}>Educación</h2>
-        <div style={styles.grid}>
-          {educacion.bachillerato.map((item, index) => (
-            <div key={index} style={styles.card}>{item.grado} - {item.institucion} ({item.ano})</div>
-          ))}
-          {educacion.educacionSuperiorNoUniversitaria.map((item, index) => (
-            <div key={index} style={styles.card}>{item.grado} - {item.institucion} ({item.anoInicio} - {item.anoFin})</div>
-          ))}
-          {educacion.educacionSuperior.map((item, index) => (
-            <div key={index} style={styles.card}>{item.grado} - {item.institucion} ({item.anoInicio} - {item.anoFin})</div>
-          ))}
-        </div>
-      </section>
-
-      <section style={styles.section}>
-        <h2 style={styles.sectionTitle}>Certificaciones</h2>
-        <div style={styles.grid}>
-          {certificaciones.map((item, index) => (
-            <div key={index} style={styles.card}>{item.curso} - {item.entidad} ({item.ano})</div>
+        <div style={styles.sectionContent}>
+          {[...educacion.bachillerato, ...educacion.educacionSuperiorNoUniversitaria, ...educacion.educacionSuperior].map((edu, index) => (
+            <div key={index}>
+              <div style={styles.listItem}>
+                <h3>{edu.grado}</h3>
+                <p>{edu.institucion} ({edu.anoInicio || edu.ano})</p>
+              </div>
+              {index < educacion.length - 1 && <div style={styles.divider}></div>}
+            </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      <section style={styles.section}>
-        <h2 style={styles.sectionTitle}>Experiencia Laboral</h2>
-        {experienciaLaboral.map((item, index) => (
-          <div key={index} style={styles.jobCard}>
-            <h3>{item.cargo} - {item.empresa}</h3>
-            <p><strong>Lugar:</strong> {item.lugar}</p>
-            <p><strong>Fecha:</strong> {item.fechaInicio} a {item.fechaFin}</p>
-            <p>{item.descripcionRol}</p>
-            <p><strong>Remuneración:</strong> {item.remuneracionBruta}</p>
-            <p><strong>Beneficios:</strong> {item.beneficios}</p>
-            <p><strong>Referencia:</strong> {item.referenciaLaboral.nombre} ({item.referenciaLaboral.cargo}) - {item.referenciaLaboral.numero}</p>
+      {/* Logros y Certificaciones */}
+      <div style={styles.sectionContainer}>
+        <h2 style={styles.sectionTitle}>Logros y Certificaciones</h2>
+        <div style={styles.sectionContent}>
+          <div>
+            <h3>Logros</h3>
+            <ul style={styles.list}>
+              {logrosRelevantes.map((achievement, index) => (
+                <li key={index} style={styles.listItem}>{achievement}</li>
+              ))}
+            </ul>
           </div>
-        ))}
-      </section>
-
-      <section style={styles.section}>
-        <h2 style={styles.sectionTitle}>Proyectos Relevantes</h2>
-        {proyectosRelevantes.map((item, index) => (
-          <div key={index} style={styles.projectCard}>
-            <h3>{item.proyecto}</h3>
-            <p><strong>Cliente:</strong> {item.cliente}</p>
-            <p><strong>Rol:</strong> {item.rol}</p>
-            <p><strong>Año:</strong> {item.ano}</p>
-            <p><strong>Descripción:</strong> {item.descripcion}</p>
+          <div>
+            <h3>Certificaciones</h3>
+            <ul style={styles.list}>
+              {certificaciones.map((cert, index) => (
+                <li key={index} style={styles.listItem}>
+                  {cert.curso} - {cert.entidad} ({cert.ano})
+                </li>
+              ))}
+            </ul>
           </div>
-        ))}
-      </section>
+        </div>
+      </div>
 
-      <section style={styles.section}>
-        <h2 style={styles.sectionTitle}>Logros Relevantes</h2>
-        <ul style={styles.list}>
-          {logrosRelevantes.map((item, index) => (
-            <li key={index} style={styles.listItem}>{item}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section style={styles.section}>
+      {/* Competencias */}
+      <div style={styles.sectionContainer}>
         <h2 style={styles.sectionTitle}>Competencias</h2>
         <ul style={styles.list}>
-          {competencias.map((item, index) => (
-            <li key={index} style={styles.listItem}>{item}</li>
+          {competencias.map((competence, index) => (
+            <li key={index} style={styles.listItem}>{competence}</li>
           ))}
         </ul>
-      </section>
+      </div>
 
-      <section style={styles.section}>
+      {/* Idiomas */}
+      <div style={styles.sectionContainer}>
         <h2 style={styles.sectionTitle}>Idiomas</h2>
         <ul style={styles.list}>
-          {idiomas.map((item, index) => (
-            <li key={index} style={styles.listItem}>{item.idioma} - {item.fluidez} ({item.porcentaje})</li>
+          {idiomas.map((language, index) => (
+            <li key={index} style={styles.listItem}>
+              {language.idioma} ({language.fluidez})
+            </li>
           ))}
         </ul>
-      </section>
+      </div>
+
+      {/* Proyectos Relevantes */}
+      <div style={styles.sectionContainer}>
+        <h2 style={styles.sectionTitle}>Proyectos Relevantes</h2>
+        <div style={styles.sectionContent}>
+          {proyectosRelevantes.map((project, index) => (
+            <div key={index}>
+              <div style={styles.listItem}>
+                <h3>{project.nombre}</h3>
+                <p>{project.descripcion}</p>
+              </div>
+              {index < proyectosRelevantes.length - 1 && <div style={styles.divider}></div>}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
 
-const styles = {
-  body :{
-    backgroundColor:'white'
-  },
-
-  container: {
-    fontFamily: '"Poppins", sans-serif',
-    maxWidth: '900px',
-    margin: '40px auto',
-    padding: '30px',
-    backgroundColor: '#f7f7f7',
-    borderRadius: '12px',
-    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.1)',
-    color: '#333',
-  },
-  header: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginBottom: '30px',
-    borderBottom: '2px solid #4CAF50',
-    paddingBottom: '20px',
-  },
-  profileSection: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  profileImage: {
-    width: '160px',
-    height: '160px',
-    borderRadius: '50%',
-    objectFit: 'cover',
-    marginRight: '20px',
-    border: '5px solid #4CAF50',
-    transition: 'transform 0.3s ease',
-    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-  },
-  nameAndContact: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  name: {
-    fontSize: '2.5em',
-    marginBottom: '15px',
-    color: '#4CAF50',
-    fontWeight: '600',
-  },
-  contactInfo: {
-    color: '#666',
-    marginBottom: '8px',
-  },
-  link: {
-    color: '#4CAF50',
-    textDecoration: 'none',
-    transition: 'color 0.3s ease',
-  },
-  section: {
-    marginBottom: '30px',
-  },
-  sectionTitle: {
-    fontSize: '2em',
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: '12px',
-    borderBottom: '2px solid #4CAF50',
-    paddingBottom: '8px',
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '20px',
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 3px 12px rgba(0, 0, 0, 0.1)',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  },
-  jobCard: {
-    backgroundColor: '#ffffff',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-    marginBottom: '20px',
-    transition: 'transform 0.3s ease',
-  },
-  projectCard: {
-    backgroundColor: '#ffffff',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-    marginBottom: '20px',
-    transition: 'transform 0.3s ease',
-  },
-  list: {
-    listStyleType: 'disc',
-    marginLeft: '20px',
-    color: '#555',
-  },
-  listItem: {
-    marginBottom: '10px',
-    transition: 'color 0.3s ease',
-  },
-};
-
-export default CV;
+export default UltimateElegantCV;
