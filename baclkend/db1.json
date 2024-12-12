@@ -1,289 +1,754 @@
 {
   "cvs": [
     {
-      "id": "cv123456",
+      "id": "1",
       "personalInfo": {
         "nombre": "Jair Joshue",
         "apellido": "Sanchez Yanza",
         "cedula": "1754516092",
-        "nacionalidad": "Ecuatoriano",
+        "nacionalidad": "Ecuatoriana",
         "correo": "alexis151270sanchez@gmail.com",
         "telefono": [
-          "0987297703"
+          "0959610833"
         ],
         "linkedIn": "https://www.linkedin.com/in/estefaniabedon",
         "aspiracionSalarial": "2000 USD mensuales",
         "tiempoIngreso": "Inmediato",
-        "diaNacimiento": "1995-06-15",
+        "diaNacimiento": "",
         "estadoCivil": "Soltera",
-        "direccion": "Calle Ficticia 123, Quito, Ecuador",
-        "foto": "",
+        "direccion": "Ciudadela Ibarra",
+        "foto": "data:image/jpeg;base64,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",
         "genero": "Femenino",
-        "autoidentificacionEtcnica": "Mestizo",
+        "autoidentificacionEtnica": "",
         "discapacidad": {
-          "tieneDiscapacidad": true,
+          "tieneDiscapacidad": false,
           "tipo": "",
           "porcentaje": ""
         },
-        "expectativasTrabajo": "Busco oportunidades para crecer profesionalmente y contribuir con soluciones tecnológicas innovadoras.",
-        "actividadesTiempoLibre": "Me gusta leer, practicar deportes y aprender nuevas tecnologías.",
+        "expectativasTrabajo": "",
+        "actividadesTiempoLibre": "",
         "cantidadHijos": 0,
-        "tieneDiscapacidad": "on",
-        "tipo": "a",
-        "porcentaje": "d"
+        "autoidentificacionEtcnica": "Mestizo"
       },
       "educacion": {
         "bachillerato": [
           {
-            "grado": "Bachiller en Ciencias",
-            "institucion": "Colegio La Providencia",
-            "ano": "2012"
+            "grado": "dasd",
+            "institucion": "dsa",
+            "ano": "2002"
           }
         ],
-        "educacionSuperiorNoUniversitaria": [
-          {
-            "grado": "Técnico en Desarrollo Web",
-            "institucion": "Instituto Tecnológico del Ecuador",
-            "anoInicio": "2016",
-            "anoFin": "2018"
-          }
-        ],
-        "educacionSuperior": [
-          {
-            "grado": "Ingeniera en Computación",
-            "institucion": "Escuela Politécnica Nacional",
-            "anoInicio": "2020",
-            "anoFin": ""
-          }
-        ],
-        "educacionDe4toNivel": [
-          {
-            "grado": "Maestría en Inteligencia Artificial",
-            "institucion": "Universidad Central del Ecuador",
-            "anoInicio": "2025",
-            "anoFin": ""
-          }
-        ]
+        "educacionSuperiorNoUniversitaria": [],
+        "educacionSuperior": [],
+        "educacionDe4toNivel": []
       },
-      "certificaciones": [
-        {
-          "curso": "Aplicaciones Web",
-          "entidad": "Escuela Politécnica Nacional",
-          "ano": "2023"
-        },
-        {
-          "curso": "CCNAv7: Switching, Routing and Wireless Essentials",
-          "entidad": "Cisco",
-          "ano": "2022"
-        }
-      ],
-      "experienciaLaboral": [
-        {
-          "empresa": "jair",
-          "lugar": "jair",
-          "fechaInicio": "2024-07",
-          "fechaFin": "2024-07",
-          "cargo": "dsa",
-          "descripcionRol": "jair",
-          "remuneracionBruta": "jair",
-          "beneficios": "jair",
-          "referenciaLaboral": {
-            "nombre": "jair",
-            "cargo": "jair",
-            "telefono": "jair"
-          }
-        },
-        {
-          "empresa": "",
-          "lugar": "",
-          "fechaInicio": "",
-          "fechaFin": "",
-          "cargo": "",
-          "descripcionRol": "",
-          "remuneracionBruta": "",
-          "beneficios": "",
-          "referenciaLaboral": {
-            "nombre": "",
-            "cargo": "",
-            "telefono": ""
-          }
-        },
-        {
-          "empresa": "jair",
-          "lugar": "",
-          "fechaInicio": "",
-          "fechaFin": "",
-          "cargo": "",
-          "descripcionRol": "",
-          "remuneracionBruta": "",
-          "beneficios": "",
-          "referenciaLaboral": {
-            "nombre": "",
-            "cargo": "",
-            "telefono": ""
-          }
-        },
-        {
-          "empresa": "",
-          "lugar": "",
-          "fechaInicio": "",
-          "fechaFin": "",
-          "cargo": "",
-          "descripcionRol": "",
-          "remuneracionBruta": "",
-          "beneficios": "",
-          "referenciaLaboral": {
-            "nombre": "",
-            "cargo": "",
-            "telefono": ""
-          }
-        }
-      ],
-      "proyectosRelevantes": [
-        "jair"
-      ],
-      "logrosRelevantes": [
-        "jair",
-        "jair",
-        "jair"
-      ],
+      "certificaciones": [],
+      "experienciaLaboral": [],
+      "proyectosRelevantes": [],
+      "logrosRelevantes": [],
       "competencias": [
-        "jair",
-        "jair"
+        "html"
       ],
       "idiomas": [
-        "jair"
-      ],
-      "imagenes": [
         {
-          "filename": "X5.png",
-          "page": 0,
-          "path": "http://127.0.0.1:5000/temp_images/cv123456_page_0_image_0_X5.png"
+          "idioma": "Inglés",
+          "fluidez": "C1",
+          "porcentaje": "100%"
         }
       ]
     },
     {
-      "id": "cv7891011",
+      "id": "CV-123456",
       "personalInfo": {
-        "nombre": "Carlos",
-        "apellido": "Sánchez",
-        "cedula": "1712345678",
-        "nacionalidad": "Ecuatoriano",
-        "correo": "carlos.sanchez@example.com",
+        "nombre": "Estefanía",
+        "apellido": "Bedón",
+        "cedula": "",
+        "nacionalidad": "",
+        "correo": "estefaniabedon@hotmail.com",
         "telefono": [
-          "0967456789"
+          "0983742552"
         ],
-        "linkedIn": "https://www.linkedin.com/in/carlossanchez",
-        "aspiracionSalarial": "3000 USD mensuales",
-        "tiempoIngreso": "3 meses",
-        "diaNacimiento": "1990-08-22",
-        "estadoCivil": "Casado",
-        "direccion": "Av. Libertador 456, Quito, Ecuador",
-        "foto": "http://example.com/foto2.jpg",
-        "genero": "Masculino",
-        "autoidentificacionEtcnica": "Afrodescendiente",
+        "linkedIn": "",
+        "aspiracionSalarial": "",
+        "tiempoIngreso": "",
+        "diaNacimiento": "",
+        "estadoCivil": "",
+        "direccion": "",
+        "foto": "",
+        "genero": "",
+        "autoidentificacionEtnica": "",
         "discapacidad": {
-          "tieneDiscapacidad": true,
-          "tipo": "Discapacidad visual",
-          "porcentaje": "40%"
+          "tieneDiscapacidad": false,
+          "tipo": "",
+          "porcentaje": ""
         },
-        "expectativasTrabajo": "Busco contribuir con mi experiencia en desarrollo de software y seguir aprendiendo sobre nuevas tecnologías.",
-        "actividadesTiempoLibre": "Disfruto de la música, la lectura y los videojuegos.",
-        "cantidadHijos": 2
+        "expectativasTrabajo": "",
+        "actividadesTiempoLibre": "",
+        "cantidadHijos": 0
       },
       "educacion": {
         "bachillerato": [
           {
-            "grado": "Bachiller en Ciencias Sociales",
-            "institucion": "Colegio Los Andes",
-            "ano": "2008"
-          }
-        ],
-        "educacionSuperiorNoUniversitaria": [
+            "grado": "Primaria",
+            "institucion": "Colegio la Milagrosa",
+            "ano": "2005/2012"
+          },
           {
-            "grado": "Técnico en Redes y Telecomunicaciones",
-            "institucion": "Instituto Técnico de Redes",
-            "anoInicio": "2011",
-            "anoFin": "2013"
+            "grado": "Secundaria",
+            "institucion": "Colegio la Providencia",
+            "ano": "2012/2020"
           }
         ],
+        "educacionSuperiorNoUniversitaria": [],
         "educacionSuperior": [
           {
-            "grado": "Licenciado en Ciencias de la Computación",
-            "institucion": "Universidad Central del Ecuador",
-            "anoInicio": "2014",
-            "anoFin": "2018"
+            "grado": "Ing. en computación",
+            "institucion": "Escuela Politécnica Nacional",
+            "anoInicio": "2020",
+            "anoFin": "Actualidad"
           }
         ],
         "educacionDe4toNivel": []
       },
       "certificaciones": [
         {
-          "curso": "Desarrollo de Aplicaciones Móviles",
-          "entidad": "Universidad de Tecnología",
-          "ano": "2021"
+          "curso": "Aplicaciones Web",
+          "entidad": "Escuela Politécnica Nacional",
+          "ano": ""
         },
         {
-          "curso": "Redes Avanzadas",
+          "curso": "CCNAv7: Switching, Routing and Wireless Essentials",
           "entidad": "Cisco",
-          "ano": "2020"
+          "ano": ""
         }
       ],
       "experienciaLaboral": [
         {
-          "empresa": "Tech Solutions",
-          "lugar": "QUITO, ECUADOR",
-          "fechaInicio": "ENERO 2019",
-          "fechaFin": "DIC 2021",
-          "cargo": "Administrador de Redes",
-          "descripcionRol": "Instalación y mantenimiento de redes. Gestión de servidores y dispositivos de red. Resolución de problemas y soporte técnico a usuarios.",
-          "remuneracionBruta": "2500 USD mensuales",
-          "beneficios": "Bonificaciones por desempeño, seguro de vida",
+          "empresa": "Escuela Politécnica Nacional",
+          "lugar": "Quito, Ecuador",
+          "fechaInicio": "ABRIL 2024",
+          "fechaFin": "AGOS 2024",
+          "cargo": "Desarrollo y diseño web",
+          "descripcionRol": "Implementación de seguridad y verificación de usuarios. Integración de APIS externas. Pruebas unitarias y despliegue. Desarrollo Front y Back.",
+          "remuneracionBruta": "",
+          "beneficios": "",
           "referenciaLaboral": {
-            "cargo": "Director de Redes",
-            "numero": "+593 992222222",
-            "nombre": "Carlos García"
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        },
+        {
+          "empresa": "Tienda “Your Store”",
+          "lugar": "QUITO, ECUADOR",
+          "fechaInicio": "SEP 2024",
+          "fechaFin": "ACTUALIDAD",
+          "cargo": "Full-Stack",
+          "descripcionRol": "Desarrollo y diseño web. Implementación de seguridad y verificación de usuarios. Pruebas unitarias y despliegue. Desarrollo Front y Back.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        },
+        {
+          "empresa": "Fundación Cecilia Rivadeneira",
+          "lugar": "QUITO, ECUADOR",
+          "fechaInicio": "JULIO 2016",
+          "fechaFin": "ACTUALIDAD",
+          "cargo": "Voluntariado",
+          "descripcionRol": "Apoyo en producción de obras teatrales. Cuidado de niños con necesidades especiales.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
           }
         }
       ],
       "proyectosRelevantes": [
         {
-          "proyecto": "Implementación de Red Corporativa",
-          "cliente": "Empresa XYZ",
-          "rol": "Líder de Proyecto",
-          "ano": "2020",
-          "partner": "Redes Globales",
-          "descripcion": "Diseño e implementación de la red corporativa para mejorar la conectividad entre sucursales y oficinas remotas."
+          "proyecto": "Proyecto Web de Banco",
+          "cliente": "",
+          "rol": "",
+          "ano": "ABRIL 2024 - AGOS 2024",
+          "partner": "",
+          "descripcion": "Desarrollo y diseño web. Implementación de seguridad y verificación de usuarios. Integración de APIS externas. Pruebas unitarias y despliegue. Desarrollo Front y Back."
+        },
+        {
+          "proyecto": "Proyecto Web de Tienda “Your Store”",
+          "cliente": "",
+          "rol": "",
+          "ano": "SEP 2024 - ACTUALIDAD",
+          "partner": "",
+          "descripcion": "Desarrollo y diseño web. Implementación de seguridad y verificación de usuarios. Pruebas unitarias y despliegue. Desarrollo Front y Back."
         }
       ],
       "logrosRelevantes": [
-        "Implementación de soluciones de red que aumentaron la velocidad de transferencia de datos en un 30%.",
-        "Liderazgo en proyectos de expansión de infraestructura de red a nivel nacional."
+        "Desarrollo de sitios web atractivos",
+        "Creación y administración de base de datos"
       ],
       "competencias": [
-        "Redes y telecomunicaciones",
-        "Administración de servidores",
-        "Diagnóstico y solución de problemas de red"
+        "Comunicación",
+        "Liderazgo",
+        "Creatividad",
+        "Trabajo en equipo",
+        "Organizada",
+        "Responsable",
+        "Desarrollo Web"
       ],
       "idiomas": [
         {
-          "idioma": "Inglés",
-          "fluidez": "C1",
-          "porcentaje": "90%"
+          "idioma": "Español",
+          "fluidez": "Native"
         },
         {
-          "idioma": "Español",
-          "fluidez": "Native",
-          "porcentaje": "100%"
+          "idioma": "Inglés",
+          "fluidez": "B2"
         }
       ],
       "imagenes": [
         {
           "filename": "X5.png",
           "page": 0,
-          "path": "http://127.0.0.1:5000/temp_images/cv7891011_page_0_image_0_X5.png"
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_0_X5.png"
         }
       ]
+    },
+    {
+      "id": "CV-12345",
+      "personalInfo": {
+        "nombre": "Estefanía",
+        "apellido": "Bedón",
+        "cedula": "",
+        "nacionalidad": "",
+        "correo": "estefaniabedon@hotmail.com",
+        "telefono": [
+          "0983742552"
+        ],
+        "linkedIn": "",
+        "aspiracionSalarial": "",
+        "tiempoIngreso": "",
+        "diaNacimiento": "",
+        "estadoCivil": "",
+        "direccion": "",
+        "foto": "",
+        "genero": "",
+        "autoidentificacionEtnica": "",
+        "discapacidad": {
+          "tieneDiscapacidad": false,
+          "tipo": "",
+          "porcentaje": ""
+        },
+        "expectativasTrabajo": "",
+        "actividadesTiempoLibre": "",
+        "cantidadHijos": 0
+      },
+      "educacion": {
+        "bachillerato": [
+          {
+            "grado": "Primaria",
+            "institucion": "Colegio la Milagrosa/ Madrid, España",
+            "ano": "2012"
+          },
+          {
+            "grado": "Secundaria",
+            "institucion": "Colegio la Providencia/ Quito, Ecuador",
+            "ano": "2020"
+          }
+        ],
+        "educacionSuperiorNoUniversitaria": [],
+        "educacionSuperior": [
+          {
+            "grado": "Ing. en computación",
+            "institucion": "Escuela Politécnica Nacional/ Quito, Ecuador",
+            "anoInicio": "2020",
+            "anoFin": "Presente"
+          }
+        ],
+        "educacionDe4toNivel": []
+      },
+      "certificaciones": [
+        {
+          "curso": "Aplicaciones Web",
+          "entidad": "Escuela Politécnica Nacional",
+          "ano": ""
+        },
+        {
+          "curso": "CCNAv7: Switching, Routing and Wireless Essentials",
+          "entidad": "Cisco",
+          "ano": ""
+        }
+      ],
+      "experienciaLaboral": [
+        {
+          "empresa": "Escuela Politécnica Nacional",
+          "lugar": "Quito, Ecuador",
+          "fechaInicio": "ABRIL 2024",
+          "fechaFin": "AGOS 2024",
+          "cargo": "Desarrollo y diseño web",
+          "descripcionRol": "Implementación de seguridad y verificación de usuarios. Integración de APIS externas. Pruebas unitarias y despliegue. Desarrollo Front y Back.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        },
+        {
+          "empresa": "Your Store",
+          "lugar": "Quito, Ecuador",
+          "fechaInicio": "SEP 2024",
+          "fechaFin": "ACTUALIDAD",
+          "cargo": "Full-Stack",
+          "descripcionRol": "Desarrollo y diseño web. Implementación de seguridad y verificación de usuarios. Pruebas unitarias y despliegue. Desarrollo Front y Back.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        },
+        {
+          "empresa": "Fundación Cecilia Rivadeneira",
+          "lugar": "Quito, Ecuador",
+          "fechaInicio": "JULIO 2016",
+          "fechaFin": "ACTUALIDAD",
+          "cargo": "Voluntariado",
+          "descripcionRol": "Apoyo en producción de obras teatrales. Cuidado de niños con necesidades especiales.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        }
+      ],
+      "proyectosRelevantes": [
+        {
+          "proyecto": "Proyecto Web de Banco",
+          "cliente": "",
+          "rol": "",
+          "ano": "",
+          "partner": "",
+          "descripcion": "Desarrollo de un proyecto web para un banco utilizando arquitectura MEAN. Implementación de seguridad y verificación de usuarios. Integración de APIS externas. Pruebas unitarias y despliegue. Desarrollo Front y Back."
+        },
+        {
+          "proyecto": "Proyecto Web de Tienda",
+          "cliente": "",
+          "rol": "",
+          "ano": "",
+          "partner": "",
+          "descripcion": "Desarrollo de un proyecto web para una tienda utilizando arquitectura MEAN. Implementación de seguridad y verificación de usuarios. Pruebas unitarias y despliegue. Desarrollo Front y Back."
+        }
+      ],
+      "logrosRelevantes": [
+        "Desarrollo y diseño de páginas web atractivas y de alta calidad",
+        "Experiencia en la creación y administración de base de datos",
+        "Habilidad para trabajar en equipo y liderazgo en proyectos",
+        "Creatividad en la resolución de problemas y comunicación efectiva"
+      ],
+      "competencias": [
+        "Desarrollo Web (Front-End y Back-End)",
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "TypeScript",
+        "Express",
+        "MongoDB"
+      ],
+      "idiomas": [
+        {
+          "idioma": "Español",
+          "fluidez": "Nativo"
+        },
+        {
+          "idioma": "Inglés",
+          "fluidez": "B2"
+        }
+      ],
+      "imagenes": [
+        {
+          "filename": "X5.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_0_X5.png"
+        }
+      ]
+    },
+    {
+      "id": "Alejandro512",
+      "personalInfo": {
+        "nombre": "Alejandro",
+        "apellido": "Guerrero Zapata",
+        "cedula": "",
+        "nacionalidad": "Ecuador",
+        "correo": "sebasguerrez@hotmail.com",
+        "telefono": [
+          "+593 984052735"
+        ],
+        "linkedIn": "",
+        "aspiracionSalarial": "",
+        "tiempoIngreso": "",
+        "diaNacimiento": "",
+        "estadoCivil": "",
+        "direccion": "Quito, Ecuador",
+        "foto": "",
+        "genero": "",
+        "autoidentificacionEtnica": "",
+        "discapacidad": {
+          "tieneDiscapacidad": false,
+          "tipo": "",
+          "porcentaje": ""
+        },
+        "expectativasTrabajo": "",
+        "actividadesTiempoLibre": "",
+        "cantidadHijos": 0
+      },
+      "educacion": {
+        "bachillerato": [
+          {
+            "grado": "",
+            "institucion": "Unidad Educativa La Inmaculada",
+            "ano": "2014"
+          }
+        ],
+        "educacionSuperiorNoUniversitaria": [],
+        "educacionSuperior": [
+          {
+            "grado": "Ingeniería en Ciencias de Computación",
+            "institucion": "Escuela Politécnica Nacional",
+            "anoInicio": "2020",
+            "anoFin": "Actualidad"
+          }
+        ],
+        "educacionDe4toNivel": []
+      },
+      "certificaciones": [],
+      "experienciaLaboral": [
+        {
+          "empresa": "HoneyWell",
+          "lugar": "Esmeraldas, Ecuador",
+          "fechaInicio": "Sep 2023",
+          "fechaFin": "Oct 2023",
+          "cargo": "Ayudante",
+          "descripcionRol": "Ayudante de ingeniero Fabian España en mantenimiento y actualización de Servicios y Servidores.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "Fabian España",
+            "cargo": "Ingeniero de Servicios",
+            "telefono": "+593 0996332521"
+          }
+        },
+        {
+          "empresa": "Proyecto Web de Banco con MongoDB, Express, Angular, NodeJS",
+          "lugar": "Quito, Ecuador",
+          "fechaInicio": "Abril 2024",
+          "fechaFin": "Agos 2024",
+          "cargo": "Programador",
+          "descripcionRol": "Desarrollo y diseño web. Implementación de seguridad y verificación de usuarios. Integración de APIs externas. Pruebas unitarias y despliegue. Desarrollo Front y Back.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        },
+        {
+          "empresa": "Proyecto Web de Tienda “Your Store”con MongoDB, Express, Angular, NodeJS",
+          "lugar": "Quito, Ecuador",
+          "fechaInicio": "Sep 2024",
+          "fechaFin": "Actualidad",
+          "cargo": "Full-Stack",
+          "descripcionRol": "Desarrollo y diseño web. Implementación de seguridad y verificación de usuarios. Pruebas unitarias y despliegue.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        }
+      ],
+      "proyectosRelevantes": [
+        {
+          "proyecto": "Proyecto Web de Banco con MongoDB, Express, Angular, NodeJS",
+          "cliente": "",
+          "rol": "",
+          "ano": "",
+          "partner": "",
+          "descripcion": ""
+        },
+        {
+          "proyecto": "Proyecto Web de Tienda “Your Store”con MongoDB, Express, Angular, NodeJS",
+          "cliente": "",
+          "rol": "",
+          "ano": "",
+          "partner": "",
+          "descripcion": ""
+        }
+      ],
+      "logrosRelevantes": [],
+      "competencias": [
+        "Desarrollo Web Front-END",
+        "Desarrollo Web Back-END con TypesScript, Express y MongoBD",
+        "Comunicación Efectiva",
+        "Creatividad"
+      ],
+      "idiomas": [
+        {
+          "idioma": "Español",
+          "fluidez": "Nativo"
+        },
+        {
+          "idioma": "Ingles",
+          "fluidez": "B2"
+        }
+      ],
+      "imagenes": [
+        {
+          "filename": "Image36.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_0_Image36.png"
+        },
+        {
+          "filename": "Image37.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_1_Image37.png"
+        },
+        {
+          "filename": "Image38.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_2_Image38.png"
+        },
+        {
+          "filename": "Image39.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_3_Image39.png"
+        },
+        {
+          "filename": "Image40.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_4_Image40.png"
+        },
+        {
+          "filename": "Image43.jpg",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_5_Image43.jpg"
+        },
+        {
+          "filename": "Image51.png",
+          "page": 1,
+          "path": "http://127.0.0.1:5000/temp_images/page_1_image_0_Image51.png"
+        },
+        {
+          "filename": "Image52.png",
+          "page": 1,
+          "path": "http://127.0.0.1:5000/temp_images/page_1_image_1_Image52.png"
+        },
+        {
+          "filename": "Image53.png",
+          "page": 1,
+          "path": "http://127.0.0.1:5000/temp_images/page_1_image_2_Image53.png"
+        },
+        {
+          "filename": "Image54.png",
+          "page": 1,
+          "path": "http://127.0.0.1:5000/temp_images/page_1_image_3_Image54.png"
+        }
+      ]
+    },
+    {
+      "id": "CV-2022-001",
+      "personalInfo": {
+        "nombre": "Estefanía",
+        "apellido": "Bedón",
+        "cedula": "",
+        "nacionalidad": "",
+        "correo": "estefaniabedon@hotmail.com",
+        "telefono": [
+          "0983742552"
+        ],
+        "linkedIn": "",
+        "aspiracionSalarial": "",
+        "tiempoIngreso": "",
+        "diaNacimiento": "",
+        "estadoCivil": "",
+        "direccion": "",
+        "foto": "",
+        "genero": "",
+        "autoidentificacionEtnica": "",
+        "discapacidad": {
+          "tieneDiscapacidad": false,
+          "tipo": "",
+          "porcentaje": ""
+        },
+        "expectativasTrabajo": "",
+        "actividadesTiempoLibre": "",
+        "cantidadHijos": 0
+      },
+      "educacion": {
+        "bachillerato": [
+          {
+            "grado": "Primaria",
+            "institucion": "Colegio la Milagrosa/ Madrid, España",
+            "ano": "2005/2012"
+          },
+          {
+            "grado": "Secundaria",
+            "institucion": "Colegio la Providencia/ Quito, Ecuador",
+            "ano": "2012/2020"
+          }
+        ],
+        "educacionSuperiorNoUniversitaria": [],
+        "educacionSuperior": [
+          {
+            "grado": "Ing. en computación",
+            "institucion": "Escuela Politécnica Nacional/ Quito, Ecuador",
+            "anoInicio": "2020",
+            "anoFin": "Actualidad"
+          }
+        ],
+        "educacionDe4toNivel": []
+      },
+      "certificaciones": [
+        {
+          "curso": "Aplicaciones Web",
+          "entidad": "Escuela Politécnica Nacional",
+          "ano": ""
+        },
+        {
+          "curso": "CCNAv7: Switching, Routing and Wireless Essentials",
+          "entidad": "Cisco",
+          "ano": ""
+        }
+      ],
+      "experienciaLaboral": [
+        {
+          "empresa": "Escuela Politécnica Nacional",
+          "lugar": "QUITO, ECUADOR",
+          "fechaInicio": "ABRIL 2024",
+          "fechaFin": "AGOS 2024",
+          "cargo": "Desarrollo y diseño web",
+          "descripcionRol": "Implementación de seguridad y verificación de usuarios. Integración de APIS externas. Pruebas unitarias y despliegue.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        },
+        {
+          "empresa": "Your Store",
+          "lugar": "QUITO, ECUADOR",
+          "fechaInicio": "SEP 2024",
+          "fechaFin": "ACTUALIDAD",
+          "cargo": "Full-Stack",
+          "descripcionRol": "Desarrollo y diseño web. Implementación de seguridad y verificación de usuarios. Pruebas unitarias y despliegue.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        },
+        {
+          "empresa": "Fundación Cecilia Rivadeneira",
+          "lugar": "QUITO, ECUADOR",
+          "fechaInicio": "JULIO 2016",
+          "fechaFin": "ACTUALIDAD",
+          "cargo": "Voluntariado",
+          "descripcionRol": "Apoyo en producción de obras teatrales. Cuidado de niños con necesidades especiales.",
+          "remuneracionBruta": "",
+          "beneficios": "",
+          "referenciaLaboral": {
+            "nombre": "",
+            "cargo": "",
+            "telefono": ""
+          }
+        }
+      ],
+      "proyectosRelevantes": [
+        {
+          "proyecto": "Proyecto Web de Banco con arquitectura MEAN",
+          "cliente": "",
+          "rol": "",
+          "ano": "",
+          "partner": "",
+          "descripcion": "Desarrollo y diseño web. Implementación de seguridad y verificación de usuarios. Integración de APIS externas. Pruebas unitarias y despliegue."
+        },
+        {
+          "proyecto": "Proyecto Web de Tienda “Your Store” con arquitectura MEAN",
+          "cliente": "",
+          "rol": "",
+          "ano": "",
+          "partner": "",
+          "descripcion": "Desarrollo y diseño web. Implementación de seguridad y verificación de usuarios. Pruebas unitarias y despliegue."
+        }
+      ],
+      "logrosRelevantes": [
+        "Desarrollo de sitios web atractivos y funcionales utilizando HTML, CSS y JavaScript"
+      ],
+      "competencias": [
+        "Comunicación",
+        "Liderazgo",
+        "Creatividad",
+        "Trabajo en equipo",
+        "Organización",
+        "Responsabilidad"
+      ],
+      "idiomas": [
+        {
+          "idioma": "Español",
+          "fluidez": "Native"
+        },
+        {
+          "idioma": "Inglés",
+          "fluidez": "B2"
+        }
+      ],
+      "imagenes": [
+        {
+          "filename": "X5.png",
+          "page": 0,
+          "path": "http://127.0.0.1:5000/temp_images/page_0_image_0_X5.png"
+        }
+      ]
+    }
+  ],
+  "imagenes": [
+    {
+      "filename": "X7.jpg",
+      "page": 0,
+      "path": "http://127.0.0.1:5000/temp_images/page_0_image_0_X7.jpg",
+      "id": "2d46"
+    },
+    {
+      "filename": "X9.png",
+      "page": 0,
+      "path": "http://127.0.0.1:5000/temp_images/page_0_image_1_X9.png",
+      "id": "6d27"
+    },
+    {
+      "filename": "X10.png",
+      "page": 0,
+      "path": "http://127.0.0.1:5000/temp_images/page_0_image_2_X10.png",
+      "id": "bee0"
+    },
+    {
+      "filename": "X11.png",
+      "page": 0,
+      "path": "http://127.0.0.1:5000/temp_images/page_0_image_3_X11.png",
+      "id": "cdbe"
     }
   ]
 }

@@ -6,6 +6,7 @@ import pdfplumber
 from pypdf import PdfReader
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
+import uuid  # Importamos para generar IDs únicos
 
 app = Flask(__name__)
 CORS(app)  # Habilitar CORS para solicitudes del cliente
@@ -70,81 +71,135 @@ def generate_response():
         # Extraer imágenes del PDF
         images = extract_images_from_pdf(pdf_file)
 
-        # Crear el prompt con el texto del CV
+        # Crear el prompt detallado con el texto del CV
         prompt = f"""
-Eres un asistente de clasificación de currículos (CVs). Tu tarea es organizar el siguiente texto de un CV en categorías específicas, basándote en la información que aparece. Categorías:
-- PERSONAL INFO: Información personal (nombre, apellido, fecha de nacimiento, cédula, nacionalidad, estado civil, teléfono, correo, dirección, foto).
-- EDUCATION: Educación (bachillerato y educación superior, incluyendo grados, instituciones y fechas).
-- CERTIFICATIONS: Certificaciones (incluyendo nombre del curso, entidad y año).
-- WORK EXPERIENCE: Experiencia laboral (empresa, lugar, fechas, cargo, descripción de la empresa y actividades).
-- RELEVANT PROJECTS: Proyectos relevantes (incluyendo proyecto, cliente, rol, año, partner y descripción).
-- LANGUAGES: Idiomas (idioma y fluidez).
-- ID: Identificador único del CV.
+Eres un asistente avanzado de procesamiento de CVs. Tu tarea es extraer y estructurar información detallada de un currículum. 
 
-El texto del CV es el siguiente: {cv_text}
+Instrucciones:
+1. Procesa toda la información del CV con máximo detalle.
+2. Genera un identificador único para el CV.
+3. Incluye campos adicionales que puedan enriquecer el perfil profesional.
 
-Devuelve los datos organizados en formato JSON con la siguiente estructura. Asegúrate de que todos los campos estén presentes, incluso si no hay datos disponibles, utiliza valores vacíos o nulos. Las categorías como educación, experiencia laboral, proyectos y idiomas pueden tener más de un elemento en una lista. Si alguna categoría no está presente, omítela del JSON.
-
-La estructura esperada es:
+Estructura JSON esperada:
 
 {{
-  "cvs": [
+  "id": "", // Identificador único del CV
+  "personalInfo": {{
+    "nombre": "",
+    "apellido": "",
+    "cedula": "",
+    "nacionalidad": "",
+    "correo": "",
+    "telefono": [""], // Array para múltiples números
+    "linkedIn": "",
+    "aspiracionSalarial": "",
+    "tiempoIngreso": "",
+    "diaNacimiento": "",
+    "estadoCivil": "",
+    "direccion": "",
+    "foto": "",
+    "genero": "",
+    "autoidentificacionEtnica": "",
+    "discapacidad": {{
+      "tieneDiscapacidad": false,
+      "tipo": "",
+      "porcentaje": ""
+    }},
+    "expectativasTrabajo": "",
+    "actividadesTiempoLibre": "",
+    "cantidadHijos": 0
+  }},
+  "educacion": {{
+    "bachillerato": [
+      {{
+        "grado": "",
+        "institucion": "",
+        "ano": ""
+      }}
+    ],
+    "educacionSuperiorNoUniversitaria": [
+      {{
+        "grado": "",
+        "institucion": "",
+        "anoInicio": "",
+        "anoFin": ""
+      }}
+    ],
+    "educacionSuperior": [
+      {{
+        "grado": "",
+        "institucion": "",
+        "anoInicio": "",
+        "anoFin": ""
+      }}
+    ],
+    "educacionDe4toNivel": [
+      {{
+        "grado": "",
+        "institucion": "",
+        "anoInicio": "",
+        "anoFin": ""
+      }}
+    ]
+  }},
+  "certificaciones": [
     {{
-      "personalInfo": {{
+      "curso": "",
+      "entidad": "",
+      "ano": ""
+    }}
+  ],
+  "experienciaLaboral": [
+    {{
+      "empresa": "",
+      "lugar": "",
+      "fechaInicio": "",
+      "fechaFin": "",
+      "cargo": "",
+      "descripcionRol": "",
+      "remuneracionBruta": "",
+      "beneficios": "",
+      "referenciaLaboral": {{
         "nombre": "",
-        "apellido": "",
-        "nacimiento": "",
-        "cedula": "",
-        "nacionalidad": "",
-        "estadoCivil": "",
-        "telefono": "",
-        "correo": "",
-        "direccion": "",
-        "foto": ""
-      }},
-      "educacion": {{
-        "bachillerato": [
-          {{"grado": "", "institucion": "", "ano": ""}}
-        ],
-        "educacionSuperior": [
-          {{"grado": "", "institucion": "", "anoInicio": "", "anoFin": ""}}
-        ]
-      }},
-      "certificaciones": [
-        {{"curso": "", "entidad": "", "ano": ""}}
-      ],
-      "experienciaLaboral": [
-        {{
-          "empresa": "",
-          "lugar": "",
-          "fechaInicio": "",
-          "fechaFin": "",
-          "cargo": "",
-          "descripcionEmpresa": "",
-          "actividades": ["", "", ""]
-        }}
-      ],
-      "proyectosRelevantes": [
-        {{
-          "proyecto": "",
-          "cliente": "",
-          "rol": "",
-          "ano": "",
-          "partner": "",
-          "descripcion": ""
-        }}
-      ],
-      "idiomas": [
-        {{"idioma": "", "fluidez": ""}}
-      ],
-      "id": ""
+        "cargo": "",
+        "telefono": ""
+      }}
+    }}
+  ],
+  "proyectosRelevantes": [
+    {{
+      "proyecto": "",
+      "cliente": "",
+      "rol": "",
+      "ano": "",
+      "partner": "",
+      "descripcion": ""
+    }}
+  ],
+  "logrosRelevantes": [""],
+  "competencias": [""],
+  "idiomas": [
+    {{
+      "idioma": "",
+      "fluidez": ""
     }}
   ]
 }}
+
+Nota importante: 
+- Si no hay información para un campo, déjalo como cadena vacía o valor nulo
+- Incluye tantos campos como sea posible
+- Sé preciso y exhaustivo en la extracción de información
+
+Texto del CV para procesar: {cv_text}
 """
 
         headers = {"Content-Type": "application/json", "api-key": AZURE_API_KEY}
-        payload = {"messages": [{"role": "user", "content": prompt}], "max_tokens": 2000, "temperature": 0.7}
+        payload = {
+            "messages": [{"role": "user", "content": prompt}], 
+            "max_tokens": 4000,  # Aumentado para mayor capacidad de procesamiento
+            "temperature": 0.7
+        }
 
         # Llamada al servicio Azure OpenAI
         response = requests.post(AZURE_API_ENDPOINT, headers=headers, json=payload)
@@ -155,16 +210,64 @@ La estructura esperada es:
         generated_text = result["choices"][0]["message"]["content"]
 
         try:
+            # Intentar parsear el JSON generado
             json_response = json.loads(generated_text)
-            json_response["imagenes"] = images  # Agregar imágenes al JSON
+            
+            # Generar un ID único si no existe
+            if not json_response.get('id'):
+                json_response['id'] = str(uuid.uuid4())
 
-            # Guardar el JSON generado en el archivo db1.json
-            with open("db1.json", "w") as json_file:
-                json.dump(json_response, json_file, ensure_ascii=False, indent=4)
+            # Añadir imágenes al JSON
+            json_response["imagenes"] = images
 
-            return jsonify(json_response)
+            # Leer el JSON existente o crear uno nuevo
+            try:
+                with open("db1.json", "r", encoding='utf-8') as json_file:
+                    existing_data = json.load(json_file)
+            except (FileNotFoundError, json.JSONDecodeError):
+                existing_data = {"cvs": []}
+
+            # Añadir el nuevo CV a la lista de CVs
+            existing_data["cvs"].append(json_response)
+
+            # Guardar el JSON actualizado
+            with open("db1.json", "w", encoding='utf-8') as json_file:
+                json.dump(existing_data, json_file, ensure_ascii=False, indent=4)
+
+            return jsonify(existing_data)
         except json.JSONDecodeError:
-            return jsonify({"error": "Hubo un error al procesar el JSON generado"}), 500
+            # Si hay error en el JSON, intentar extraer el JSON válido
+            import re
+            json_match = re.search(r'\{.*\}', generated_text, re.DOTALL)
+            if json_match:
+                try:
+                    json_response = json.loads(json_match.group(0))
+                    
+                    # Generar un ID único si no existe
+                    if not json_response.get('id'):
+                        json_response['id'] = str(uuid.uuid4())
+
+                    json_response["imagenes"] = images
+                    
+                    # Leer el JSON existente o crear uno nuevo
+                    try:
+                        with open("db1.json", "r", encoding='utf-8') as json_file:
+                            existing_data = json.load(json_file)
+                    except (FileNotFoundError, json.JSONDecodeError):
+                        existing_data = {"cvs": []}
+
+                    # Añadir el nuevo CV a la lista de CVs
+                    existing_data["cvs"].append(json_response)
+                    
+                    # Guardar el JSON generado en el archivo db1.json
+                    with open("db1.json", "w", encoding='utf-8') as json_file:
+                        json.dump(existing_data, json_file, ensure_ascii=False, indent=4)
+                    
+                    return jsonify(existing_data)
+                except json.JSONDecodeError:
+                    return jsonify({"error": "No se pudo procesar el JSON generado", "raw_response": generated_text}), 500
+            else:
+                return jsonify({"error": "Hubo un error al procesar el JSON generado", "raw_response": generated_text}), 500
 
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500

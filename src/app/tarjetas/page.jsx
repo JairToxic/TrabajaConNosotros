@@ -1,11 +1,11 @@
 'use client'
 import React from 'react'
-import Home from '../components/trabajaConNosotros'
+import VacancyPage from '../components/trabajaConNosotros/filtroBusqueda'
 
 function page() {
   return (
     <div>
-      <Home/>
+      <VacancyPage/>
     </div>
   )
 }
