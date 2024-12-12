@@ -71,15 +71,18 @@ const CVForm = () => {
   useEffect(() => {
     const fetchCVData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/cvs/1', {
+        const response = await fetch('http://51.222.110.107:5012/applicant/get_cv/11', {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': '7zXnBjF5PBl7EzG/WhATQw=='  // Aquí añades la cabecera Authorization
+          }
         });
-
+  
         if (!response.ok) {
           throw new Error('No se pudo obtener el CV');
         }
-
+  
         const data = await response.json();
         setCvData(data);
       } catch (error) {
@@ -88,9 +91,10 @@ const CVForm = () => {
         setLoading(false);
       }
     };
-
+  
     fetchCVData();
   }, []);
+  
 
   const handleFotoChange = (e) => {
     const file = e.target.files[0];
