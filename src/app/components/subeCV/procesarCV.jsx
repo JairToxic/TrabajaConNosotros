@@ -30,12 +30,13 @@ const SubirCurriculum = () => {
     setErrorMessage("");
 
     const formData = new FormData();
-    formData.append("pdf_file", cvFile);
+    formData.append("file", cvFile);
 
     try {
-      const res = await axios.post("http://127.0.0.1:5000/api/generate", formData, {
+      const res = await axios.post("http://51.222.110.107:5012/applicant/read_cv", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization":"7zXnBjF5PBl7EzG/WhATQw==",
         },
       });
 

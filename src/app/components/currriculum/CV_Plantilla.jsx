@@ -7,7 +7,7 @@ const UltimateElegantCV = () => {
   useEffect(() => {
     const fetchCVData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/cvs/cv7891011', {
+        const response = await fetch('http://51.222.110.107:5012/applicant/get_cv/11', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         });

@@ -71,7 +71,7 @@ const CVForm = () => {
   useEffect(() => {
     const fetchCVData = async () => {
       try {
-        const response = await fetch('http://51.222.110.107:5012/applicant/get_cv/11', {
+        const response = await fetch('http://51.222.110.107:5012/applicant/get_cv/12', {
           method: 'GET',
           headers: { 
             'Content-Type': 'application/json',
@@ -464,9 +464,12 @@ const CVForm = () => {
     const isValid = validateForm();
     if (!isValid) return;
 
-    fetch('http://localhost:5000/cvs/1', {
+    fetch('http://51.222.110.107:5012/applicant/update_cv/12', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': '7zXnBjF5PBl7EzG/WhATQw=='
+      },
       body: JSON.stringify(cvData),
     })
     .then(response => {
