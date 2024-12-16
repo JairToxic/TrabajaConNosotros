@@ -2,7 +2,8 @@ import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
 import Link from 'next/link';
-
+import Cookies from 'js-cookie';
+ 
 const SubirCurriculum = () => {
   const [cvFile, setCvFile] = useState(null); // Para almacenar el archivo cargado
   const [isUploading, setIsUploading] = useState(false); // Estado para controlar el proceso de carga
@@ -30,18 +31,21 @@ const SubirCurriculum = () => {
     setErrorMessage("");
 
     const formData = new FormData();
-    formData.append("pdf_file", cvFile);
+    formData.append("file", cvFile);
 
     try {
-      const res = await axios.post("http://127.0.0.1:5000/api/generate", formData, {
+      const res = await axios.post("http://51.222.110.107:5012/applicant/read_cv", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization":"7zXnBjF5PBl7EzG/WhATQw==",
         },
       });
 
       // Imprimir la respuesta en la consola (de momento sin redirección)
       console.log("Respuesta del backend:", res.data);
       setSuccessMessage("¡Tu CV ha sido procesado exitosamente!");
+      Cookies.set('cv', JSON.stringify(res.data), { expires: 7 });
+ 
     } catch (err) {
       setErrorMessage("Error al procesar el archivo. Intenta nuevamente.");
       console.error("Error al procesar el archivo:", err);
@@ -54,7 +58,7 @@ const SubirCurriculum = () => {
     <div style={{ fontFamily: "Arial, sans-serif" }}>
       {/* Banner */}
       <div style={{ position: "relative", width: "100%", height: "300px" }}>
-        <Image
+        <Images
           src="/banner.png" // Cambia por la ruta de tu imagen
           alt="Banner Equipo"
           layout="fill"

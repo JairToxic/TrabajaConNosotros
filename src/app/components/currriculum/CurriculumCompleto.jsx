@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './CVForm.css';
-
+import Cookies from 'js-cookie';
+ 
 const CVForm = () => {
   const [cvData, setCvData] = useState({
     personalInfo: {
@@ -85,6 +86,8 @@ const CVForm = () => {
   
         const data = await response.json();
         setCvData(data);
+        const savedCv = Cookies.get('cv');
+        console.log(savedCv)
       } catch (error) {
         setError(error.message);
       } finally {
