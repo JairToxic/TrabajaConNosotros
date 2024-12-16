@@ -42,7 +42,7 @@ h2 {
     margin-bottom: 20px;
 }
 
-label, input, textarea {
+label, input, textarea, select {
     display: block;
     width: 100%;
     font-size: 1rem;
@@ -56,7 +56,7 @@ label {
     color: #555;
 }
 
-input, textarea {
+input, textarea, select {
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
@@ -258,3 +258,8 @@ input[type="text"].telefono:last-child {
   margin-top: 5px;
 }
 
+.required-label::before {
+    content: "*";
+    color: red;
+    margin-right: 4px; /* Adjust spacing as needed */
+  }

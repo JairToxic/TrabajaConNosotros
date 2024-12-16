@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 
 const SubirCurriculum = () => {
   const [cvFile, setCvFile] = useState(null); // Para almacenar el archivo cargado
@@ -36,11 +37,13 @@ const SubirCurriculum = () => {
       const res = await axios.post("http://127.0.0.1:5000/api/generate", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization":"7zXnBjF5PBl7EzG/WhATQw==",
         },
       });
 
       // Imprimir la respuesta en la consola (de momento sin redirección)
       console.log("Respuesta del backend:", res.data);
+      Cookies.set('cv', res.data, { expires: 7 });
       setSuccessMessage("¡Tu CV ha sido procesado exitosamente!");
     } catch (err) {
       setErrorMessage("Error al procesar el archivo. Intenta nuevamente.");

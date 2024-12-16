@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './CVForm.css';
+import validarCedulaEcuatoriana from '../../../functions/verify-ec-id';
+import Cookies from 'js-cookie';
 
 const CVForm = () => {
   const [cvData, setCvData] = useState({
@@ -85,6 +87,8 @@ const CVForm = () => {
   
         const data = await response.json();
         setCvData(data);
+        const savedCv = Cookies.get('cv');
+        console.log(savedCv)
       } catch (error) {
         setError(error.message);
       } finally {
@@ -114,6 +118,15 @@ const CVForm = () => {
     updatedData.personalInfo.foto = '';
     setCvData(updatedData);
   };
+
+  const isValidLinkedIn = (url) => {
+    const regex = /^(https?:\/\/)?(www\.)?linkedin\.com\/(in|pub)\/[a-zA-Z0-9_-]+(\/)?$/;
+    return regex.test(url);
+  };  
+
+  const sixteenYearsAgo = new Date();
+  sixteenYearsAgo.setFullYear(sixteenYearsAgo.getFullYear() - 16);
+  const minDate = sixteenYearsAgo.toISOString().split('T')[0];
 
   // Funciones genéricas para manejo de arrays simples y de objetos dentro de cvData
   const handleAddArrayItem = (field, newItem) => {
@@ -149,16 +162,22 @@ const CVForm = () => {
 
   // Manejo especial para teléfonos dentro de personalInfo
   const handleAddTelefono = () => {
-    const updatedData = { ...cvData };
-    updatedData.personalInfo.telefono.push('');
-    setCvData(updatedData);
+    const allTelefonosFilled = cvData.personalInfo.telefono.every(telefono => telefono !== '');
+    if (allTelefonosFilled) {
+      const updatedData = { ...cvData };
+      updatedData.personalInfo.telefono.push('');
+      setCvData(updatedData);
 
-    const newErrors = { ...errors };
-    newErrors.telefono.push('');
-    setErrors(newErrors);
+      const newErrors = { ...errors };
+      newErrors.telefono.push('');
+      setErrors(newErrors);
+    }
   };
 
   const handleRemoveTelefono = (index) => {
+    if (cvData.personalInfo.telefono.length <= 1) {
+      return;
+    }
     const updatedData = { ...cvData };
     updatedData.personalInfo.telefono.splice(index, 1);
     setCvData(updatedData);
@@ -289,6 +308,13 @@ const CVForm = () => {
       newErrors.cedula = '';
     }
 
+    if (!validarCedulaEcuatoriana(cvData.personalInfo.cedula)) {
+      newErrors.cedula = 'La cédula es incorrecta.';
+      formValid = false;
+    } else {
+      newErrors.cedula = '';
+    }
+
     if (!trimString(cvData.personalInfo.nacionalidad)) {
       newErrors.nacionalidad = 'La nacionalidad es obligatoria.';
       formValid = false;
@@ -304,7 +330,14 @@ const CVForm = () => {
     }
 
     if (!trimString(cvData.personalInfo.linkedIn)) {
-      newErrors.linkedIn = 'El linkedin es obligatorio.';
+      newErrors.linkedIn = 'El perfil de LinkedIn es obligatorio.';
+      formValid = false;
+    } else {
+      newErrors.linkedIn = '';
+    }
+
+    if (!isValidLinkedIn(cvData.personalInfo.linkedIn)) {
+      newErrors.linkedIn = 'El perfil de LinkedIn no es válido.';
       formValid = false;
     } else {
       newErrors.linkedIn = '';
@@ -489,7 +522,7 @@ const CVForm = () => {
 
       <h2>Datos Personales</h2>
       <div className="form-group">
-        <label>Nombre:</label>
+        <label className="required-label">Nombres:</label>
         <input
           type="text"
           name="nombre"
@@ -500,7 +533,7 @@ const CVForm = () => {
         {errors.nombre && <p className="error-text">{errors.nombre}</p>}
       </div>
       <div className="form-group">
-        <label>Apellido:</label>
+        <label className="required-label">Apellidos:</label>
         <input
           type="text"
           name="apellido"
@@ -511,7 +544,7 @@ const CVForm = () => {
         {errors.apellido && <p className="error-text">{errors.apellido}</p>}
       </div>
       <div className="form-group">
-        <label>Cédula:</label>
+        <label className="required-label">Cédula:</label>
         <input
           type="text"
           name="cedula"
@@ -522,7 +555,7 @@ const CVForm = () => {
         {errors.cedula && <p className="error-text">{errors.cedula}</p>}
       </div>
       <div className="form-group">
-        <label>Nacionalidad:</label>
+        <label className="required-label">Nacionalidad:</label>
         <input
           type="text"
           name="nacionalidad"
@@ -533,7 +566,7 @@ const CVForm = () => {
         {errors.nacionalidad && <p className="error-text">{errors.nacionalidad}</p>}
       </div>
       <div className="form-group">
-        <label>Correo:</label>
+        <label className="required-label">Correo:</label>
         <input
           type="email"
           name="correo"
@@ -544,7 +577,9 @@ const CVForm = () => {
         {errors.correo && <p className="error-text">{errors.correo}</p>}
       </div>
       <div className="form-group">
-        <label>Teléfonos:</label>
+        <label className="required-label">
+          {cvData.personalInfo.telefono.length > 1 ? 'Teléfonos:' : 'Teléfono:'}
+        </label>
         {cvData.personalInfo.telefono.map((telefono, index) => (
           <div key={index} className="telefono-input">
             <input
@@ -557,12 +592,23 @@ const CVForm = () => {
             {errors.telefono[index] && (
               <p className="error-text">{errors.telefono[index]}</p>
             )}
-            <button
-              type="button"
-              onClick={() => handleRemoveTelefono(index)}
-            >
-              Eliminar Teléfono
-            </button>
+            {cvData.personalInfo.telefono.length > 1 && (
+              <button
+                type="button"
+                onClick={() => handleRemoveTelefono(index)}
+                style={{
+                  backgroundColor: 'red',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 15px',
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                }}
+              >
+                Eliminar Teléfono
+              </button>
+            )
+          }
           </div>
         ))}
         <button
@@ -573,7 +619,7 @@ const CVForm = () => {
         </button>
       </div>
       <div className="form-group">
-        <label>LinkedIn:</label>
+        <label className="required-label">LinkedIn:</label>
         <input
           type="url"
           name="linkedIn"
@@ -584,7 +630,7 @@ const CVForm = () => {
         {errors.linkedIn && <p className="error-text">{errors.linkedIn}</p>}
       </div>
       <div className="form-group">
-        <label>Aspiración Salarial:</label>
+        <label className="required-label">Aspiración Salarial:</label>
         <input
           type="text"
           name="aspiracionSalarial"
@@ -595,7 +641,7 @@ const CVForm = () => {
         {errors.aspiracionSalarial && <p className="error-text">{errors.aspiracionSalarial}</p>}
       </div>
       <div className="form-group">
-        <label>Tiempo de Ingreso:</label>
+        <label className="required-label">Tiempo de Ingreso:</label>
         <input
           type="text"
           name="tiempoIngreso"
@@ -618,16 +664,23 @@ const CVForm = () => {
           name="diaNacimiento"
           value={cvData.personalInfo.diaNacimiento}
           onChange={handleInputChange}
+          max={minDate}
         />
       </div>
       <div className="form-group">
         <label>Estado Civil:</label>
-        <input
-          type="text"
+        <select
           name="estadoCivil"
           value={cvData.personalInfo.estadoCivil}
           onChange={handleInputChange}
-        />
+        >
+          <option value="No desea compartir">No deseo compartir</option>
+          <option value="Soltero">Soltero</option>
+          <option value="Casado">Casado</option>
+          <option value="Divorciado">Divorciado</option>
+          <option value="Viudo">Viudo</option>
+          <option value="Unión de hecho">Unión de hecho</option>
+        </select>
       </div>
       <div className="form-group">
         <label>Dirección:</label>
