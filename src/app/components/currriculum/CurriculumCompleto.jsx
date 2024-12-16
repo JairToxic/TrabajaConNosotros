@@ -50,6 +50,12 @@ const CVForm = () => {
     idiomas: [{ idioma: '', fluidez: '', porcentaje: '' }],
     imagenes: [{ filename: '', path: '' }]
   });
+  const categoryDisplayNames = {
+    bachillerato: 'Bachillerato',
+    educacionDe4toNivel: 'Educación de Cuarto Nivel',
+    educacionSuperior: 'Educación Superior',
+    educacionSuperiorNoUniversitaria: 'Educación Superior No Universitaria',
+  };
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -69,6 +75,7 @@ const CVForm = () => {
     competencias: [],
     idiomas:[]
   });
+  const [removingIndex, setRemovingIndex] = useState(null);
 
   useEffect(() => {
     const fetchCVData = async () => {
@@ -178,6 +185,9 @@ const CVForm = () => {
     if (cvData.personalInfo.telefono.length <= 1) {
       return;
     }
+    setRemovingIndex(index);
+
+  setTimeout(() => {
     const updatedData = { ...cvData };
     updatedData.personalInfo.telefono.splice(index, 1);
     setCvData(updatedData);
@@ -185,6 +195,10 @@ const CVForm = () => {
     const newErrors = { ...errors };
     newErrors.telefono.splice(index, 1);
     setErrors(newErrors);
+
+    // Reset the removingIndex state after the item is removed
+    setRemovingIndex(null);
+  }, 300);
   };
 
   const handleTelefonoChange = (e, index) => {
@@ -220,14 +234,28 @@ const CVForm = () => {
 
   // Manejo de educación
   const handleAddEntry = (category) => {
+    const isEntryComplete = (entry) => {
+      return Object.values(entry).every((value) => value.trim() !== '');
+    };
+  
+    const updatedData = { ...cvData };
+    const currentCategoryEntries = updatedData.educacion[category];
+  
+    // Check if all existing entries in the category are complete
+    if (currentCategoryEntries.some((entry) => !isEntryComplete(entry))) {
+      alert('Complete los campos existentes antes de agregar otro.');
+      return;
+    }
+  
+    // Define the new entry structure based on the category
     const newEntry = category === 'bachillerato'
       ? { grado: '', institucion: '', ano: '' }
       : { grado: '', institucion: '', anoInicio: '', anoFin: '' };
-
-    const updatedData = { ...cvData };
-    updatedData.educacion[category].push(newEntry);
+  
+    currentCategoryEntries.push(newEntry);
     setCvData(updatedData);
   };
+  
 
   const handleRemoveEntry = (category, index) => {
     const updatedData = { ...cvData };
@@ -581,7 +609,7 @@ const CVForm = () => {
           {cvData.personalInfo.telefono.length > 1 ? 'Teléfonos:' : 'Teléfono:'}
         </label>
         {cvData.personalInfo.telefono.map((telefono, index) => (
-          <div key={index} className="telefono-input">
+          <div key={index} className={`telefono-input ${removingIndex === index ? 'fade-out' : ''}`}>
             <input
               type="text"
               value={telefono}
@@ -596,14 +624,7 @@ const CVForm = () => {
               <button
                 type="button"
                 onClick={() => handleRemoveTelefono(index)}
-                style={{
-                  backgroundColor: 'red',
-                  color: 'white',
-                  border: 'none',
-                  padding: '10px 15px',
-                  borderRadius: '20px',
-                  cursor: 'pointer',
-                }}
+                className="delete-button"
               >
                 Eliminar Teléfono
               </button>
@@ -719,6 +740,7 @@ const CVForm = () => {
             <button
               type="button"
               onClick={handleRemoveFoto}
+              className="delete-button"
             >
               Eliminar Foto
             </button>
@@ -737,13 +759,20 @@ const CVForm = () => {
 
       <h3>Discapacidad</h3>
       <div className="form-group">
-        <label>Tiene discapacidad:</label>
-        <input
-          type="checkbox"
-          name="tieneDiscapacidad"
-          checked={cvData.personalInfo.discapacidad.tieneDiscapacidad}
-          onChange={handleInputChange}
-        />
+        <div className='columnContainer'>
+          <div className='leftColumn'>
+            <label>Tiene discapacidad:</label>
+          </div>
+          <div className='rightColumn'>
+            <input
+            type="checkbox"
+            className="custom-checkbox"
+            name="tieneDiscapacidad"
+            checked={cvData.personalInfo.discapacidad.tieneDiscapacidad}
+            onChange={handleInputChange}
+          />
+          </div>
+        </div>
       </div>
 
       {cvData.personalInfo.discapacidad.tieneDiscapacidad && (
@@ -771,8 +800,9 @@ const CVForm = () => {
           <div className="form-group">
             <label>Porcentaje:</label>
             <input
-              type="text"
+              type="number"
               name="porcentaje"
+              min={0}
               value={cvData.personalInfo.discapacidad.porcentaje}
               onChange={(e) =>
                 setCvData(prevData => ({
@@ -795,7 +825,7 @@ const CVForm = () => {
       <h2>Educación</h2>
       {Object.keys(cvData.educacion).map((category) => (
         <div key={category}>
-          <h3>{category.replace(/([A-Z])/g, ' $1')}</h3>
+          <h3>{categoryDisplayNames[category] || category.replace(/([A-Z])/g, ' $1')}</h3>          
           {cvData.educacion[category].map((entry, index) => (
             <div key={index} style={{ marginBottom: '1rem' }}>
               <input
@@ -834,10 +864,10 @@ const CVForm = () => {
                   onChange={(e) => handleChangeEducacion(category, index, 'ano', e.target.value)}
                 />
               )}
-              <button type="button" onClick={() => handleRemoveEntry(category, index)}>Eliminar</button>
+              <button type="button" className="delete-button" onClick={() => handleRemoveEntry(category, index)} >Eliminar</button>
             </div>
           ))}
-          <button type="button" onClick={() => handleAddEntry(category)}>Añadir {category}</button>
+          <button type="button" onClick={() => handleAddEntry(category)}>Añadir {categoryDisplayNames[category] || category}</button>
         </div>
       ))}
 
@@ -1006,7 +1036,7 @@ const CVForm = () => {
             )}
           </div>
 
-          <button type="button" onClick={() => handleRemoveExperience(index)}>
+          <button type="button" className="delete-button" onClick={() => handleRemoveExperience(index)}>
             Eliminar Experiencia
           </button>
         </div>
@@ -1097,6 +1127,7 @@ const CVForm = () => {
           <button
             type="button"
             onClick={() => handleRemoveArrayItem('proyectosRelevantes', index)}
+            className="delete-button"
           >
             Eliminar Proyecto
           </button>
@@ -1124,6 +1155,7 @@ const CVForm = () => {
           <button
             type="button"
             onClick={() => handleRemoveArrayItem('logrosRelevantes', index)}
+            className="delete-button"
           >
             Eliminar Logro
           </button>
@@ -1150,6 +1182,7 @@ const CVForm = () => {
           <button
             type="button"
             onClick={() => handleRemoveArrayItem('competencias', index)}
+            className="delete-button"
           >
             Eliminar Competencia
           </button>
@@ -1202,6 +1235,7 @@ const CVForm = () => {
           <button
             type="button"
             onClick={() => handleRemoveArrayItem('idiomas', index)}
+            className="delete-button"
           >
             Eliminar Idioma
           </button>

@@ -6,9 +6,14 @@ body {
     padding: 0;
 }
 
+p {
+    font-family: 'Calibri';
+}
+
 h1, h2, h3 {
     color: #333;
     margin-top: 20px;
+    font-family: 'Calibri';
 }
 
 h1 {
@@ -23,7 +28,7 @@ h2, h3 {
 }
 
 h2 {
-    border-bottom: 2px solid #4CAF50;
+    border-bottom: 2px solid #264b8b;
     padding-bottom: 5px;
 }
 
@@ -48,6 +53,7 @@ label, input, textarea, select {
     font-size: 1rem;
     color:black;
     padding: 12px 16px;
+    font-family: 'Calibri';
 }
 
 label {
@@ -64,7 +70,7 @@ input, textarea, select {
 }
 
 input:focus, textarea:focus {
-    border-color: #4CAF50;
+    border-color: #264b8b;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
@@ -158,11 +164,26 @@ button[type="button"]:hover {
 input[type="text"].telefono {
     width: calc(50% - 10px);
     margin-right: 10px;
+    transition: opacity 0.5s ease-out;
 }
 
 input[type="text"].telefono:last-child {
     margin-right: 0;
+    transition: opacity 0.5s ease-out;
 }
+
+.fade-out {
+    animation: fadeOut 0.3s forwards; /* Longer duration for smooth fading */
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 
 /* Responsividad */
 @media (max-width: 768px) {
@@ -263,3 +284,78 @@ input[type="text"].telefono:last-child {
     color: red;
     margin-right: 4px; /* Adjust spacing as needed */
   }
+
+  .custom-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 2px solid #21498e; /* Adjust color */
+    border-radius: 4px;
+    background-color: #ffffff;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  
+  /* Add custom checkmark */
+  .custom-checkbox:checked {
+    background-color: #21498e; /* Adjust to preferred color */
+    border-color: #21498e;
+  }
+  
+  .custom-checkbox:checked::before {
+    content: '✔'; /* Unicode checkmark */
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 2px;
+    left: 4px;
+  }
+  
+  .custom-checkbox:hover {
+    border-color: #21498e; /* Darker shade for hover */
+    background-color: lightgray;
+  }
+
+  .columnContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Add space between the columns */
+  }
+   
+  .leftColumn, .rightColumn {
+    flex: 1; /* Each column takes equal width */
+  }
+   
+  .rightColumnButton{
+    align-content: right;
+  }
+   
+  @media (max-width: 768px) {
+    .columnContainer {
+      flex-direction: column; /* Stack the columns vertically on smaller screens */
+    }
+    .rightColumnButton{
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        flex-direction: row;
+        align-items: center;
+      }
+  }
+
+  .delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  button.delete-button:hover {
+    background-color: #ba0001;
+}
