@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './CVForm.css';
 import Cookies from 'js-cookie';
- 
+import { useCVContext } from '../../../context/cv-context'
+
 const CVForm = () => {
-  const [cvData, setCvData] = useState({
+  const {cvData, setCVData} = useCVContext()
+  const [cvDataEmpty, setCvDataEmpty] = useState({
     personalInfo: {
       nombre: '',
       apellido: '',
@@ -72,6 +74,7 @@ const CVForm = () => {
   useEffect(() => {
     const fetchCVData = async () => {
       try {
+        console.log('CV ', cvData)
         const response = await fetch('http://51.222.110.107:5012/applicant/get_cv/12', {
           method: 'GET',
           headers: { 
@@ -79,15 +82,11 @@ const CVForm = () => {
             'Authorization': '7zXnBjF5PBl7EzG/WhATQw=='  // Aquí añades la cabecera Authorization
           }
         });
-  
         if (!response.ok) {
           throw new Error('No se pudo obtener el CV');
         }
-  
         const data = await response.json();
-        setCvData(data);
-        const savedCv = Cookies.get('cv');
-        console.log(savedCv)
+        setCvDataEmpty(data);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -104,36 +103,36 @@ const CVForm = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const updatedData = { ...cvData };
+        const updatedData = { ...cvDataEmpty };
         updatedData.personalInfo.foto = reader.result;
-        setCvData(updatedData);
+        setCvDataEmpty(updatedData);
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleRemoveFoto = () => {
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmptyEmpty };
     updatedData.personalInfo.foto = '';
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   // Funciones genéricas para manejo de arrays simples y de objetos dentro de cvData
   const handleAddArrayItem = (field, newItem) => {
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     updatedData[field].push(newItem);
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   const handleRemoveArrayItem = (field, index) => {
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     updatedData[field].splice(index, 1);
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   const handleArrayChange = (e, index, field) => {
     const { name, value } = e.target;
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
 
     if (!updatedData[field]) {
       updatedData[field] = [];
@@ -147,14 +146,14 @@ const CVForm = () => {
       updatedData[field][index] = value;
     }
 
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   // Manejo especial para teléfonos dentro de personalInfo
   const handleAddTelefono = () => {
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     updatedData.personalInfo.telefono.push('');
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
 
     const newErrors = { ...errors };
     newErrors.telefono.push('');
@@ -162,9 +161,9 @@ const CVForm = () => {
   };
 
   const handleRemoveTelefono = (index) => {
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     updatedData.personalInfo.telefono.splice(index, 1);
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
 
     const newErrors = { ...errors };
     newErrors.telefono.splice(index, 1);
@@ -173,15 +172,15 @@ const CVForm = () => {
 
   const handleTelefonoChange = (e, index) => {
     const { value } = e.target;
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     updatedData.personalInfo.telefono[index] = value;
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
-      setCvData(prevData => ({
+      setCvDataEmpty(prevData => ({
         ...prevData,
         personalInfo: {
           ...prevData.personalInfo,
@@ -192,7 +191,7 @@ const CVForm = () => {
         }
       }));
     } else {
-      setCvData(prevData => ({
+      setCvDataEmpty(prevData => ({
         ...prevData,
         personalInfo: {
           ...prevData.personalInfo,
@@ -208,27 +207,27 @@ const CVForm = () => {
       ? { grado: '', institucion: '', ano: '' }
       : { grado: '', institucion: '', anoInicio: '', anoFin: '' };
 
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     updatedData.educacion[category].push(newEntry);
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   const handleRemoveEntry = (category, index) => {
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     updatedData.educacion[category].splice(index, 1);
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   const handleChangeEducacion = (category, index, field, value) => {
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     updatedData.educacion[category][index][field] = value;
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   // Experiencia laboral
   const handleExperienceChange = (e, index, field, subField) => {
     const { name, value } = e.target;
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
 
     if (!updatedData[field] || !updatedData[field][index]) return;
     
@@ -238,11 +237,11 @@ const CVForm = () => {
       updatedData[field][index][name] = value;
     }
 
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   const handleAddExperience = () => {
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     const newExperience = {
       empresa: '',
       lugar: '',
@@ -255,13 +254,13 @@ const CVForm = () => {
       referenciaLaboral: { nombre: '', cargo: '', telefono: '' }
     };
     updatedData.experienciaLaboral.push(newExperience);
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   const handleRemoveExperience = (index) => {
-    const updatedData = { ...cvData };
+    const updatedData = { ...cvDataEmpty };
     updatedData.experienciaLaboral.splice(index, 1);
-    setCvData(updatedData);
+    setCvDataEmpty(updatedData);
   };
 
   const validateForm = () => {
@@ -271,56 +270,56 @@ const CVForm = () => {
     const trimString = (value) => String(value || '').trim();
 
     // Validaciones datos personales
-    if (!trimString(cvData.personalInfo.nombre)) {
+    if (!trimString(cvDataEmpty.personalInfo.nombre)) {
       newErrors.nombre = 'El nombre es obligatorio.';
       formValid = false;
     } else {
       newErrors.nombre = '';
     }
 
-    if (!trimString(cvData.personalInfo.apellido)) {
+    if (!trimString(cvDataEmpty.personalInfo.apellido)) {
       newErrors.apellido = 'El apellido es obligatorio.';
       formValid = false;
     } else {
       newErrors.apellido = '';
     }
 
-    if (!trimString(cvData.personalInfo.cedula)) {
+    if (!trimString(cvDataEmpty.personalInfo.cedula)) {
       newErrors.cedula = 'La cédula es obligatoria.';
       formValid = false;
     } else {
       newErrors.cedula = '';
     }
 
-    if (!trimString(cvData.personalInfo.nacionalidad)) {
+    if (!trimString(cvDataEmpty.personalInfo.nacionalidad)) {
       newErrors.nacionalidad = 'La nacionalidad es obligatoria.';
       formValid = false;
     } else {
       newErrors.nacionalidad = '';
     }
 
-    if (!trimString(cvData.personalInfo.correo)) {
+    if (!trimString(cvDataEmpty.personalInfo.correo)) {
       newErrors.correo = 'El correo es obligatorio.';
       formValid = false;
     } else {
       newErrors.correo = '';
     }
 
-    if (!trimString(cvData.personalInfo.linkedIn)) {
+    if (!trimString(cvDataEmpty.personalInfo.linkedIn)) {
       newErrors.linkedIn = 'El linkedin es obligatorio.';
       formValid = false;
     } else {
       newErrors.linkedIn = '';
     }
 
-    if (!trimString(cvData.personalInfo.aspiracionSalarial)) {
+    if (!trimString(cvDataEmpty.personalInfo.aspiracionSalarial)) {
       newErrors.aspiracionSalarial = 'La aspiración salarial es obligatoria.';
       formValid = false;
     } else {
       newErrors.aspiracionSalarial = '';
     }
 
-    if (!trimString(cvData.personalInfo.tiempoIngreso)) {
+    if (!trimString(cvDataEmpty.personalInfo.tiempoIngreso)) {
       newErrors.tiempoIngreso = 'El tiempo de ingreso es obligatorio.';
       formValid = false;
     } else {
@@ -328,7 +327,7 @@ const CVForm = () => {
     }
 
     // Validar teléfonos
-    const telefonoErrors = cvData.personalInfo.telefono.map((tel) => {
+    const telefonoErrors = cvDataEmpty.personalInfo.telefono.map((tel) => {
       if (!trimString(tel)) {
         formValid = false;
         return 'El teléfono es obligatorio.';
@@ -338,7 +337,7 @@ const CVForm = () => {
     newErrors.telefono = telefonoErrors;
 
     // Validar experiencia laboral
-    const expErrors = cvData.experienciaLaboral.map((exp) => {
+    const expErrors = cvDataEmpty.experienciaLaboral.map((exp) => {
       const eErr = {};
       if (!trimString(exp.empresa)) {
         eErr.empresa = 'El campo Empresa es obligatorio.';
@@ -389,7 +388,7 @@ const CVForm = () => {
     newErrors.experienciaLaboral = expErrors;
 
     // Validar proyectosRelevantes
-    const proyectosErrors = cvData.proyectosRelevantes.map((proy) => {
+    const proyectosErrors = cvDataEmpty.proyectosRelevantes.map((proy) => {
       const pErr = {};
       if (!trimString(proy.proyecto)) {
         pErr.proyecto = 'El nombre del proyecto es obligatorio.';
@@ -420,7 +419,7 @@ const CVForm = () => {
     newErrors.proyectosRelevantes = proyectosErrors;
 
     // Validar logrosRelevantes (array de strings)
-    const logrosErrors = cvData.logrosRelevantes.map((logro) => {
+    const logrosErrors = cvDataEmpty.logrosRelevantes.map((logro) => {
       if (!trimString(logro)) {
         formValid = false;
         return { logro: 'El campo Logro es obligatorio.' };
@@ -430,7 +429,7 @@ const CVForm = () => {
     newErrors.logrosRelevantes = logrosErrors;
 
     // Validar competencias (array de strings)
-    const competenciasErrors = cvData.competencias.map((comp) => {
+    const competenciasErrors = cvDataEmpty.competencias.map((comp) => {
       if (!trimString(comp)) {
         formValid = false;
         return 'El campo Competencia es obligatorio.';
@@ -440,7 +439,7 @@ const CVForm = () => {
     newErrors.competencias = competenciasErrors;
 
     // Validar idiomas (array de objetos)
-    const idiomasErrors = cvData.idiomas.map((idioma) => {
+    const idiomasErrors = cvDataEmpty.idiomas.map((idioma) => {
       const iErr = {};
       if (!trimString(idioma.idioma)) {
         iErr.idioma = 'El idioma es obligatorio.';
@@ -473,7 +472,7 @@ const CVForm = () => {
           'Content-Type': 'application/json',
           'Authorization': '7zXnBjF5PBl7EzG/WhATQw=='
       },
-      body: JSON.stringify(cvData),
+      body: JSON.stringify(cvDataEmpty),
     })
     .then(response => {
       if(!response.ok) throw new Error("Error al actualizar el CV");
@@ -496,7 +495,7 @@ const CVForm = () => {
         <input
           type="text"
           name="nombre"
-          value={cvData.personalInfo.nombre}
+          value={cvDataEmpty.personalInfo.nombre}
           onChange={handleInputChange}
           className={errors.nombre ? 'error' : ''}
         />
@@ -507,7 +506,7 @@ const CVForm = () => {
         <input
           type="text"
           name="apellido"
-          value={cvData.personalInfo.apellido}
+          value={cvDataEmpty.personalInfo.apellido}
           onChange={handleInputChange}
           className={errors.apellido ? 'error' : ''}
         />
@@ -518,7 +517,7 @@ const CVForm = () => {
         <input
           type="text"
           name="cedula"
-          value={cvData.personalInfo.cedula}
+          value={cvDataEmpty.personalInfo.cedula}
           onChange={handleInputChange}
           className={errors.cedula ? 'error' : ''}
         />
@@ -529,7 +528,7 @@ const CVForm = () => {
         <input
           type="text"
           name="nacionalidad"
-          value={cvData.personalInfo.nacionalidad}
+          value={cvDataEmpty.personalInfo.nacionalidad}
           onChange={handleInputChange}
           className={errors.nacionalidad ? 'error' : ''}
         />
@@ -540,7 +539,7 @@ const CVForm = () => {
         <input
           type="email"
           name="correo"
-          value={cvData.personalInfo.correo}
+          value={cvDataEmpty.personalInfo.correo}
           onChange={handleInputChange}
           className={errors.correo ? 'error' : ''}
         />
@@ -548,7 +547,7 @@ const CVForm = () => {
       </div>
       <div className="form-group">
         <label>Teléfonos:</label>
-        {cvData.personalInfo.telefono.map((telefono, index) => (
+        {cvDataEmpty.personalInfo.telefono.map((telefono, index) => (
           <div key={index} className="telefono-input">
             <input
               type="text"
@@ -580,7 +579,7 @@ const CVForm = () => {
         <input
           type="url"
           name="linkedIn"
-          value={cvData.personalInfo.linkedIn}
+          value={cvDataEmpty.personalInfo.linkedIn}
           onChange={handleInputChange}
           className={errors.linkedIn ? 'error' : ''}
         />
@@ -591,7 +590,7 @@ const CVForm = () => {
         <input
           type="text"
           name="aspiracionSalarial"
-          value={cvData.personalInfo.aspiracionSalarial}
+          value={cvDataEmpty.personalInfo.aspiracionSalarial}
           onChange={handleInputChange}
           className={errors.aspiracionSalarial ? 'error' : ''}
         />
@@ -602,7 +601,7 @@ const CVForm = () => {
         <input
           type="text"
           name="tiempoIngreso"
-          value={cvData.personalInfo.tiempoIngreso}
+          value={cvDataEmpty.personalInfo.tiempoIngreso}
           onChange={handleInputChange}
           className={errors.tiempoIngreso ? 'error' : ''}
         />
@@ -619,7 +618,7 @@ const CVForm = () => {
         <input
           type="date"
           name="diaNacimiento"
-          value={cvData.personalInfo.diaNacimiento}
+          value={cvDataEmpty.personalInfo.diaNacimiento}
           onChange={handleInputChange}
         />
       </div>
@@ -628,7 +627,7 @@ const CVForm = () => {
         <input
           type="text"
           name="estadoCivil"
-          value={cvData.personalInfo.estadoCivil}
+          value={cvDataEmpty.personalInfo.estadoCivil}
           onChange={handleInputChange}
         />
       </div>
@@ -637,7 +636,7 @@ const CVForm = () => {
         <input
           type="text"
           name="direccion"
-          value={cvData.personalInfo.direccion}
+          value={cvDataEmpty.personalInfo.direccion}
           onChange={handleInputChange}
         />
       </div>
@@ -646,7 +645,7 @@ const CVForm = () => {
         <input
           type="text"
           name="genero"
-          value={cvData.personalInfo.genero}
+          value={cvDataEmpty.personalInfo.genero}
           onChange={handleInputChange}
         />
       </div>
@@ -659,10 +658,10 @@ const CVForm = () => {
           accept="image/*"
           className="file-input"
         />
-        {cvData.personalInfo.foto && (
+        {cvDataEmpty.personalInfo.foto && (
           <div className="image-display">
             <img 
-              src={cvData.personalInfo.foto} 
+              src={cvDataEmpty.personalInfo.foto} 
               alt="Foto del CV" 
               className="preview-image"
             />
@@ -680,7 +679,7 @@ const CVForm = () => {
         <input
           type="text"
           name="autoidentificacionEtcnica"
-          value={cvData.personalInfo.autoidentificacionEtcnica}
+          value={cvDataEmpty.personalInfo.autoidentificacionEtcnica}
           onChange={handleInputChange}
         />
       </div>
@@ -691,21 +690,21 @@ const CVForm = () => {
         <input
           type="checkbox"
           name="tieneDiscapacidad"
-          checked={cvData.personalInfo.discapacidad.tieneDiscapacidad}
+          checked={cvDataEmpty.personalInfo.discapacidad.tieneDiscapacidad}
           onChange={handleInputChange}
         />
       </div>
 
-      {cvData.personalInfo.discapacidad.tieneDiscapacidad && (
+      {cvDataEmpty.personalInfo.discapacidad.tieneDiscapacidad && (
         <>
           <div className="form-group">
             <label>Tipo:</label>
             <input
               type="text"
               name="tipo"
-              value={cvData.personalInfo.discapacidad.tipo}
+              value={cvDataEmpty.personalInfo.discapacidad.tipo}
               onChange={(e) =>
-                setCvData(prevData => ({
+                setCvDataEmpty(prevData => ({
                   ...prevData,
                   personalInfo: {
                     ...prevData.personalInfo,
@@ -723,9 +722,9 @@ const CVForm = () => {
             <input
               type="text"
               name="porcentaje"
-              value={cvData.personalInfo.discapacidad.porcentaje}
+              value={cvDataEmpty.personalInfo.discapacidad.porcentaje}
               onChange={(e) =>
-                setCvData(prevData => ({
+                setCvDataEmpty(prevData => ({
                   ...prevData,
                   personalInfo: {
                     ...prevData.personalInfo,
@@ -743,10 +742,10 @@ const CVForm = () => {
 
       {/* Educación */}
       <h2>Educación</h2>
-      {Object.keys(cvData.educacion).map((category) => (
+      {Object.keys(cvDataEmpty.educacion).map((category) => (
         <div key={category}>
           <h3>{category.replace(/([A-Z])/g, ' $1')}</h3>
-          {cvData.educacion[category].map((entry, index) => (
+          {cvDataEmpty.educacion[category].map((entry, index) => (
             <div key={index} style={{ marginBottom: '1rem' }}>
               <input
                 type="text"
@@ -793,7 +792,7 @@ const CVForm = () => {
 
       {/* Experiencia Laboral */}
       <h2>Experiencia Laboral</h2>
-      {cvData.experienciaLaboral.map((experiencia, index) => (
+      {cvDataEmpty.experienciaLaboral.map((experiencia, index) => (
         <div key={index}>
           <h3>Experiencia {index + 1}</h3>
 
@@ -968,7 +967,7 @@ const CVForm = () => {
 
       {/* Proyectos Relevantes */}
       <h2>Proyectos Relevantes</h2>
-      {cvData.proyectosRelevantes.map((proyecto, index) => (
+      {cvDataEmpty.proyectosRelevantes.map((proyecto, index) => (
         <div key={index}>
           <h3>Proyecto {index + 1}</h3>
 
@@ -1059,7 +1058,7 @@ const CVForm = () => {
 
       {/* Logros Relevantes */}
       <h2>Logros Relevantes</h2>
-      {cvData.logrosRelevantes.map((logro, index) => (
+      {cvDataEmpty.logrosRelevantes.map((logro, index) => (
         <div key={index}>
           <input
             type="text"
@@ -1085,7 +1084,7 @@ const CVForm = () => {
 
       {/* Competencias */}
       <h2>Competencias</h2>
-      {cvData.competencias.map((competencia, index) => (
+      {cvDataEmpty.competencias.map((competencia, index) => (
         <div key={index}>
           <input
             type="text"
@@ -1111,7 +1110,7 @@ const CVForm = () => {
 
       {/* Idiomas */}
       <h2>Idiomas</h2>
-      {cvData.idiomas.map((idioma, index) => (
+      {cvDataEmpty.idiomas.map((idioma, index) => (
         <div key={index}>
           <input
             type="text"

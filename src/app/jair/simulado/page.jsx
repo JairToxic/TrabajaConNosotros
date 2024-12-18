@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import PersonalInformationForm from '../../components/formularioEstilo'
 

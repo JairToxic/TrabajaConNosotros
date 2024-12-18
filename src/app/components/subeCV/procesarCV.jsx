@@ -2,9 +2,10 @@ import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
 import Link from 'next/link';
-import Cookies from 'js-cookie';
+import { CVContextProvider, useCVContext } from '../../../context/cv-context'
  
 const SubirCurriculum = () => {
+  const {cvData, setCVData} = useCVContext();
   const [cvFile, setCvFile] = useState(null); // Para almacenar el archivo cargado
   const [isUploading, setIsUploading] = useState(false); // Estado para controlar el proceso de carga
   const [uploadError, setUploadError] = useState(null); // Para manejar errores en la carga
@@ -44,8 +45,13 @@ const SubirCurriculum = () => {
       // Imprimir la respuesta en la consola (de momento sin redirección)
       console.log("Respuesta del backend:", res.data);
       setSuccessMessage("¡Tu CV ha sido procesado exitosamente!");
-      Cookies.set('cv', JSON.stringify(res.data), { expires: 7 });
- 
+      // Cookies.set('cv', JSON.stringify(res.data), { expires: 7, sameSite: 'None' });
+      // console.log("Cookie size:", JSON.stringify(res.data).length);
+      // console.log(JSON.parse(Cookies.get('cv')))
+      // localStorage.setItem('cv', JSON.stringify(res.data));
+      // console.log(localStorage.getItem('cv'))
+      setCVData(JSON.stringify(res.data))
+      console.log(cvData)
     } catch (err) {
       setErrorMessage("Error al procesar el archivo. Intenta nuevamente.");
       console.error("Error al procesar el archivo:", err);
@@ -58,7 +64,7 @@ const SubirCurriculum = () => {
     <div style={{ fontFamily: "Arial, sans-serif" }}>
       {/* Banner */}
       <div style={{ position: "relative", width: "100%", height: "300px" }}>
-        <Images
+        <Image
           src="/banner.png" // Cambia por la ruta de tu imagen
           alt="Banner Equipo"
           layout="fill"
