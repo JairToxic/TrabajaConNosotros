@@ -1,12 +1,11 @@
 'use client'
-
 import React from 'react'
-import SubirPDF from '../../../components/subeCV/procesarCV'
+import VacancyPage from '../../../components/trabajaConNosotros/filtroBusqueda'
 
 function page() {
   return (
     <div>
-        <SubirPDF/>
+      <VacancyPage/>
     </div>
   )
 }

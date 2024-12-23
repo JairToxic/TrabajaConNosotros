@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSession } from "next-auth/react";
 import { getUserInfoByToken, getEmployeeByUserID } from "../../services/employee.dao";
  
-const SubirCurriculum = () => {
+const SubirCurriculum = ({processId}) => {
   const [cvFile, setCvFile] = useState(null); // Para almacenar el archivo cargado
   const [isUploading, setIsUploading] = useState(false); // Estado para controlar el proceso de carga
   const [uploadError, setUploadError] = useState(null); // Para manejar errores en la carga
@@ -14,9 +14,14 @@ const SubirCurriculum = () => {
   const { data: session } = useSession();
   const [userId, setUserId]=useState(null)
   const [type, setType]=useState(null)
+  const [preexistingProcess, setPreexistingProcess]=useState(false)
+
+  const handleBackClick = () => {
+    window.location.href = `/procesos`;
+  };
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
+    const fetchUserProcess = async () => {
       if (session) {
         try {
           const user = await getUserInfoByToken(session);
@@ -39,8 +44,29 @@ const SubirCurriculum = () => {
       }
     };
   
+    fetchUserProcess();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (type){
+        const response = await fetch(`http://51.222.110.107:5012/applicant/search?user_id=${userId}&process_id=${processId}`, {
+          method: 'GET',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': '7zXnBjF5PBl7EzG/WhATQw==', 
+            'Token':session.user.data.token // Aquí añades la cabecera Authorization
+          }
+        });
+        console.log(response.status)
+        if (response.status===200){
+          setPreexistingProcess(true)
+        }
+      }
+    };
+  
     fetchUserInfo();
-  }, [session]);
+  }, [session, type]);
 
   // Función para manejar la selección del archivo
   const handleFileChange = (event) => {
@@ -51,6 +77,7 @@ const SubirCurriculum = () => {
 
   // Función para manejar el envío del archivo
   const handleUpload = async () => {
+
     if (!cvFile) {
       setUploadError("Por favor selecciona un archivo para subir.");
       return;
@@ -64,15 +91,14 @@ const SubirCurriculum = () => {
     const formData = new FormData();
     formData.append("file", cvFile);
     formData.append("user_id", userId);
-    formData.append("process_id", "1");
+    formData.append("process_id", processId);
     formData.append("type", type);
 
     try {
       const res = await axios.post("http://51.222.110.107:5012/applicant/read_cv", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
           "Authorization":"7zXnBjF5PBl7EzG/WhATQw==",
-          "token":session.user.data.token
+          "Token":session.user.data.token
         },
       });
 
@@ -89,7 +115,49 @@ const SubirCurriculum = () => {
   };
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif" }}>
+    <>
+      {preexistingProcess ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            backgroundColor: "#fff",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ marginBottom: "20px" }}>
+            <Image
+              src="/check.png" // Replace with the actual path to your check icon
+              alt="Check Icon"
+              width={100}
+              height={100}
+            />
+          </div>
+          <h2 style={{ fontSize: "1.5rem", color: "#333", marginBottom: "20px" }}>
+            Usted ya aplicó a este proceso
+          </h2>
+          <button
+            onClick={handleBackClick}
+            style={{
+              backgroundColor: "#21498E",
+              color: "#fff",
+              padding: "12px 30px",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "1rem",
+              transition: "background-color 0.3s ease",
+            }}
+          >
+            Regresar
+          </button>
+        </div>
+      ) : (
+        <div>
+          <div style={{ fontFamily: "Arial, sans-serif" }}>
       {/* Banner */}
       <div style={{ position: "relative", width: "100%", height: "300px" }}>
         <Image
@@ -396,18 +464,11 @@ const SubirCurriculum = () => {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </div>
+  </div>
+        
+      )}
+    </>
   );
 };
 

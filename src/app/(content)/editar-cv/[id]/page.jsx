@@ -1,11 +1,11 @@
 'use client'
 import React from 'react'
-import CV from '../../../components/currriculum/CV_Plantilla'
+import CVDetails from '../../../../components/currriculum/CurriculumCompleto'
 
 function page() {
   return (
     <div>
-      <CV/>
+      <CVDetails/>
     </div>
   )
 }

@@ -15,10 +15,17 @@ const JobVacanciesSearch = () => {
   useEffect(() => {
     const fetchVacancies = async () => {
       try {
-        const response = await fetch('http://localhost:5001/vacancies');
+        const response = await fetch('http://51.222.110.107:5012/process/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': '7zXnBjF5PBl7EzG/WhATQw==',
+          },
+        });
         const data = await response.json();
-        setVacancies(data);
-        setFilteredVacancies(data);
+        const openVacancies = data.filter(item => item.stage === 'Abierto');
+        setVacancies(openVacancies);
+        setFilteredVacancies(openVacancies);
       } catch (error) {
         console.error('Error fetching vacancies:', error);
       }
@@ -80,10 +87,16 @@ const JobVacanciesSearch = () => {
     setFilteredVacancies(vacancies);
   };
 
+  // Handle "Aplicar" button click
+  const handleClick = (id) => {
+    console.log('Applied for vacancy with ID:', id);
+    window.location.href = `/aplicar-puesto/${id}`;
+  };
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-white text-gray-800">
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <div className="p-4 bg-gray-100 border-b">
+        <div className="p-4 bg-gray-200 border-b">
           <h2 className="text-xl font-bold text-gray-800">Búsqueda de Vacantes</h2>
         </div>
         <div className="p-4">
@@ -92,26 +105,14 @@ const JobVacanciesSearch = () => {
             <input 
               type="text"
               placeholder="Nombre del Puesto" 
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded text-gray-800"
               value={filters.positionName}
               onChange={(e) => handleFilterChange('positionName', e.target.value)}
             />
 
-            {/* Stage Filter */}
-            <select 
-              className="w-full p-2 border rounded"
-              value={filters.stage} 
-              onChange={(e) => handleFilterChange('stage', e.target.value)}
-            >
-              <option value="">Seleccionar Etapa</option>
-              {['Reclutamiento', 'Entrevistas', 'Selección'].map(stage => (
-                <option key={stage} value={stage}>{stage}</option>
-              ))}
-            </select>
-
             {/* Type Filter */}
             <select 
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded text-gray-800"
               value={filters.type} 
               onChange={(e) => handleFilterChange('type', e.target.value)}
             >
@@ -123,7 +124,7 @@ const JobVacanciesSearch = () => {
 
             {/* Minimum Requirements Filter */}
             <select 
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded text-gray-800"
               value={filters.minRequirements} 
               onChange={(e) => handleFilterChange('minRequirements', e.target.value)}
             >
@@ -149,7 +150,7 @@ const JobVacanciesSearch = () => {
             {filteredVacancies.map(vacancy => (
               <div 
                 key={vacancy.id} 
-                className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+                className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow bg-white text-gray-800 relative"
               >
                 <h3 className="text-lg font-bold mb-2">{vacancy.position_name}</h3>
                 <div className="grid md:grid-cols-2 gap-2">
@@ -162,6 +163,14 @@ const JobVacanciesSearch = () => {
                   <p className="md:col-span-2"><strong>Descripción:</strong> {vacancy.description}</p>
                   <p className="md:col-span-2"><strong>Beneficios:</strong> {vacancy.benefits}</p>
                 </div>
+
+                {/* "Aplicar" Button */}
+                <button 
+                  onClick={() => handleClick(vacancy.id)}
+                  className="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Aplicar
+                </button>
               </div>
             ))}
           </div>
