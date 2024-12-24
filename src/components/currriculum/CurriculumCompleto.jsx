@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { getUserInfoByToken, getEmployeeByUserID } from "../../services/employee.dao";
 import validarCedulaEcuatoriana from '../../functions/verify-ec-id';
  
-const CVForm = () => {
+const CVForm = ({applicantData}) => {
   const { data: session } = useSession();
   const [idCv, setIdCv]=useState(null);
   const [cvData, setCvData] = useState({
@@ -88,24 +88,8 @@ const CVForm = () => {
     const fetchCVData = async () => {
       try {
         if (session){
-          const user = await getUserInfoByToken(session);
-          const user_id=user.id
-          const process_id=7
-          const response = await fetch(`http://51.222.110.107:5012/applicant/search?user_id=${user_id}&process_id=${process_id}`, {
-            method: 'GET',
-            headers: { 
-              'Content-Type': 'application/json',
-              'Authorization': '7zXnBjF5PBl7EzG/WhATQw==', 
-              'Token':session.user.data.token // Aquí añades la cabecera Authorization
-            }
-          });
-    
-          if (!response.ok) {
-            throw new Error('No se pudo obtener el CV asociado al usuario');
-          }
-          const body=await response.json();
-          setIdCv(body.applicant_data_id)
-          const cv = await fetch(`http://51.222.110.107:5012/applicant/get_cv/${body.applicant_data_id}`, {
+          setIdCv(applicantData)
+          const cv = await fetch(`http://51.222.110.107:5012/applicant/get_cv/${applicantData}`, {
             method: 'GET',
             headers: { 
               'Content-Type': 'application/json',
@@ -574,7 +558,9 @@ const CVForm = () => {
       if(!response.ok) throw new Error("Error al actualizar el CV");
       return response.json();
     })
-    .then(data => alert('CV actualizado con éxito!'))
+    .then(data => {alert('CV actualizado con éxito!');
+      window.location.href = `/ver-cv/${applicantData}`;
+    })
     .catch(error => alert('Error al actualizar el CV: ' + error));
   };
 
