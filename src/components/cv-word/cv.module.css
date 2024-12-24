@@ -1,0 +1,316 @@
+.cv {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Urbanist', sans-serif;
+  }
+ 
+  .header {
+    position: relative;
+    padding: 2rem;
+    color: white;
+    overflow: hidden;
+  }
+ 
+  .headerBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #012C5F;
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+    z-index: 1;
+  }
+ 
+  .headerContent {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+ 
+  .logoImage {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+    margin-top: -20px;
+  }
+ 
+  .profileArea {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+ 
+  .profilePhoto {
+    width: 140px;
+    height: 130px;
+    border-radius: 50%;
+    border: 4px solid #1a69c9;
+  }
+ 
+  .profileInfo h1 {
+    font-size: 2rem;
+    margin: 0;
+  }
+ 
+  .profileInfo h2 {
+    font-size: 1.2rem;
+    margin: 0.5rem 0 0;
+    opacity: 0.9;
+  }
+ 
+  .main {
+    padding: 2rem;
+  }
+ 
+  .section {
+    margin-bottom: 2rem;
+    break-inside: avoid;
+  }
+ 
+  .sectionTitle {
+    color: #012C5F;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #135DB6;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+ 
+  .sectionIcon {
+    width: 2rem;
+    height: 2rem;
+  }
+ 
+  .infoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+ 
+  .infoItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 0rem;
+  }
+ 
+  .infoLabel {
+    font-weight: 600;
+    color: #012C5F;
+    min-width: 120px;
+  }
+ 
+  .icon {
+    width: 2rem;
+    height: 2rem;
+    color: #135DB6;
+  }
+ 
+  .education {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem; /* Espaciado entre las columnas y filas */
+  }
+ 
+  .educationItem {
+    background: #f9f9f9; /* Opcional: Fondo para cada item */
+    padding: 1rem; /* Opcional: Espaciado interno */
+    border-radius: 8px; /* Opcional: Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Opcional: Sombra */
+  }
+ 
+ 
+  .educationItem h4 {
+    color: #012C5F;
+    margin: 0 0 0.5rem;
+  }
+ 
+  .educationItem p {
+    margin: 0.25rem 0;
+  }
+ 
+  .educationItem span {
+    display: block;
+    font-style: italic;
+    color: #666;
+    margin-top: 0.25rem;
+  }
+ 
+  .certifications {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem; /* Espaciado entre las columnas y filas */
+  }
+ 
+  .certificationItem {
+    background: #f9f9f9; /* Opcional: Fondo para cada item */
+    padding: 1rem; /* Opcional: Espaciado interno */
+    border-radius: 8px; /* Opcional: Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Opcional: Sombra */
+  }
+ 
+  .certificationItem h4 {
+    color: #012C5F;
+    margin: 0 0 0.5rem;
+  }
+ 
+  .experienceItem {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+ 
+  .experienceHeader {
+    margin-bottom: 0.5rem;
+  }
+ 
+  .experienceHeader h4 {
+    margin-bottom: 0.3rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #135DB6;
+  }
+ 
+  .periodAndLocation {
+    font-size: 1rem;
+    color: #000000;
+  }
+ 
+  .experienceContent {
+    display: flex;
+    gap: 5rem; /* Espaciado entre columnas */
+  }
+ 
+  .leftColumn {
+    flex: 2;
+  }
+ 
+  .leftColumn h4{
+    margin-bottom: 15px;
+  }
+ 
+  .rightColumn {
+    flex: 1;
+  }
+ 
+  .rightColumn h4 {
+    margin-bottom: -10px;
+  }
+ 
+  .description, .benefits {
+    margin-bottom: 1rem;
+    padding-left: 1.2rem;
+    margin-top: -10px;
+  }
+ 
+  .reference, .salary {
+    margin-bottom: 1rem;
+  }
+ 
+  .reference p, .salary p {
+    margin: 0.2rem 0;
+    font-size: 1rem;
+    color: #000000;
+  }
+ 
+  .reference strong, .salary strong {
+    font-weight: bold;
+  }
+ 
+ 
+  .skillsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.5rem;
+  }
+ 
+  .languages, .skills {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+  }
+ 
+  .languages h4, .skills h4 {
+    color: #012C5F;
+    margin: 0 0 1rem;
+  }
+ 
+  .languageItem {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    margin-right: 400px;
+  }
+ 
+  .skills ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+  }
+ 
+  .achievements {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+  }
+ 
+  .projectItem {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+ 
+  .projectItem h4 {
+    color: #012C5F;
+    margin: 0 0 0.5rem;
+  }
+ 
+  .projectItem span {
+    display: block;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+ 
+  @media (max-width: 768px) {
+    .headerContent {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+    }
+ 
+    .profileArea {
+      flex-direction: column;
+      text-align: center;
+    }
+ 
+    .infoGrid {
+      grid-template-columns: 1fr;
+    }
+ 
+    .infoItem {
+      flex-direction: column;
+    }
+ 
+    .infoLabel {
+      min-width: auto;
+    }
+ 
+    .skillsContainer {
+      grid-template-columns: 1fr;
+    }
+ 
+    .experienceHeader {
+      flex-direction: column;
+      text-align: center;
+    }
+  }  
+ 
