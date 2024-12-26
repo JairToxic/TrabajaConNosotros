@@ -87,11 +87,12 @@ const MenuTrabajaConNosotros = () => {
           <FaBriefcase style={{ color: '#ffffff', paddingLeft: '10px', fontSize: '100px' }}  />
           <Label>Ver vacantes y postulantes</Label>
         </ButtonPerfil>
-        <ButtonPerfil onClick={() => handleClick("/admin/onboarding/gestion-procesos")}
+        <ButtonPerfil onClick={() => handleClick("/admin/trabaja-con-nosotros/vacantes/crear-nuevo")}
         >
           <FaUserPlus style={{ color: '#ffffff', paddingLeft: '10px', fontSize: '100px' }}  />
           <Label>Crear vacante</Label>
         </ButtonPerfil>
+      
       </Controles>
     </Container>
   );
