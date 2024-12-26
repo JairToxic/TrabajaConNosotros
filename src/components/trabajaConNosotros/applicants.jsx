@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FaExclamationCircle } from 'react-icons/fa';
+import { FaExclamationCircle, FaCheck } from 'react-icons/fa';
 
 const Applicants = ({ idProcess }) => {
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Headers comunes para todas las solicitudes fetch
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': '7zXnBjF5PBl7EzG/WhATQw==',
   };
 
-  // Obtener datos desde el endpoint al montar el componente
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
@@ -23,14 +21,16 @@ const Applicants = ({ idProcess }) => {
 
         if (response.status === 200) {
           const data = await response.json();
-          setApplicants(data || []); // Ensure applicants is an array
+          setApplicants(data || []);
         } else if (response.status === 404) {
-          setApplicants(null); // Set applicants to null to trigger the no applicants message
+          setApplicants(null);
         } else {
-          throw new Error('Error al obtener los datos.');
+          const errorData = await response.json().catch(() => null);
+          const errorMessage = errorData?.message || 'Error al obtener los datos.';
+          throw new Error(errorMessage);
         }
       } catch (err) {
-        console.error('Error fetching applicants:', err);
+        console.error('Error al obtener los postulantes:', err);
         setError(err);
       } finally {
         setLoading(false);
@@ -40,91 +40,83 @@ const Applicants = ({ idProcess }) => {
     fetchApplicants();
   }, [idProcess]);
 
-  // Función para manejar la actualización del progreso de la etapa
   const handleStageUpdate = async (id, newStage) => {
+    // Mapeo de los valores de stage_progress del cliente a los esperados por el servidor
+    const stageMapping = {
+      preseleccionar: 'Preseleccionado',
+      descartar: 'Descartado',
+      no_elegible: 'No Elegible',
+    };
+
+    const stageToSend = stageMapping[newStage] || newStage;
+
     try {
-      const response = await fetch(`http://51.222.110.107:5012/applicant/update_stage/${id}`, {
+      const response = await fetch(`http://51.222.110.107:5012/applicant/14`, {
         method: 'PUT',
         headers,
-        body: JSON.stringify({ stage_progress: newStage }),
+        body: JSON.stringify({
+          stage_progress: stageToSend, // Solo enviamos el campo requerido
+        }),
       });
 
       if (!response.ok) {
-        throw new Error('Error al actualizar el estado.');
+        const errorData = await response.json().catch(() => null);
+        const errorMessage = errorData?.message || 'Error al actualizar el estado.';
+        throw new Error(errorMessage);
       }
 
       // Actualizar el estado local para reflejar el cambio
       setApplicants(prevApplicants =>
         prevApplicants.map(applicant =>
           applicant.applicant_data_id === id
-            ? { ...applicant, stage_progress: newStage }
+            ? { ...applicant, stage_progress: stageToSend }
             : applicant
         )
       );
     } catch (error) {
       console.error('Error al actualizar el estado:', error);
-      alert('Ocurrió un error al actualizar el estado. Por favor, intenta nuevamente.');
+      alert(`Ocurrió un error al actualizar el estado: ${error.message}. Por favor, intenta nuevamente.`);
     }
   };
 
   if (loading) return <p className="message">Cargando...</p>;
   if (error) return <p className="error">Ocurrió un error al cargar los datos.</p>;
 
-  // Display message if no applicants exist
   if (applicants === null) {
     return (
-        <div>
-            <button className="return-button" onClick={() => window.location.href = '/admin/trabaja-con-nosotros/vacantes'}>Regresar</button>
-            <div className="no-applicants-message">
-                <FaExclamationCircle style={{ color: '#b91c1c', paddingRight: '10px', fontSize: '40px' }}  />
-                <p>No Existen Aplicantes Aún</p>
+      <div>
+        <button 
+          className="return-button" 
+          onClick={() => window.location.href = '/admin/trabaja-con-nosotros/vacantes'}
+        >
+          Regresar
+        </button>
+        <div className="no-applicants-message">
+          <FaExclamationCircle style={{ color: '#b91c1c', paddingRight: '10px', fontSize: '40px' }} />
+          <p>No Existen Aplicantes Aún</p>
         </div>
-        <style jsx>{`
-        .return-button{
-            background-color: #21498e;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom:10px;
-            cursor: pointer;
-            width: 10%;
-            @media (max-width: 768px) {
-                width: 86%;
-            }
-        }
-        .no-applicants-message {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-            background-color: #fecaca; /* Soft red background */
-            color: #b91c1c; /* Dark red text */
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .no-applicants-message p {
-            font-size: 1.25rem; /* Larger text */
-            font-weight: 600; /* Semi-bold text */
-        }
-      `}</style>
-      </div>      
+      </div>
     );
   }
-  
 
   return (
     <div className="container">
-      <button className="return-button" onClick={() => window.location.href = '/admin/trabaja-con-nosotros/vacantes'}>Regresar</button>
+      <button 
+        className="return-button" 
+        onClick={() => window.location.href = '/admin/trabaja-con-nosotros/vacantes'}
+      >
+        Regresar
+      </button>
       <h1 className="title">Lista de Candidatos</h1>
       <div className="tableContainer">
         <table className="table">
           <thead>
             <tr>
               <th className="th">Nombre</th>
-              <th className="th">Tipo</th>
-              <th className="th">Progreso de la Etapa</th>
+              <th className="th">Brecha Requisitos</th>
+              <th className="th">Preseleccionar</th>
+              <th className="th">Descartar</th>
+              <th className="th">No elegible</th>
               <th className="th">Acciones</th>
             </tr>
           </thead>
@@ -132,30 +124,54 @@ const Applicants = ({ idProcess }) => {
             {applicants.map(applicant => (
               <tr key={applicant.applicant_data_id} className="tr">
                 <td className="td">{applicant.user_name}</td>
-                <td className="td">{applicant.type}</td>
-                <td className="td">
-                  <select
-                    value={applicant.stage_progress}
-                    onChange={(e) => handleStageUpdate(applicant.applicant_data_id, e.target.value)}
-                    className="select"
-                  >
-                    <option value="Reclutamiento">Reclutamiento</option>
-                    <option value="Entrevista">Entrevista</option>
-                    <option value="Oferta">Oferta</option>
-                    <option value="Contratado">Contratado</option>
-                    <option value="Rechazado">Rechazado</option>
-                  </select>
+                <td className="td">{applicant.requirements_percentages || '0'}%</td>
+                <td className="td checkbox-cell">
+                  {applicant.stage_progress === 'Preseleccionado' && (
+                    <div className="check-circle">
+                      <FaCheck className="check-icon" />
+                    </div>
+                  )}
+                  <div 
+                    className="checkbox-area"
+                    onClick={() => handleStageUpdate(applicant.applicant_data_id, 'preseleccionar')}
+                  />
+                </td>
+                <td className="td checkbox-cell">
+                  {applicant.stage_progress === 'Descartado' && (
+                    <div className="check-circle">
+                      <FaCheck className="check-icon" />
+                    </div>
+                  )}
+                  <div 
+                    className="checkbox-area"
+                    onClick={() => handleStageUpdate(applicant.applicant_data_id, 'descartar')}
+                  />
+                </td>
+                <td className="td checkbox-cell">
+                  {applicant.stage_progress === 'No Elegible' && (
+                    <div className="check-circle">
+                      <FaCheck className="check-icon" />
+                    </div>
+                  )}
+                  <div 
+                    className="checkbox-area"
+                    onClick={() => handleStageUpdate(applicant.applicant_data_id, 'no_elegible')}
+                  />
                 </td>
                 <td className="td">
                   <div className="buttonContainer">
-                    <Link href={`/admin/trabaja-con-nosotros/vacantes/postulantes/cv-postulante/${applicant.applicant_data_id}`} className="butto">
+                    <Link 
+                      href={`/admin/trabaja-con-nosotros/vacantes/postulantes/cv-postulante/${applicant.applicant_data_id}`} 
+                      className="button cvButton"
+                    >
                       Ver CV
                     </Link>
                     <a
                       href={applicant.cv_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="button originalCvButton" >
+                      className="button originalCvButton"
+                    >
                       Ver CV Original
                     </a>
                   </div>
@@ -166,9 +182,7 @@ const Applicants = ({ idProcess }) => {
         </table>
       </div>
 
-      {/* Estilos CSS Mejorados */}
       <style jsx>{`
-        /* Contenedor principal */
         .container {
           padding: 40px;
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -177,7 +191,6 @@ const Applicants = ({ idProcess }) => {
           box-sizing: border-box;
         }
 
-        /* Título */
         .title {
           margin-bottom: 30px;
           text-align: center;
@@ -186,21 +199,20 @@ const Applicants = ({ idProcess }) => {
           text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
-        .return-button{
-            background-color: #21498e;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom:10px;
-            cursor: pointer;
-            width: 10%;
-            @media (max-width: 768px) {
-                width: 86%;
-            }
+        .return-button {
+          background-color: #21498e;
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 10px;
+          margin-bottom: 10px;
+          cursor: pointer;
+          width: 10%;
+          @media (max-width: 768px) {
+            width: 86%;
+          }
         }
 
-        /* Contenedor de la tabla con scroll */
         .tableContainer {
           overflow-x: auto;
           border-radius: 12px;
@@ -209,19 +221,17 @@ const Applicants = ({ idProcess }) => {
           padding: 20px;
         }
 
-        /* Tabla */
         .table {
           width: 100%;
           border-collapse: collapse;
-          min-width: 600px;
+          min-width: 800px;
         }
 
-        /* Encabezados de tabla */
         .th {
           padding: 15px;
           background-color: #264b8b;
           color: #fff;
-          text-align: left;
+          text-align: center;
           font-size: 1rem;
           position: sticky;
           top: 0;
@@ -229,7 +239,6 @@ const Applicants = ({ idProcess }) => {
           border-bottom: 2px solid #3b7dd8;
         }
 
-        /* Filas de la tabla */
         .tr:nth-child(even) {
           background-color: #f9fafb;
         }
@@ -239,38 +248,51 @@ const Applicants = ({ idProcess }) => {
           transition: background-color 0.3s ease;
         }
 
-        /* Celdas de la tabla */
         .td {
           padding: 15px;
           border-bottom: 1px solid #e2e8f0;
           color: #555;
           font-size: 0.95rem;
+          text-align: center;
         }
 
-        /* Select */
-        .select {
-          padding: 10px;
-          width: 100%;
-          border: 1px solid #cbd5e0;
-          border-radius: 8px;
-          background-color: #f7fafc;
-          font-size: 0.95rem;
-          transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        .checkbox-cell {
+          position: relative;
+          cursor: pointer;
+          min-width: 100px;
         }
 
-        .select:focus {
-          border-color: #4a90e2;
-          box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
-          outline: none;
+        .checkbox-area {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          cursor: pointer;
         }
 
-        /* Contenedor de botones */
+        .check-circle {
+          width: 24px;
+          height: 24px;
+          background-color: #4CAF50;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto;
+        }
+
+        .check-icon {
+          color: white;
+          font-size: 14px;
+        }
+
         .buttonContainer {
           display: flex;
           gap: 10px;
+          justify-content: center;
         }
 
-        /* Botones */
         .button {
           display: inline-flex;
           align-items: center;
@@ -293,7 +315,6 @@ const Applicants = ({ idProcess }) => {
           box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
-        /* Botón Ver CV */
         .cvButton {
           background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
         }
@@ -302,7 +323,6 @@ const Applicants = ({ idProcess }) => {
           background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
         }
 
-        /* Botón Ver CV Original */
         .originalCvButton {
           background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
         }
@@ -311,10 +331,26 @@ const Applicants = ({ idProcess }) => {
           background: linear-gradient(135deg, #feb47b 0%, #ff7e5f 100%);
         }
 
-        /* Mensajes */
+        .no-applicants-message {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 16px;
+          background-color: #fecaca;
+          color: #b91c1c;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-applicants-message p {
+          font-size: 1.25rem;
+          font-weight: 600;
+        }
+
         .message {
           padding: 40px;
-          text-align: center font-size: 1.5rem;
+          text-align: center;
+          font-size: 1.5rem;
           color: #555;
         }
 
@@ -325,7 +361,6 @@ const Applicants = ({ idProcess }) => {
           color: #e53e3e;
         }
 
-        /* Responsividad */
         @media (max-width: 768px) {
           .title {
             font-size: 2rem;

@@ -31,7 +31,7 @@ const JobVacanciesSearch = () => {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
-        const openVacancies = data.filter(item => item.stage.toLowerCase() === 'abierto');
+        const openVacancies = data.filter(item => item.stage.toLowerCase() === 'reclutamiento');
         setVacancies(openVacancies);
         setFilteredVacancies(openVacancies);
         setError(null);
@@ -121,17 +121,7 @@ const JobVacanciesSearch = () => {
               onChange={(e) => handleFilterChange('positionName', e.target.value)}
             />
 
-            {/* Etapa */}
-            <select 
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={filters.stage} 
-              onChange={(e) => handleFilterChange('stage', e.target.value)}
-            >
-              <option value="">Seleccionar Etapa</option>
-              {['Reclutamiento', 'Entrevistas', 'Selección'].map(stage => (
-                <option key={stage} value={stage}>{stage}</option>
-              ))}
-            </select>
+          
 
             {/* Tipo */}
             <select 
@@ -152,7 +142,7 @@ const JobVacanciesSearch = () => {
               onChange={(e) => handleFilterChange('location', e.target.value)}
             >
               <option value="">Seleccionar Localización</option>
-              {['Remoto', 'Presencial'].map(location => (
+              {['Remoto', 'Presencial','Quito','On-site'].map(location => (
                 <option key={location} value={location}>{location}</option>
               ))}
             </select>
