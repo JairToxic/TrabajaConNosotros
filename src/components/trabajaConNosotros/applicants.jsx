@@ -174,6 +174,12 @@ const Applicants = ({ idProcess }) => {
                     >
                       Ver CV Original
                     </a>
+                    <Link 
+                      href={`/admin/trabaja-con-nosotros/vacantes/postulantes/brechas/${applicant.applicant_data_id}/${idProcess}`} 
+                      className="button cvButton"
+                    >
+                      Análisis Brechas
+                    </Link>
                   </div>
                 </td>
               </tr>
