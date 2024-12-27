@@ -230,7 +230,6 @@ const NuevaVacante = () => {
     }
     const perfilSeleccionado = perfiles.find((p) => String(p._id) === String(perfilId));
     setSelectedPerfil(perfilSeleccionado);
-
     setErrors((prev) => ({ ...prev, perfilDescriptivo: false }));
     if (perfilSeleccionado) {
       procesarPerfilDescriptivo(perfilSeleccionado);

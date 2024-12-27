@@ -101,6 +101,11 @@ const JobVacanciesSearch = () => {
     window.location.href = `/aplicar-puesto/${id}`;
   };
 
+  const handleClickDetalles = (id) => {
+    console.log('Aplicando para la vacante con ID:', id);
+    window.location.href = `/vacante-description/${id}`;
+  };
+
   return (
     <div className="container mx-auto p-6 bg-gray-100 min-h-screen">
       <div className="bg-white shadow-lg rounded-lg p-6">
@@ -174,30 +179,43 @@ const JobVacanciesSearch = () => {
         )}
 
         {/* Lista de Vacantes */}
-        <div className="grid gap-6">
+        <div className="flex flex-col gap-6">
           {filteredVacancies.map(vacancy => (
             <div 
               key={vacancy.id} 
-              className="bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow"
+              className="w-full bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow"
             >
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div>
-                  <h3 className="text-2xl font-bold text-blue-600">{vacancy.position_name}</h3>
-                  <p className="text-gray-600"><strong>Localización:</strong> {vacancy.location}</p>
-                </div>
-                <button 
-                  onClick={() => handleClick(vacancy.id)}
-                  className="mt-4 md:mt-0 bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition"
-                >
-                  Aplicar
-                </button>
-              </div>
+              {/* Title */}
+              <h3 className="text-2xl font-bold text-blue-600">{vacancy.position_name}</h3>
 
-              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <p><strong>Aplicantes:</strong> {vacancy.applicants}</p>
-                <p><strong>Apertura:</strong> {new Date(vacancy.opened_at).toLocaleDateString()}</p>
-                <p><strong>Etapa:</strong> {vacancy.stage}</p>
-                <p><strong>Tipo:</strong> {vacancy.type}</p>
+              {/* Two Columns Layout */}
+              <div className="flex flex-col md:flex-row justify-between gap-6 mt-4">
+                {/* 70% Column - Text Content */}
+                <div className="flex-1">
+                  <p className="text-gray-600"><strong>Localización:</strong> {vacancy.location}</p>
+                  <p><strong>Aplicantes:</strong> {vacancy.applicants}</p>
+                  <p><strong>Apertura:</strong> {new Date(vacancy.opened_at).toLocaleDateString()}</p>
+                  <p><strong>Etapa:</strong> {vacancy.stage}</p>
+                  <p><strong>Tipo:</strong> {vacancy.type}</p>
+                </div>
+
+                {/* 30% Column - Other Elements */}
+                <div className="w-full md:w-1/3 gap-10">
+                  <div className="mt-4" >
+                    <button 
+                      onClick={() => handleClickDetalles(vacancy.id)}
+                      className="bg-blue-300 text-white px-6 py-3 rounded-lg hover:bg-blue-500 transition w-full mb-4"
+                    >
+                      Detalles
+                    </button>
+                    <button 
+                      onClick={() => handleClick(vacancy.id)}
+                      className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition w-full"
+                    >
+                      Aplicar
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
