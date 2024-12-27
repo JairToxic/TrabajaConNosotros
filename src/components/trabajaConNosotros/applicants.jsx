@@ -51,7 +51,7 @@ const Applicants = ({ idProcess }) => {
     const stageToSend = stageMapping[newStage] || newStage;
 
     try {
-      const response = await fetch(`http://51.222.110.107:5012/applicant/14`, {
+      const response = await fetch(`http://51.222.110.107:5012/applicant/${idProcess}`, {
         method: 'PUT',
         headers,
         body: JSON.stringify({
