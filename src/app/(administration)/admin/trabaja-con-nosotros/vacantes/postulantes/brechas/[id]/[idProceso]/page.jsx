@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
- 
+import { useParams } from 'next/navigation';
 /**
  * Convierte la experiencia laboral en meses y suma todo.
  * Devuelve un número total de meses.
@@ -147,6 +147,7 @@ function getAllDegrees(educacion) {
 /** Componente principal */
 export default function RequisitosPage() {
   // Estados para los requisitos
+  const {id, idProceso}=useParams()
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -170,7 +171,7 @@ export default function RequisitosPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://51.222.110.107:5012/process/14', {
+        const response = await axios.get(`http://51.222.110.107:5012/process/${idProceso}`, {
           headers: {
             Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
           },
@@ -192,7 +193,7 @@ export default function RequisitosPage() {
     const fetchCvData = async () => {
       try {
         const response = await axios.get(
-          'http://51.222.110.107:5012/applicant/get_cv/58',
+          `http://51.222.110.107:5012/applicant/get_cv/${id}`,
           {
             headers: {
               Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
