@@ -4,20 +4,20 @@ import requests
 import os
 import json
 import logging
- 
+     
 app = Flask(__name__)
 CORS(app)
- 
+     
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
- 
+     
 AZURE_API_ENDPOINT = "https://mychatbot.openai.azure.com/openai/deployments/gpt-35-turbo/chat/completions?api-version=2024-08-01-preview"
 AZURE_API_KEY = "c068c560e2774b0a9318651e846455d6"
- 
+     
 @app.route('/')
 def index():
     return render_template('index.html')
- 
+     
 @app.route('/procesar_cv', methods=['POST'])
 def procesar_cv():
     try:
@@ -25,34 +25,36 @@ def procesar_cv():
         data = request.get_json()
         logger.debug(f"Datos recibidos: {data}")
  
-        job_requirements = data.get('job_requirements', '').strip()
+        # Cambiar 'job_requirements' por 'job_competencies'
+        job_competencies = data.get('job_competencies', '').strip()
         cv_text = data.get('cv_text', '').strip()
  
-        if not job_requirements or not cv_text:
-            logger.warning("Campos 'job_requirements' y/o 'cv_text' están vacíos")
-            return jsonify({"error": "Los campos 'job_requirements' y 'cv_text' son obligatorios."}), 400
+        if not job_competencies or not cv_text:
+            logger.warning("Campos 'job_competencies' y/o 'cv_text' están vacíos")
+            return jsonify({"error": "Los campos 'job_competencies' y 'cv_text' son obligatorios."}), 400
  
+        # Actualizar el prompt para referirse a competencias en lugar de requisitos
         prompt = f"""
 ### Instrucciones:
 A continuación, se te proporcionarán dos secciones:
- 
-1. **Requisitos del Puesto**:
-{job_requirements}
- 
+
+1. **Competencias del Puesto**:
+{job_competencies}
+
 2. **Datos del CV**:
 {cv_text}
- 
-Tu tarea es analizar cómo cada requisito del puesto se alinea con los datos proporcionados en el CV. Para cada requisito, asigna una **calificación** (userValue) basada en la alineación entre el CV y el requisito. La calificación debe ser un número que no exceda el porcentaje máximo asignado a cada requisito (maxValue) el userValue NO puede ser mayor que el maxValue.
- 
-Al final, proporciona un resumen que incluya la **suma de calificaciones**, la **suma de máximos** y la **brecha** y un comentario explciando porque esas calificaicones entre ambos.
- 
-Proporciona SOLO la respuesta en formato JSON, sin texto adicional.
- 
+
+Tu tarea es analizar cómo cada competencia del puesto se alinea con los datos proporcionados en el CV. Para cada competencia, asigna una **calificación** (userValue) basada en la alineación entre el CV y la competencia. La calificación debe ser un número que no exceda el porcentaje máximo asignado a cada competencia (maxValue). El userValue **NO** puede ser mayor que el maxValue.
+
+Al final, proporciona un resumen que incluya la **suma de calificaciones**, la **suma de máximos**, la **brecha** y un comentario explicando por qué esas calificaciones entre ambos.
+
+Proporciona **SOLO** la respuesta en formato JSON, sin texto adicional.
+
 ### **Formato de Respuesta Esperado:**
 {{
-  "requirements": [
+  "competencies": [
     {{
-      "description": "Descripción del requisito",
+      "description": "Descripción de la competencia",
       "maxValue": 10,
       "userValue": 8
     }},
@@ -61,12 +63,12 @@ Proporciona SOLO la respuesta en formato JSON, sin texto adicional.
   "summary": {{
     "sumUserValue": 80,
     "sumMaxValue": 100,
-    "gap": 20
-    "comentario:" comentario
+    "gap": 20,
+    "comentario": "Comentario explicativo."
   }}
 }}
 """
- 
+
         logger.debug(f"Prompt construido: {prompt}")
  
         headers = {
@@ -76,7 +78,7 @@ Proporciona SOLO la respuesta en formato JSON, sin texto adicional.
  
         payload = {
             "messages": [
-                {"role": "system", "content": "Eres un asistente que analiza la alineación de requisitos de puestos con datos de CVs. Responde SOLO en formato JSON, sin texto adicional."},
+                {"role": "system", "content": "Eres un asistente que analiza la alineación de competencias de puestos con datos de CVs. Responde SOLO en formato JSON, sin texto adicional."},
                 {"role": "user", "content": prompt}
             ],
             "max_tokens": 500,

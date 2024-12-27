@@ -146,11 +146,11 @@ function getAllDegrees(educacion) {
 }
 
 /** Componente principal */
-export default function RequisitosPage() {
+export default function CompetenciasPage() {
   // Obtención de parámetros de la URL
   const { id, idProceso } = useParams();
 
-  // Estados para los requisitos
+  // Estados para las competencias (proceso data)
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -165,8 +165,8 @@ export default function RequisitosPage() {
   const [applicantLoading, setApplicantLoading] = useState(true);
   const [applicantError, setApplicantError] = useState(null);
 
-  // Arreglo con los requisitos parseados
-  const [ratingsState, setRatingsState] = useState([]);
+  // Arreglo con las competencias parseadas
+  const [competenciesState, setCompetenciesState] = useState([]);
 
   // Estados para manejar la respuesta de la IA
   const [iaResponse, setIaResponse] = useState(null);
@@ -177,33 +177,38 @@ export default function RequisitosPage() {
   const [brecha, setBrecha] = useState(0);
 
   // Estado para la recomendación de la IA
-  const [requirements_comment, setRequirementsComment] = useState('');
+  const [competencies_comment, setCompetenciesComment] = useState('');
 
   // Nuevos estados para el envío de datos
   const [sendLoading, setSendLoading] = useState(false);
   const [sendError, setSendError] = useState(null);
   const [sendSuccess, setSendSuccess] = useState(false);
 
+  // Obtener el token de autorización desde las variables de entorno
+  const AUTH_TOKEN = '7zXnBjF5PBl7EzG/WhATQw=='; // Añadir 'Bearer ' antes del token
+
   // ------------------------------------
-  // FETCH Requisitos
+  // FETCH Competencias (Proceso Data)
   // ------------------------------------
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://51.222.110.107:5012/process/${idProceso}`, {
           headers: {
-            Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
+            Authorization: AUTH_TOKEN, // Ya incluye 'Bearer '
+            'Content-Type': 'application/json',
           },
         });
         setData(response.data);
       } catch (err) {
+        console.error('Error al cargar competencias:', err);
         setError(err);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [idProceso]);
+  }, [idProceso, AUTH_TOKEN]);
 
   // ------------------------------------
   // FETCH CV
@@ -215,19 +220,21 @@ export default function RequisitosPage() {
           `http://51.222.110.107:5012/applicant/get_cv/${id}`,
           {
             headers: {
-              Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
+              Authorization: AUTH_TOKEN, // Ya incluye 'Bearer '
+              'Content-Type': 'application/json',
             },
           }
         );
         setCvData(response.data);
       } catch (err) {
+        console.error('Error al cargar CV:', err);
         setCvError(err);
       } finally {
         setCvLoading(false);
       }
     };
     fetchCvData();
-  }, [id]);
+  }, [id, AUTH_TOKEN]);
 
   // ------------------------------------
   // FETCH Datos del Solicitante
@@ -239,58 +246,60 @@ export default function RequisitosPage() {
           `http://51.222.110.107:5012/applicant/${id}`,
           {
             headers: {
-              Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
+              Authorization: AUTH_TOKEN, // Ya incluye 'Bearer '
+              'Content-Type': 'application/json',
             },
           }
         );
         setApplicantData(response.data);
       } catch (err) {
+        console.error('Error al cargar datos del solicitante:', err);
         setApplicantError(err);
       } finally {
         setApplicantLoading(false);
       }
     };
     fetchApplicantData();
-  }, [id]);
+  }, [id, AUTH_TOKEN]);
 
   // ------------------------------------
   // Calcular Brecha Basada en las Calificaciones
   // ------------------------------------
   useEffect(() => {
-    const calculateBrecha = (ratings) => {
-      const sumMax = ratings.reduce((acc, req) => acc + req.maxValue, 0);
-      const sumUser = ratings.reduce((acc, req) => acc + req.userValue, 0);
+    const calculateBrecha = (competencies) => {
+      const sumMax = competencies.reduce((acc, comp) => acc + comp.maxValue, 0);
+      const sumUser = competencies.reduce((acc, comp) => acc + comp.userValue, 0);
       return Math.max(sumMax - sumUser, 0); // Aseguramos que no sea negativa
     };
 
-    const nuevaBrecha = calculateBrecha(ratingsState);
+    const nuevaBrecha = calculateBrecha(competenciesState);
     setBrecha(nuevaBrecha);
-  }, [ratingsState]);
+  }, [competenciesState]);
 
   // ------------------------------------
-  // Parsear requisitos desde Process Data o Applicant Data
+  // Parsear competencias desde Process Data
   // ------------------------------------
   useEffect(() => {
     if (data) {
-      const { requirements_percentages } = data;
+      const { competencies_percentages } = data;
 
       const regex = /(\d+)%\s*([^,]+)/g;
-      const requisitosParseados = [];
+      const competenciasParseadas = [];
       let match;
 
-      // Usar regex para capturar cada requisito con porcentaje y descripción
-      while ((match = regex.exec(requirements_percentages)) !== null) {
+      // Usar regex para capturar cada competencia con porcentaje y descripción
+      while ((match = regex.exec(competencies_percentages)) !== null) {
         const maxValue = parseInt(match[1], 10); // Captura el porcentaje
         const descripcion = match[2].trim(); // Captura la descripción
-        requisitosParseados.push({
+        competenciasParseadas.push({
           maxValue,
           descripcion,
           userValue: 0, // Inicialmente 0
         });
       }
 
-      setRatingsState(requisitosParseados);
-      console.log('Requisitos Parseados desde Process Data:', requisitosParseados);
+      setCompetenciesState(competenciasParseadas);
+      console.log('Competencias Parseadas desde Process Data:', competenciasParseadas);
     }
   }, [data]);
 
@@ -299,26 +308,26 @@ export default function RequisitosPage() {
   // ------------------------------------
   useEffect(() => {
     if (applicantData) {
-      const { requirements_calification, requirements_comment, requirements_gap } = applicantData;
+      const { competencies_calification, competencies_comment, competencies_gap } = applicantData;
 
-      // Parsear requirements_calification
-      const califications = requirements_calification.split(',').map((val) => parseInt(val, 10));
+      // Parsear competencies_calification
+      const califications = competencies_calification.split(',').map((val) => parseInt(val, 10));
 
-      setRatingsState((prevRatings) =>
-        prevRatings.map((req, index) => ({
-          ...req,
+      setCompetenciesState((prevCompetencies) =>
+        prevCompetencies.map((comp, index) => ({
+          ...comp,
           userValue: califications[index] || 0, // Asignar valor o 0 si no existe
         }))
       );
 
-      // Establecer requirements_comment y requirements_gap
-      setRequirementsComment(requirements_comment || '');
-      setBrecha(requirements_gap || 0);
+      // Establecer competencies_comment y competencies_gap
+      setCompetenciesComment(competencies_comment || '');
+      setBrecha(competencies_gap || 0);
 
       console.log('Datos del Solicitante Actualizados:', {
-        requirements_calification,
-        requirements_comment,
-        requirements_gap,
+        competencies_calification,
+        competencies_comment,
+        competencies_gap,
       });
     }
   }, [applicantData]);
@@ -326,8 +335,8 @@ export default function RequisitosPage() {
   // ------------------------------------
   // Función para cambiar la calificación
   // ------------------------------------
-  const handleRatingChange = (index, newVal) => {
-    setRatingsState((prev) =>
+  const handleCompetencyChange = (index, newVal) => {
+    setCompetenciesState((prev) =>
       prev.map((item, i) => {
         if (i === index) {
           const userValue = Math.max(0, Math.min(item.maxValue, Number(newVal)));
@@ -356,6 +365,8 @@ export default function RequisitosPage() {
   let cvExpLabel = '—';
   // CERTIFICACIONES
   let cvCertifications = [];
+  // COMPETENCIAS
+  let cvCompetencies = [];
 
   if (cvData) {
     // 1) Extraer grados
@@ -380,6 +391,11 @@ export default function RequisitosPage() {
         ano: cert.ano?.trim() || '',
       }));
     }
+
+    // 4) Competencias
+    if (cvData.competencias && cvData.competencias.length > 0) {
+      cvCompetencies = cvData.competencias.map((comp) => comp.trim());
+    }
   }
 
   // ------------------------------------
@@ -401,8 +417,13 @@ export default function RequisitosPage() {
         }).join(', ')
       : 'Sin certificaciones.';
 
+    // COMPETENCIAS
+    const competenciasText = cvCompetencies.length > 0
+      ? `Competencias: ${cvCompetencies.join(', ')}.`
+      : 'Sin competencias registradas.';
+
     // Combinas todo en un solo string
-    return `${educationsText}\n${experienciaText}\n${certsText}`;
+    return `${educationsText}\n${experienciaText}\n${certsText}\n${competenciasText}`;
   };
 
   // ------------------------------------
@@ -416,16 +437,16 @@ export default function RequisitosPage() {
         return;
       }
 
-      // 1) job_requirements = el string con porcentajes
-      const job_requirements = data.requirements_percentages;
+      // 1) job_competencies = el string con porcentajes
+      const job_competencies = data.competencies_percentages;
 
       // 2) cv_text = string generado con la información del CV
       const cv_text = buildCvText();
 
       // Verificar que los campos no estén vacíos
-      if (!job_requirements || !cv_text) {
-        console.warn('job_requirements o cv_text están vacíos.');
-        alert('job_requirements o cv_text están vacíos.');
+      if (!job_competencies || !cv_text) {
+        console.warn('job_competencies o cv_text están vacíos.');
+        alert('job_competencies o cv_text están vacíos.');
         return;
       }
 
@@ -433,16 +454,16 @@ export default function RequisitosPage() {
       setIaLoading(true);
       setIaError(null);
       setIaResponse(null);
-      setRequirementsComment(''); // Resetear comentario anterior
+      setCompetenciesComment(''); // Resetear comentario anterior
 
       // Registrar los datos que se van a enviar
-      console.log('Enviando datos a Flask:', { job_requirements, cv_text });
+      console.log('Enviando datos a Flask:', { job_competencies, cv_text });
 
       // Llamada a tu endpoint en Flask
       const response = await axios.post(
         'http://localhost:5000/procesar_cv', // Ajusta la URL y el puerto según tu entorno
         {
-          job_requirements,
+          job_competencies, // Cambiar 'competencies_percentages' por 'job_competencies'
           cv_text
         },
         {
@@ -456,28 +477,28 @@ export default function RequisitosPage() {
       console.log('Respuesta IA:', response.data);
       setIaResponse(response.data);
 
-      // **Actualizar `ratingsState` con los `userValue` de la IA usando el índice**
-      if (response.data && response.data.requirements) {
-        // Verificar que la cantidad de requisitos coincida
-        if (response.data.requirements.length !== ratingsState.length) {
-          console.warn('La cantidad de requisitos en la respuesta de la IA no coincide con la de ratingsState.');
-          alert('La cantidad de requisitos en la respuesta de la IA no coincide con la de ratingsState.');
+      // **Actualizar `competenciesState` con los `userValue` de la IA usando el índice**
+      if (response.data && response.data.competencies) {
+        // Verificar que la cantidad de competencias coincida
+        if (response.data.competencies.length !== competenciesState.length) {
+          console.warn('La cantidad de competencias en la respuesta de la IA no coincide con la de competenciesState.');
+          alert('La cantidad de competencias en la respuesta de la IA no coincide con la de competenciesState.');
         }
 
-        setRatingsState((prevRatings) =>
-          prevRatings.map((req, index) => {
-            const iaReq = response.data.requirements[index];
-            if (iaReq) {
-              console.log(`Actualizando Requisito: "${req.descripcion}" con userValue: ${iaReq.userValue}`);
-              return { ...req, userValue: iaReq.userValue };
+        setCompetenciesState((prevCompetencies) =>
+          prevCompetencies.map((comp, index) => {
+            const iaComp = response.data.competencies[index];
+            if (iaComp) {
+              console.log(`Actualizando Competencia: "${comp.descripcion}" con userValue: ${iaComp.userValue}`);
+              return { ...comp, userValue: iaComp.userValue };
             }
-            return req;
+            return comp;
           })
         );
 
         // Extraer y establecer la recomendación de la IA
         if (response.data.summary && typeof response.data.summary.comentario === 'string') {
-          setRequirementsComment(response.data.summary.comentario);
+          setCompetenciesComment(response.data.summary.comentario);
         }
       }
     } catch (error) {
@@ -495,12 +516,12 @@ export default function RequisitosPage() {
   const handleEnviarDatos = async () => {
     try {
       // Preparar los datos
-      const requirements_calification = ratingsState.map(req => req.userValue).join(',');
-      const requirements_gap = brecha;
-      const trimmed_comment = requirements_comment.trim(); // Renombrar para evitar conflicto
+      const competencies_calification = competenciesState.map(comp => comp.userValue).join(',');
+      const competencies_gap = brecha;
+      const trimmed_comment = competencies_comment.trim(); // Renombrar para evitar conflicto
 
       // Validar los datos
-      if (!requirements_calification) {
+      if (!competencies_calification) {
         alert('No hay datos de calificación para enviar.');
         return;
       }
@@ -519,13 +540,13 @@ export default function RequisitosPage() {
       const response = await axios.put(
         `http://51.222.110.107:5012/applicant/${id}`, // Usar el ID dinámico
         {
-          requirements_calification,
-          requirements_gap,
-          requirements_comment: trimmed_comment // Usar el comentario renombrado
+          competencies_calification,
+          competencies_gap,
+          competencies_comment: trimmed_comment // Usar el comentario renombrado
         },
         {
           headers: {
-            Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
+            Authorization: AUTH_TOKEN, // Ya incluye 'Bearer '
             'Content-Type': 'application/json'
           }
         }
@@ -552,7 +573,7 @@ export default function RequisitosPage() {
         <div className="flex items-center space-x-2 animate-pulse">
           <div className="w-4 h-4 bg-white rounded-full"></div>
           <p className="text-white text-lg">
-            {loading ? 'Cargando requisitos...' : cvLoading ? 'Cargando CV...' : 'Cargando datos del solicitante...'}
+            {loading ? 'Cargando competencias...' : cvLoading ? 'Cargando CV...' : 'Cargando datos del solicitante...'}
           </p>
         </div>
       </div>
@@ -562,7 +583,7 @@ export default function RequisitosPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#21498E] to-[#6a82fb]">
         <p className="text-red-300 text-lg">
-          {error ? `Error al cargar requisitos: ${error.message}` : cvError ? `Error al cargar CV: ${cvError.message}` : `Error al cargar datos del solicitante: ${applicantError.message}`}
+          {error ? `Error al cargar competencias: ${error.message}` : cvError ? `Error al cargar CV: ${cvError.message}` : `Error al cargar datos del solicitante: ${applicantError.message}`}
         </p>
       </div>
     );
@@ -573,7 +594,7 @@ export default function RequisitosPage() {
       {/* Encabezado */}
       <header className="bg-[#21498E] text-white py-6 shadow-lg transition-all duration-300">
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-          <h1 className="text-3xl font-extrabold">Comparativa de Requisitos vs. CV</h1>
+          <h1 className="text-3xl font-extrabold">Comparativa de Competencias vs. CV</h1>
           <div className="text-sm">
             <span className="bg-white text-[#21498E] px-4 py-2 rounded-full font-semibold shadow-md transform hover:scale-105 transition-transform duration-300">
               Brecha: {brecha}
@@ -582,45 +603,45 @@ export default function RequisitosPage() {
         </div>
       </header>
 
-      {/* Contenido: 2 columnas (izq: Requisitos - der: CV) */}
+      {/* Contenido: 2 columnas (izq: Competencias - der: CV) */}
       <main className="flex-grow py-10">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            {/* Columna Izquierda: REQUISITOS */}
+            {/* Columna Izquierda: COMPETENCIAS */}
             <div className="bg-white shadow-xl rounded-lg p-8 transform hover:scale-105 transition-transform duration-300">
-              <h2 className="text-2xl font-bold text-[#21498E] mb-6">Requisitos del Puesto</h2>
+              <h2 className="text-2xl font-bold text-[#21498E] mb-6">Competencias del Puesto</h2>
 
               <div className="overflow-x-auto">
                 <table className="w-full table-auto border-collapse">
                   <thead>
                     <tr className="bg-[#21498E] text-white">
-                      <th className="text-left py-3 px-4 font-semibold">Requisito</th>
+                      <th className="text-left py-3 px-4 font-semibold">Competencia</th>
                       <th className="text-center py-3 px-4 font-semibold">Calificación</th>
                       <th className="text-center py-3 px-4 font-semibold">Progreso</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {ratingsState.map((req, index) => {
+                    {competenciesState.map((comp, index) => {
                       const progress =
-                        req.maxValue === 0 ? 0 : (req.userValue / req.maxValue) * 100;
+                        comp.maxValue === 0 ? 0 : (comp.userValue / comp.maxValue) * 100;
                       return (
                         <tr key={index} className="border-b last:border-b-0 hover:bg-gray-50 transition-colors duration-300">
                           {/* Descripción */}
                           <td className="py-4 px-4">
-                            <div className="text-gray-800 font-medium">{req.descripcion}</div>
-                            <div className="text-xs text-gray-500">Máx: {req.maxValue}</div>
+                            <div className="text-gray-800 font-medium">{comp.descripcion}</div>
+                            <div className="text-xs text-gray-500">Máx: {comp.maxValue}</div>
                           </td>
                           {/* Calificación */}
                           <td className="py-4 px-4 text-center">
                             <input
                               type="number"
-                              value={req.userValue}
+                              value={comp.userValue}
                               onChange={(e) =>
-                                handleRatingChange(index, parseInt(e.target.value, 10) || 0)
+                                handleCompetencyChange(index, parseInt(e.target.value, 10) || 0)
                               }
                               className="w-16 text-center border border-[#21498E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#21498E] transition-shadow duration-300"
                               min="0"
-                              max={req.maxValue}
+                              max={comp.maxValue}
                             />
                           </td>
                           {/* Barra de Progreso */}
@@ -643,10 +664,10 @@ export default function RequisitosPage() {
               {/* Resumen final */}
               <div className="mt-8 text-gray-700 space-y-2">
                 <p>
-                  <span className="font-semibold text-[#21498E]">Suma de calificaciones:</span> {ratingsState.reduce((acc, cur) => acc + cur.userValue, 0)}
+                  <span className="font-semibold text-[#21498E]">Suma de calificaciones:</span> {competenciesState.reduce((acc, cur) => acc + cur.userValue, 0)}
                 </p>
                 <p>
-                  <span className="font-semibold text-[#21498E]">Suma de máximos:</span> {ratingsState.reduce((acc, cur) => acc + cur.maxValue, 0)}
+                  <span className="font-semibold text-[#21498E]">Suma de máximos:</span> {competenciesState.reduce((acc, cur) => acc + cur.maxValue, 0)}
                 </p>
               </div>
 
@@ -692,7 +713,7 @@ export default function RequisitosPage() {
                 <button
                   onClick={handleEnviarDatos}
                   className="w-full px-4 py-3 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-200 transition-colors duration-300"
-                  disabled={sendLoading || !requirements_comment}
+                  disabled={sendLoading || !competencies_comment}
                 >
                   {sendLoading ? (
                     <div className="flex items-center justify-center space-x-2">
@@ -739,10 +760,10 @@ export default function RequisitosPage() {
               )}
 
               {/* Mostrar Recomendación de la IA */}
-              {requirements_comment && (
+              {competencies_comment && (
                 <div className="mt-6 p-5 bg-blue-50 border border-blue-200 rounded-lg shadow-inner">
                   <h3 className="text-lg font-semibold text-[#21498E] mb-3">Recomendación</h3>
-                  <p className="text-gray-700">{requirements_comment}</p>
+                  <p className="text-gray-700">{competencies_comment}</p>
                 </div>
               )}
 
@@ -761,66 +782,29 @@ export default function RequisitosPage() {
 
             {/* Columna Derecha: CV */}
             <div className="bg-white shadow-xl rounded-lg p-8 transform hover:scale-105 transition-transform duration-300">
-              <h2 className="text-2xl font-bold text-[#21498E] mb-6">Datos del CV</h2>
+              <h2 className="text-2xl font-bold text-[#21498E] mb-6">Competencias del CV</h2>
 
               {/* Si hay algún mensaje (cargando, error, etc.) */}
               {cvMessage && !cvData && (
                 <p className="text-gray-500 mb-4 animate-pulse">{cvMessage}</p>
               )}
 
-              {/* Si hay CV data, mostramos las secciones */}
+              {/* Si hay CV data, mostramos solo las competencias */}
               {cvData && (
                 <div className="space-y-8">
-                  {/* EDUCACIÓN */}
+                  {/* COMPETENCIAS */}
                   <div>
-                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">Educación (Grados)</h3>
-                    {cvEducations.length > 0 ? (
+                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">Competencias</h3>
+                    {cvCompetencies.length > 0 ? (
                       <ul className="list-disc list-inside text-gray-700 space-y-1">
-                        {cvEducations.map((deg, i) => (
+                        {cvCompetencies.map((comp, i) => (
                           <li key={i} className="hover:text-[#21498E] transition-colors duration-300">
-                            {deg}
+                            {comp}
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-gray-600">No hay grados registrados.</p>
-                    )}
-                  </div>
-
-                  <hr className="border-gray-300" />
-
-                  {/* EXPERIENCIA TOTAL */}
-                  <div>
-                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">Experiencia Laboral (Tiempo Total)</h3>
-                    <p className="text-gray-700">{cvExpLabel}</p>
-                  </div>
-
-                  <hr className="border-gray-300" />
-
-                  {/* CERTIFICACIONES */}
-                  <div>
-                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">Certificaciones</h3>
-                    {cvCertifications.length > 0 ? (
-                      <div className="space-y-4">
-                        {cvCertifications.map((cert, i) => (
-                          <div
-                            key={i}
-                            className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300"
-                          >
-                            <p className="text-gray-700">
-                              <strong>Curso:</strong> {cert.curso || '—'}
-                            </p>
-                            <p className="text-gray-700">
-                              <strong>Entidad:</strong> {cert.entidad || '—'}
-                            </p>
-                            <p className="text-gray-700">
-                              <strong>Año:</strong> {cert.ano || '—'}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-600">No hay certificaciones registradas.</p>
+                      <p className="text-gray-600">No hay competencias registradas.</p>
                     )}
                   </div>
                 </div>
@@ -832,7 +816,7 @@ export default function RequisitosPage() {
 
       {/* Footer */}
       <footer className="bg-[#21498E] py-6 text-sm text-center text-white shadow-inner">
-        © 2024 Inova Solutions - Todos los derechos reservados
+        © 2024 Tu Compañía - Todos los derechos reservados
       </footer>
     </div>
   );

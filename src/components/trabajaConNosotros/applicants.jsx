@@ -51,7 +51,7 @@ const Applicants = ({ idProcess }) => {
     const stageToSend = stageMapping[newStage] || newStage;
 
     try {
-      const response = await fetch(`http://51.222.110.107:5012/applicant/14`, {
+      const response = await fetch(`http://51.222.110.107:5012/applicant/17`, { // Mantenido el endpoint original
         method: 'PUT',
         headers,
         body: JSON.stringify({
@@ -124,7 +124,9 @@ const Applicants = ({ idProcess }) => {
             {applicants.map(applicant => (
               <tr key={applicant.applicant_data_id} className="tr">
                 <td className="td">{applicant.user_name}</td>
-                <td className="td">{applicant.requirements_percentages || '0'}%</td>
+                <td className="td">
+                  {applicant.requirements_gap !== null ? `${applicant.requirements_gap}%` : '0%'}
+                </td>
                 <td className="td checkbox-cell">
                   {applicant.stage_progress === 'Preseleccionado' && (
                     <div className="check-circle">
@@ -167,7 +169,7 @@ const Applicants = ({ idProcess }) => {
                       Ver CV
                     </Link>
                     <a
-                      href={applicant.cv_link}
+                      href={applicant.cv_link || '#'} // Asegura que el enlace no esté vacío
                       target="_blank"
                       rel="noopener noreferrer"
                       className="button originalCvButton"
@@ -214,9 +216,11 @@ const Applicants = ({ idProcess }) => {
           margin-bottom: 10px;
           cursor: pointer;
           width: 10%;
-          @media (max-width: 768px) {
-            width: 86%;
-          }
+          transition: background-color 0.3s ease;
+        }
+
+        .return-button:hover {
+          background-color: #1a3f7a;
         }
 
         .tableContainer {
@@ -297,6 +301,7 @@ const Applicants = ({ idProcess }) => {
           display: flex;
           gap: 10px;
           justify-content: center;
+          flex-wrap: wrap;
         }
 
         .button {
@@ -382,6 +387,10 @@ const Applicants = ({ idProcess }) => {
             padding: 8px 16px;
             font-size: 0.8rem;
             min-width: 100px;
+          }
+
+          .return-button {
+            width: 100%;
           }
         }
       `}</style>
