@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { toPng } from "html-to-image";
 
-const AsistenteInformacion = () => {
-  const [data, setData] = useState(null);
+const AsistenteInformacion = ({idVacante}) => {
+  const [data, setData] = useState('');
   const [selectedCompetency, setSelectedCompetency] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -20,12 +20,13 @@ const AsistenteInformacion = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          "http://51.222.110.107:5012/process/open/4",
+          `http://51.222.110.107:5012/process/open/${idVacante}`,
           {
             method: "GET",
             headers: headers,
           }
         );
+        console.log(response)
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
@@ -140,6 +141,12 @@ const AsistenteInformacion = () => {
 
   return (
     <div className="container mx-auto p-6 bg-gray-100 min-h-screen flex flex-col items-center">
+      <button
+        className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition mb-4 "
+        onClick={() => window.location.href = `/aplicar-puesto/${idVacante}`}
+      >
+        Aplicar
+      </button>
       <div
         className="bg-white shadow-xl rounded-3xl overflow-hidden w-full max-w-4xl"
         id="component-to-download"
@@ -349,7 +356,7 @@ const AsistenteInformacion = () => {
               <p className="text-gray-700">
                 <strong>talentohumano@empresa.com</strong>
               </p>
-              <p className="text-gray-700">Asunto: Inova EC-Postulacion a "escribir la vacante a que postula"</p>
+              <p className="text-gray-700">Asunto: Inova EC-Postulacion a {data.position_name}</p>
             </div>
 
             {/* Detalles Adicionales */}
