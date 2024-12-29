@@ -1,5 +1,6 @@
+// JobVacanciesSearchAdmin.jsx
 import React, { useState, useEffect, Fragment } from 'react';
-import { FaExclamationCircle, FaCheck, FaEye, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaExclamationCircle, FaCheck, FaEye, FaTrash, FaPlus, FaArrowUp } from 'react-icons/fa';
 import { Dialog, Transition } from '@headlessui/react'; // Para modales y transiciones
 
 const JobVacanciesSearchAdmin = () => {
@@ -18,6 +19,7 @@ const JobVacanciesSearchAdmin = () => {
   const [vacancyToDelete, setVacancyToDelete] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   // Opciones de etapas disponibles
   const stageOptions = ['Reclutamiento', 'Preselección', 'Etapa Final'];
@@ -28,6 +30,7 @@ const JobVacanciesSearchAdmin = () => {
     'Authorization': '7zXnBjF5PBl7EzG/WhATQw==',
   };
 
+  // Fetch vacantes al montar el componente
   useEffect(() => {
     const fetchVacancies = async () => {
       setLoading(true);
@@ -53,6 +56,22 @@ const JobVacanciesSearchAdmin = () => {
     };
 
     fetchVacancies();
+  }, []);
+
+  // Manejar visibilidad del botón Scroll to Top basado en el scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.pageYOffset > 300) { // Puedes ajustar este valor
+        setShowScrollToTop(true);
+      } else {
+        setShowScrollToTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Limpieza del event listener
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleFilterChange = (key, value) => {
@@ -209,6 +228,28 @@ const JobVacanciesSearchAdmin = () => {
     return true;
   };
 
+  // Componente ScrollToTopButton integrado
+  const ScrollToTopButton = () => {
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    };
+
+    return (
+      showScrollToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition-colors duration-300 z-50 flex items-center justify-center"
+          aria-label="Volver al inicio"
+        >
+          <FaArrowUp />
+        </button>
+      )
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Notificaciones Tipo Toast */}
@@ -338,8 +379,19 @@ const JobVacanciesSearchAdmin = () => {
         {loading && (
           <div className="text-center text-gray-500 mb-6">
             <svg className="animate-spin h-8 w-8 text-indigo-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              ></path>
             </svg>
             <p>Cargando vacantes...</p>
           </div>
@@ -477,6 +529,9 @@ const JobVacanciesSearchAdmin = () => {
           </Dialog>
         </Transition>
       </div>
+
+      {/* Componente ScrollToTopButton */}
+      <ScrollToTopButton />
     </div>
   );
 };

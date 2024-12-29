@@ -360,6 +360,12 @@ const Applicants = ({ idProcess }) => {
                           >
                             Ver Brechas Competencias
                           </ActionButton>
+                          <ActionButton 
+                            href={`/admin/trabaja-con-nosotros/vacantes/postulantes/completo/${applicant.applicant_data_id}/${idProcess}`} 
+                            className="brechasCompetenciasButton"
+                          >
+                            Ver Analisis Completo
+                          </ActionButton>
                         </div>
                       </td>
                     </tr>

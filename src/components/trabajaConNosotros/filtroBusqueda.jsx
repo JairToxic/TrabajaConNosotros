@@ -7,7 +7,6 @@ import {
   FaHandshake, 
   FaArrowUp 
 } from 'react-icons/fa';
-
 // Estilos en línea utilizando CSS-in-JS
 const styles = {
   container: {
@@ -71,6 +70,9 @@ const styles = {
     transition: 'border-color 0.3s ease',
     width: '100%',
     boxSizing: 'border-box',
+  },
+  filterInputFocus: {
+    borderColor: '#7cb342',
   },
   resetButton: {
     backgroundColor: '#EC7063',
@@ -255,6 +257,16 @@ const styles = {
     width: '20px',
     height: '20px',
   },
+  // Estilos para la barra de progreso de scroll
+  scrollProgressBar: {
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    height: '5px',
+    backgroundColor: '#21498E',
+    transition: 'width 0.25s ease-out',
+    zIndex: 999,
+  },
   /* Animaciones clave */
   '@keyframes fadeInDown': {
     from: { opacity: 0, transform: 'translateY(-20px)' },
@@ -301,6 +313,7 @@ const JobVacanciesSearch = () => {
     message: '',
     type: '', // 'success' or 'error'
   });
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   // Opciones de etapas
@@ -325,8 +338,12 @@ const JobVacanciesSearch = () => {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
-        setVacancies(data);
-        setFilteredVacancies(data);
+        // Filtrar vacantes en etapa de "Reclutamiento"
+        const recruitmentVacancies = data.filter(
+          (vacancy) => vacancy.stage.toLowerCase() === 'reclutamiento'
+        );
+        setVacancies(recruitmentVacancies);
+        setFilteredVacancies(recruitmentVacancies);
         setError(null);
       } catch (error) {
         console.error('Error fetching vacancies:', error);
@@ -392,7 +409,7 @@ const JobVacanciesSearch = () => {
   const handleApply = (id) => {
     // Mostrar notificación de éxito
     setToast({
-      message: 'Has aplicado exitosamente para esta vacante.',
+      message: '¡Has aplicado exitosamente para esta vacante!',
       type: 'success',
     });
     // Redirigir después de 1.5 segundos
@@ -405,7 +422,7 @@ const JobVacanciesSearch = () => {
   const handleViewDetails = (id) => {
     // Mostrar notificación de información
     setToast({
-      message: 'Redirigiendo a los detalles de la vacante.',
+      message: 'Redirigiendo a los detalles de la vacante...',
       type: 'success',
     });
     // Redirigir después de 1.5 segundos
@@ -436,10 +453,15 @@ const JobVacanciesSearch = () => {
     );
   };
 
-  // Manejar visibilidad del botón de scroll al top
+  // Manejar el progreso de scroll y la visibilidad del botón de scroll al top
   useEffect(() => {
     const handleScroll = () => {
-      if (window.pageYOffset > 300) {
+      const totalScroll = window.pageYOffset;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scroll = (totalScroll / windowHeight) * 100;
+      setScrollProgress(scroll);
+
+      if (totalScroll > 300) {
         setShowScrollTop(true);
       } else {
         setShowScrollTop(false);
@@ -463,18 +485,21 @@ const JobVacanciesSearch = () => {
       {/* Notificación Tipo Toast */}
       {renderToast()}
 
+      {/* Barra de Progreso de Scroll */}
+      <div style={styles.scrollProgressBar}></div>
+
       {/* Encabezado y Mensaje Motivacional */}
       <div style={styles.header}>
-        <h1 style={styles.title}>Cómo Trabajar con Nosotros</h1>
+        <h1 style={styles.title}>Únete a Nuestro Equipo</h1>
         <p style={styles.subtitle}>
-          Únete a nuestro equipo y crece profesionalmente en un ambiente dinámico y colaborativo. ¡Tu futuro comienza aquí!
+          Forma parte de una empresa líder donde podrás crecer profesionalmente en un ambiente dinámico y colaborativo. ¡Tu futuro comienza aquí!
         </p>
         <FaHandshake style={styles.shakeIcon} />
       </div>
 
       {/* Filtros */}
       <div style={styles.filters}>
-        <h3 style={styles.filterTitle}>Filtros de Búsqueda</h3>
+        <h3 style={styles.filterTitle}>Refina tu Búsqueda</h3>
         <div
           style={{
             ...styles.filterGroup,
@@ -489,12 +514,11 @@ const JobVacanciesSearch = () => {
             <input
               type="text"
               id="positionName"
-              placeholder="Buscar por puesto"
+              placeholder="Ejemplo: Desarrollador Frontend"
               style={styles.filterInput}
               value={filters.positionName}
               onChange={(e) => handleFilterChange('positionName', e.target.value)}
-              onFocus={(e) => (e.target.style.borderColor = styles.filterInputFocus.borderColor)}
-              onBlur={(e) => (e.target.style.borderColor = '#AED6F1')}
+              // Eliminamos los manejadores onFocus y onBlur para evitar errores
             />
           </div>
 
@@ -508,8 +532,7 @@ const JobVacanciesSearch = () => {
               style={styles.filterInput}
               value={filters.stage}
               onChange={(e) => handleFilterChange('stage', e.target.value)}
-              onFocus={(e) => (e.target.style.borderColor = styles.filterInputFocus.borderColor)}
-              onBlur={(e) => (e.target.style.borderColor = '#AED6F1')}
+              // Eliminamos los manejadores onFocus y onBlur para evitar errores
             >
               <option value="">Seleccionar Etapa</option>
               {stageOptions.map((stage) => (
@@ -530,8 +553,7 @@ const JobVacanciesSearch = () => {
               style={styles.filterInput}
               value={filters.type}
               onChange={(e) => handleFilterChange('type', e.target.value)}
-              onFocus={(e) => (e.target.style.borderColor = styles.filterInputFocus.borderColor)}
-              onBlur={(e) => (e.target.style.borderColor = '#AED6F1')}
+              // Eliminamos los manejadores onFocus y onBlur para evitar errores
             >
               <option value="">Seleccionar Tipo</option>
               {['Full-time', 'Part-Time', 'Interno', 'Externo'].map((type) => (
@@ -552,8 +574,7 @@ const JobVacanciesSearch = () => {
               style={styles.filterInput}
               value={filters.location}
               onChange={(e) => handleFilterChange('location', e.target.value)}
-              onFocus={(e) => (e.target.style.borderColor = styles.filterInputFocus.borderColor)}
-              onBlur={(e) => (e.target.style.borderColor = '#AED6F1')}
+              // Eliminamos los manejadores onFocus y onBlur para evitar errores
             >
               <option value="">Seleccionar Localización</option>
               {['Remoto', 'Presencial', 'Quito', 'On-site'].map((location) => (
