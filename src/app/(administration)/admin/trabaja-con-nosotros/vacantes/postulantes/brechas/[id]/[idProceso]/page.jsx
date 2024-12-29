@@ -44,7 +44,7 @@ function parseSpanishDate(raw) {
   if (!raw) return null;
   const lower = raw.trim().toLowerCase();
 
-  // Si incluye "actual", "present", etc. => null para usar la fecha actual fuera
+  // Si incluye "actual", "present", etc. => null para usar la fecha actual afuera
   if (lower.includes('actual') || lower.includes('present')) {
     return null;
   }
@@ -84,7 +84,7 @@ function parseSpanishDate(raw) {
   let month = null;
 
   parts.forEach((p) => {
-    // Chequeamos año
+    // Chequeamos año (por ejemplo "2022", "2023", etc.)
     const maybeYear = p.match(/\b20\d{2}\b/);
     if (maybeYear) {
       year = parseInt(maybeYear[0], 10);
@@ -185,7 +185,7 @@ export default function RequisitosPage() {
   const [sendSuccess, setSendSuccess] = useState(false);
 
   // ------------------------------------
-  // FETCH Requisitos
+  // FETCH Requisitos (Process)
   // ------------------------------------
   useEffect(() => {
     const fetchData = async () => {
@@ -260,7 +260,7 @@ export default function RequisitosPage() {
     const calculateBrecha = (ratings) => {
       const sumMax = ratings.reduce((acc, req) => acc + req.maxValue, 0);
       const sumUser = ratings.reduce((acc, req) => acc + req.userValue, 0);
-      return Math.max(sumMax - sumUser, 0); // Aseguramos que no sea negativa
+      return Math.max(sumMax - sumUser, 0); // Evitar negativo
     };
 
     const nuevaBrecha = calculateBrecha(ratingsState);
@@ -268,20 +268,20 @@ export default function RequisitosPage() {
   }, [ratingsState]);
 
   // ------------------------------------
-  // Parsear requisitos desde Process Data o Applicant Data
+  // Parsear requisitos desde Process Data
   // ------------------------------------
   useEffect(() => {
     if (data) {
       const { requirements_percentages } = data;
 
+      // Ejemplo: "60% Formación, 20% Experiencia, 20% Certificaciones"
       const regex = /(\d+)%\s*([^,]+)/g;
       const requisitosParseados = [];
       let match;
 
-      // Usar regex para capturar cada requisito con porcentaje y descripción
       while ((match = regex.exec(requirements_percentages)) !== null) {
-        const maxValue = parseInt(match[1], 10); // Captura el porcentaje
-        const descripcion = match[2].trim(); // Captura la descripción
+        const maxValue = parseInt(match[1], 10);
+        const descripcion = match[2].trim();
         requisitosParseados.push({
           maxValue,
           descripcion,
@@ -299,25 +299,34 @@ export default function RequisitosPage() {
   // ------------------------------------
   useEffect(() => {
     if (applicantData) {
-      const { requirements_calification, requirements_comment, requirements_gap } = applicantData;
+      const {
+        requirements_calification,
+        requirements_comment: applicantComment,
+        requirements_gap,
+      } = applicantData;
+
+      // Asegurarnos de que no sea undefined o null para evitar el error .split
+      const safeCalification = requirements_calification || '';
 
       // Parsear requirements_calification
-      const califications = requirements_calification.split(',').map((val) => parseInt(val, 10));
+      const califications = safeCalification
+        .split(',')
+        .map((val) => parseInt(val, 10));
 
       setRatingsState((prevRatings) =>
         prevRatings.map((req, index) => ({
           ...req,
-          userValue: califications[index] || 0, // Asignar valor o 0 si no existe
+          userValue: califications[index] || 0, // Tomamos la calificación o 0 si no existe
         }))
       );
 
       // Establecer requirements_comment y requirements_gap
-      setRequirementsComment(requirements_comment || '');
+      setRequirementsComment(applicantComment || '');
       setBrecha(requirements_gap || 0);
 
       console.log('Datos del Solicitante Actualizados:', {
         requirements_calification,
-        requirements_comment,
+        applicantComment,
         requirements_gap,
       });
     }
@@ -372,7 +381,7 @@ export default function RequisitosPage() {
       }
     }
 
-    // 3) Certificaciones (curso, entidad, año)
+    // 3) Certificaciones
     if (cvData.certificaciones && cvData.certificaciones.length > 0) {
       cvCertifications = cvData.certificaciones.map((cert) => ({
         curso: cert.curso?.trim() || '',
@@ -387,21 +396,26 @@ export default function RequisitosPage() {
   // ------------------------------------
   const buildCvText = () => {
     // EDUCACIÓN
-    const educationsText = cvEducations.length > 0
-      ? `Grados académicos: ${cvEducations.join(', ')}.`
-      : 'Sin educación registrada.';
+    const educationsText =
+      cvEducations.length > 0
+        ? `Grados académicos: ${cvEducations.join(', ')}.`
+        : 'Sin educación registrada.';
 
     // EXPERIENCIA
     const experienciaText = `Experiencia total: ${cvExpLabel}.`;
 
     // CERTIFICACIONES
-    const certsText = cvCertifications.length > 0
-      ? 'Certificaciones: ' + cvCertifications.map(cert => {
-          return `${cert.curso} - ${cert.entidad} (${cert.ano})`;
-        }).join(', ')
-      : 'Sin certificaciones.';
+    const certsText =
+      cvCertifications.length > 0
+        ? 'Certificaciones: ' +
+          cvCertifications
+            .map((cert) => {
+              return `${cert.curso} - ${cert.entidad} (${cert.ano})`;
+            })
+            .join(', ')
+        : 'Sin certificaciones.';
 
-    // Combinas todo en un solo string
+    // Combinar todo en un solo string
     return `${educationsText}\n${experienciaText}\n${certsText}`;
   };
 
@@ -416,7 +430,7 @@ export default function RequisitosPage() {
         return;
       }
 
-      // 1) job_requirements = el string con porcentajes
+      // 1) job_requirements = el string con porcentajes (p.ej. "60% Formación, 20% Experiencia...")
       const job_requirements = data.requirements_percentages;
 
       // 2) cv_text = string generado con la información del CV
@@ -438,17 +452,17 @@ export default function RequisitosPage() {
       // Registrar los datos que se van a enviar
       console.log('Enviando datos a Flask:', { job_requirements, cv_text });
 
-      // Llamada a tu endpoint en Flask
+      // Llamada a tu endpoint en Flask (ajusta la URL según tu entorno)
       const response = await axios.post(
-        'http://localhost:5000/procesar_cv', // Ajusta la URL y el puerto según tu entorno
+        'http://localhost:5000/procesar_cv',
         {
           job_requirements,
-          cv_text
+          cv_text,
         },
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
       );
 
@@ -456,19 +470,25 @@ export default function RequisitosPage() {
       console.log('Respuesta IA:', response.data);
       setIaResponse(response.data);
 
-      // **Actualizar `ratingsState` con los `userValue` de la IA usando el índice**
+      // **Actualizar `ratingsState` con los `userValue` de la IA**
       if (response.data && response.data.requirements) {
         // Verificar que la cantidad de requisitos coincida
         if (response.data.requirements.length !== ratingsState.length) {
-          console.warn('La cantidad de requisitos en la respuesta de la IA no coincide con la de ratingsState.');
-          alert('La cantidad de requisitos en la respuesta de la IA no coincide con la de ratingsState.');
+          console.warn(
+            'La cantidad de requisitos en la respuesta de la IA no coincide con la de ratingsState.'
+          );
+          alert(
+            'La cantidad de requisitos en la respuesta de la IA no coincide con la de ratingsState.'
+          );
         }
 
         setRatingsState((prevRatings) =>
           prevRatings.map((req, index) => {
             const iaReq = response.data.requirements[index];
             if (iaReq) {
-              console.log(`Actualizando Requisito: "${req.descripcion}" con userValue: ${iaReq.userValue}`);
+              console.log(
+                `Actualizando Requisito: "${req.descripcion}" con userValue: ${iaReq.userValue}`
+              );
               return { ...req, userValue: iaReq.userValue };
             }
             return req;
@@ -490,14 +510,15 @@ export default function RequisitosPage() {
   };
 
   // ------------------------------------
-  // Función para enviar los datos al endpoint especificado
+  // Función para enviar los datos al endpoint
   // ------------------------------------
   const handleEnviarDatos = async () => {
     try {
       // Preparar los datos
-      const requirements_calification = ratingsState.map(req => req.userValue).join(',');
+      const requirements_calification = ratingsState.map((req) => req.userValue).join(',');
       const requirements_gap = brecha;
-      const trimmed_comment = requirements_comment.trim(); // Renombrar para evitar conflicto
+      // Renombramos localmente para no confundir con el estado
+      const trimmed_comment = requirements_comment.trim();
 
       // Validar los datos
       if (!requirements_calification) {
@@ -515,19 +536,19 @@ export default function RequisitosPage() {
       setSendError(null);
       setSendSuccess(false);
 
-      // Enviar solicitud PUT al endpoint especificado
+      // Enviar solicitud PUT
       const response = await axios.put(
-        `http://51.222.110.107:5012/applicant/${id}`, // Usar el ID dinámico
+        `http://51.222.110.107:5012/applicant/${id}`,
         {
           requirements_calification,
           requirements_gap,
-          requirements_comment: trimmed_comment // Usar el comentario renombrado
+          requirements_comment: trimmed_comment,
         },
         {
           headers: {
             Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
       );
 
@@ -552,7 +573,11 @@ export default function RequisitosPage() {
         <div className="flex items-center space-x-2 animate-pulse">
           <div className="w-4 h-4 bg-white rounded-full"></div>
           <p className="text-white text-lg">
-            {loading ? 'Cargando requisitos...' : cvLoading ? 'Cargando CV...' : 'Cargando datos del solicitante...'}
+            {loading
+              ? 'Cargando requisitos...'
+              : cvLoading
+              ? 'Cargando CV...'
+              : 'Cargando datos del solicitante...'}
           </p>
         </div>
       </div>
@@ -562,7 +587,11 @@ export default function RequisitosPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#21498E] to-[#6a82fb]">
         <p className="text-red-300 text-lg">
-          {error ? `Error al cargar requisitos: ${error.message}` : cvError ? `Error al cargar CV: ${cvError.message}` : `Error al cargar datos del solicitante: ${applicantError.message}`}
+          {error
+            ? `Error al cargar requisitos: ${error.message}`
+            : cvError
+            ? `Error al cargar CV: ${cvError.message}`
+            : `Error al cargar datos del solicitante: ${applicantError.message}`}
         </p>
       </div>
     );
@@ -604,7 +633,10 @@ export default function RequisitosPage() {
                       const progress =
                         req.maxValue === 0 ? 0 : (req.userValue / req.maxValue) * 100;
                       return (
-                        <tr key={index} className="border-b last:border-b-0 hover:bg-gray-50 transition-colors duration-300">
+                        <tr
+                          key={index}
+                          className="border-b last:border-b-0 hover:bg-gray-50 transition-colors duration-300"
+                        >
                           {/* Descripción */}
                           <td className="py-4 px-4">
                             <div className="text-gray-800 font-medium">{req.descripcion}</div>
@@ -631,7 +663,9 @@ export default function RequisitosPage() {
                                 style={{ width: `${progress}%` }}
                               ></div>
                             </div>
-                            <div className="text-xs text-center text-gray-600 mt-1">{progress.toFixed(0)}%</div>
+                            <div className="text-xs text-center text-gray-600 mt-1">
+                              {progress.toFixed(0)}%
+                            </div>
                           </td>
                         </tr>
                       );
@@ -643,10 +677,12 @@ export default function RequisitosPage() {
               {/* Resumen final */}
               <div className="mt-8 text-gray-700 space-y-2">
                 <p>
-                  <span className="font-semibold text-[#21498E]">Suma de calificaciones:</span> {ratingsState.reduce((acc, cur) => acc + cur.userValue, 0)}
+                  <span className="font-semibold text-[#21498E]">Suma de calificaciones:</span>{' '}
+                  {ratingsState.reduce((acc, cur) => acc + cur.userValue, 0)}
                 </p>
                 <p>
-                  <span className="font-semibold text-[#21498E]">Suma de máximos:</span> {ratingsState.reduce((acc, cur) => acc + cur.maxValue, 0)}
+                  <span className="font-semibold text-[#21498E]">Suma de máximos:</span>{' '}
+                  {ratingsState.reduce((acc, cur) => acc + cur.maxValue, 0)}
                 </p>
               </div>
 
@@ -763,7 +799,7 @@ export default function RequisitosPage() {
             <div className="bg-white shadow-xl rounded-lg p-8 transform hover:scale-105 transition-transform duration-300">
               <h2 className="text-2xl font-bold text-[#21498E] mb-6">Datos del CV</h2>
 
-              {/* Si hay algún mensaje (cargando, error, etc.) */}
+              {/* Mensaje (cargando, error, etc.) */}
               {cvMessage && !cvData && (
                 <p className="text-gray-500 mb-4 animate-pulse">{cvMessage}</p>
               )}
@@ -773,11 +809,16 @@ export default function RequisitosPage() {
                 <div className="space-y-8">
                   {/* EDUCACIÓN */}
                   <div>
-                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">Educación (Grados)</h3>
+                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">
+                      Educación (Grados)
+                    </h3>
                     {cvEducations.length > 0 ? (
                       <ul className="list-disc list-inside text-gray-700 space-y-1">
                         {cvEducations.map((deg, i) => (
-                          <li key={i} className="hover:text-[#21498E] transition-colors duration-300">
+                          <li
+                            key={i}
+                            className="hover:text-[#21498E] transition-colors duration-300"
+                          >
                             {deg}
                           </li>
                         ))}
@@ -791,7 +832,9 @@ export default function RequisitosPage() {
 
                   {/* EXPERIENCIA TOTAL */}
                   <div>
-                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">Experiencia Laboral (Tiempo Total)</h3>
+                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">
+                      Experiencia Laboral (Tiempo Total)
+                    </h3>
                     <p className="text-gray-700">{cvExpLabel}</p>
                   </div>
 

@@ -44,7 +44,7 @@ A continuación, se te proporcionarán dos secciones:
  
 Tu tarea es analizar cómo cada requisito del puesto se alinea con los datos proporcionados en el CV. Para cada requisito, asigna una **calificación** (userValue) basada en la alineación entre el CV y el requisito. La calificación debe ser un número que no exceda el porcentaje máximo asignado a cada requisito (maxValue) el userValue NO puede ser mayor que el maxValue.
  
-Al final, proporciona un resumen que incluya la **suma de calificaciones**, la **suma de máximos** y la **brecha** y un comentario explciando porque esas calificaicones entre ambos.
+Al final, proporciona un resumen que incluya la **suma de calificaciones**, la **suma de máximos** y la **brecha** y un comentario explciando porque esas calificaicones entre ambos ten en cuenta los maxValue y el userValue y da un comentario como si fueras gerente de RH.
  
 Proporciona SOLO la respuesta en formato JSON, sin texto adicional.
  
