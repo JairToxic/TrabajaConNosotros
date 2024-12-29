@@ -603,7 +603,7 @@ export default function AnalisisCompleto() {
 
       {/* Footer */}
       <footer className="bg-blue-800 py-4 text-sm text-center text-white shadow-inner">
-        © 2024 Tu Compañía - Todos los derechos reservados
+        © 2024 Inova Solutions - Todos los derechos reservados
       </footer>
     </div>
   );

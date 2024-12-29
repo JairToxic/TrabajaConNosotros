@@ -646,7 +646,7 @@ export default function RequisitosPage() {
  
       {/* Footer */}
       <footer className="bg-white py-4 text-sm text-center text-gray-500 shadow-inner">
-        © 2024 Tu Compañía - Todos los derechos reservados
+        © 2024 Inova Solutions - Todos los derechos reservados
       </footer>
     </div>
   );

@@ -877,7 +877,7 @@ export default function CompetenciasPage() {
 
       {/* Footer */}
       <footer className="bg-[#21498E] py-6 text-sm text-center text-white shadow-inner">
-        © 2024 Tu Compañía - Todos los derechos reservados
+        © 2024 Inova Solutions - Todos los derechos reservados
       </footer>
     </div>
   );
