@@ -185,7 +185,7 @@ export default function CompetenciasPage() {
   const [sendSuccess, setSendSuccess] = useState(false);
 
   // Obtener el token de autorización desde las variables de entorno
-  const AUTH_TOKEN = '7zXnBjF5PBl7EzG/WhATQw=='; // Añadir 'Bearer ' antes del token
+  const AUTH_TOKEN = '7zXnBjF5PBl7EzG/WhATQw=='; // Añadir 'Bearer ' antes del token si fuera necesario
 
   // ------------------------------------
   // FETCH Competencias (Proceso Data)
@@ -195,7 +195,7 @@ export default function CompetenciasPage() {
       try {
         const response = await axios.get(`http://51.222.110.107:5012/process/${idProceso}`, {
           headers: {
-            Authorization: AUTH_TOKEN, // Ya incluye 'Bearer '
+            Authorization: AUTH_TOKEN,
             'Content-Type': 'application/json',
           },
         });
@@ -220,7 +220,7 @@ export default function CompetenciasPage() {
           `http://51.222.110.107:5012/applicant/get_cv/${id}`,
           {
             headers: {
-              Authorization: AUTH_TOKEN, // Ya incluye 'Bearer '
+              Authorization: AUTH_TOKEN,
               'Content-Type': 'application/json',
             },
           }
@@ -246,7 +246,7 @@ export default function CompetenciasPage() {
           `http://51.222.110.107:5012/applicant/${id}`,
           {
             headers: {
-              Authorization: AUTH_TOKEN, // Ya incluye 'Bearer '
+              Authorization: AUTH_TOKEN,
               'Content-Type': 'application/json',
             },
           }
@@ -290,7 +290,8 @@ export default function CompetenciasPage() {
       // Usar regex para capturar cada competencia con porcentaje y descripción
       while ((match = regex.exec(competencies_percentages)) !== null) {
         const maxValue = parseInt(match[1], 10); // Captura el porcentaje
-        const descripcion = match[2].trim(); // Captura la descripción
+        const descripcion = match[2].trim();     // Captura la descripción
+
         competenciasParseadas.push({
           maxValue,
           descripcion,
@@ -308,15 +309,22 @@ export default function CompetenciasPage() {
   // ------------------------------------
   useEffect(() => {
     if (applicantData) {
-      const { competencies_calification, competencies_comment, competencies_gap } = applicantData;
+      const {
+        competencies_calification,
+        competencies_comment,
+        competencies_gap,
+      } = applicantData;
 
-      // Parsear competencies_calification
-      const califications = competencies_calification.split(',').map((val) => parseInt(val, 10));
+      // Ajuste para evitar error de .split() cuando sea null/undefined:
+      const califications = competencies_calification
+        ? competencies_calification.split(',').map((val) => parseInt(val, 10) || 0)
+        : [];
 
       setCompetenciesState((prevCompetencies) =>
         prevCompetencies.map((comp, index) => ({
           ...comp,
-          userValue: califications[index] || 0, // Asignar valor o 0 si no existe
+          // Asignar valor o 0 si no existe
+          userValue: califications[index] !== undefined ? califications[index] : 0,
         }))
       );
 
@@ -403,24 +411,28 @@ export default function CompetenciasPage() {
   // ------------------------------------
   const buildCvText = () => {
     // EDUCACIÓN
-    const educationsText = cvEducations.length > 0
-      ? `Grados académicos: ${cvEducations.join(', ')}.`
-      : 'Sin educación registrada.';
+    const educationsText =
+      cvEducations.length > 0
+        ? `Grados académicos: ${cvEducations.join(', ')}.`
+        : 'Sin educación registrada.';
 
     // EXPERIENCIA
     const experienciaText = `Experiencia total: ${cvExpLabel}.`;
 
     // CERTIFICACIONES
-    const certsText = cvCertifications.length > 0
-      ? 'Certificaciones: ' + cvCertifications.map(cert => {
-          return `${cert.curso} - ${cert.entidad} (${cert.ano})`;
-        }).join(', ')
-      : 'Sin certificaciones.';
+    const certsText =
+      cvCertifications.length > 0
+        ? 'Certificaciones: ' +
+          cvCertifications
+            .map((cert) => `${cert.curso} - ${cert.entidad} (${cert.ano})`)
+            .join(', ')
+        : 'Sin certificaciones.';
 
     // COMPETENCIAS
-    const competenciasText = cvCompetencies.length > 0
-      ? `Competencias: ${cvCompetencies.join(', ')}.`
-      : 'Sin competencias registradas.';
+    const competenciasText =
+      cvCompetencies.length > 0
+        ? `Competencias: ${cvCompetencies.join(', ')}.`
+        : 'Sin competencias registradas.';
 
     // Combinas todo en un solo string
     return `${educationsText}\n${experienciaText}\n${certsText}\n${competenciasText}`;
@@ -461,15 +473,15 @@ export default function CompetenciasPage() {
 
       // Llamada a tu endpoint en Flask
       const response = await axios.post(
-        'http://localhost:5000/procesar_cv', // Ajusta la URL y el puerto según tu entorno
+        'http://127.0.0.1:5001/cv-analyzer/procesar_cv', // Ajusta la URL/puerto a tu entorno
         {
-          job_competencies, // Cambiar 'competencies_percentages' por 'job_competencies'
-          cv_text
+          job_competencies,
+          cv_text,
         },
         {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
       );
 
@@ -477,19 +489,24 @@ export default function CompetenciasPage() {
       console.log('Respuesta IA:', response.data);
       setIaResponse(response.data);
 
-      // **Actualizar `competenciesState` con los `userValue` de la IA usando el índice**
+      // **Actualizar `competenciesState` con los `userValue` de la IA**
       if (response.data && response.data.competencies) {
-        // Verificar que la cantidad de competencias coincida
         if (response.data.competencies.length !== competenciesState.length) {
-          console.warn('La cantidad de competencias en la respuesta de la IA no coincide con la de competenciesState.');
-          alert('La cantidad de competencias en la respuesta de la IA no coincide con la de competenciesState.');
+          console.warn(
+            'La cantidad de competencias en la respuesta de la IA no coincide con la de competenciesState.'
+          );
+          alert(
+            'La cantidad de competencias en la respuesta de la IA no coincide con la de competenciesState.'
+          );
         }
 
         setCompetenciesState((prevCompetencies) =>
           prevCompetencies.map((comp, index) => {
             const iaComp = response.data.competencies[index];
             if (iaComp) {
-              console.log(`Actualizando Competencia: "${comp.descripcion}" con userValue: ${iaComp.userValue}`);
+              console.log(
+                `Actualizando Competencia: "${comp.descripcion}" con userValue: ${iaComp.userValue}`
+              );
               return { ...comp, userValue: iaComp.userValue };
             }
             return comp;
@@ -516,16 +533,17 @@ export default function CompetenciasPage() {
   const handleEnviarDatos = async () => {
     try {
       // Preparar los datos
-      const competencies_calification = competenciesState.map(comp => comp.userValue).join(',');
+      const competencies_calification = competenciesState
+        .map((comp) => comp.userValue)
+        .join(',');
       const competencies_gap = brecha;
-      const trimmed_comment = competencies_comment.trim(); // Renombrar para evitar conflicto
+      const trimmed_comment = competencies_comment.trim();
 
       // Validar los datos
       if (!competencies_calification) {
         alert('No hay datos de calificación para enviar.');
         return;
       }
-
       if (!trimmed_comment) {
         alert('No hay comentario de recomendación para enviar.');
         return;
@@ -536,19 +554,19 @@ export default function CompetenciasPage() {
       setSendError(null);
       setSendSuccess(false);
 
-      // Enviar solicitud PUT al endpoint especificado
+      // Enviar solicitud PUT al endpoint
       const response = await axios.put(
-        `http://51.222.110.107:5012/applicant/${id}`, // Usar el ID dinámico
+        `http://51.222.110.107:5012/applicant/${id}`,
         {
           competencies_calification,
           competencies_gap,
-          competencies_comment: trimmed_comment // Usar el comentario renombrado
+          competencies_comment: trimmed_comment,
         },
         {
           headers: {
-            Authorization: AUTH_TOKEN, // Ya incluye 'Bearer '
-            'Content-Type': 'application/json'
-          }
+            Authorization: AUTH_TOKEN,
+            'Content-Type': 'application/json',
+          },
         }
       );
 
@@ -573,7 +591,11 @@ export default function CompetenciasPage() {
         <div className="flex items-center space-x-2 animate-pulse">
           <div className="w-4 h-4 bg-white rounded-full"></div>
           <p className="text-white text-lg">
-            {loading ? 'Cargando competencias...' : cvLoading ? 'Cargando CV...' : 'Cargando datos del solicitante...'}
+            {loading
+              ? 'Cargando competencias...'
+              : cvLoading
+              ? 'Cargando CV...'
+              : 'Cargando datos del solicitante...'}
           </p>
         </div>
       </div>
@@ -583,7 +605,11 @@ export default function CompetenciasPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#21498E] to-[#6a82fb]">
         <p className="text-red-300 text-lg">
-          {error ? `Error al cargar competencias: ${error.message}` : cvError ? `Error al cargar CV: ${cvError.message}` : `Error al cargar datos del solicitante: ${applicantError.message}`}
+          {error
+            ? `Error al cargar competencias: ${error.message}`
+            : cvError
+            ? `Error al cargar CV: ${cvError.message}`
+            : `Error al cargar datos del solicitante: ${applicantError.message}`}
         </p>
       </div>
     );
@@ -609,7 +635,9 @@ export default function CompetenciasPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Columna Izquierda: COMPETENCIAS */}
             <div className="bg-white shadow-xl rounded-lg p-8 transform hover:scale-105 transition-transform duration-300">
-              <h2 className="text-2xl font-bold text-[#21498E] mb-6">Competencias del Puesto</h2>
+              <h2 className="text-2xl font-bold text-[#21498E] mb-6">
+                Competencias del Puesto
+              </h2>
 
               <div className="overflow-x-auto">
                 <table className="w-full table-auto border-collapse">
@@ -623,13 +651,22 @@ export default function CompetenciasPage() {
                   <tbody>
                     {competenciesState.map((comp, index) => {
                       const progress =
-                        comp.maxValue === 0 ? 0 : (comp.userValue / comp.maxValue) * 100;
+                        comp.maxValue === 0
+                          ? 0
+                          : (comp.userValue / comp.maxValue) * 100;
                       return (
-                        <tr key={index} className="border-b last:border-b-0 hover:bg-gray-50 transition-colors duration-300">
+                        <tr
+                          key={index}
+                          className="border-b last:border-b-0 hover:bg-gray-50 transition-colors duration-300"
+                        >
                           {/* Descripción */}
                           <td className="py-4 px-4">
-                            <div className="text-gray-800 font-medium">{comp.descripcion}</div>
-                            <div className="text-xs text-gray-500">Máx: {comp.maxValue}</div>
+                            <div className="text-gray-800 font-medium">
+                              {comp.descripcion}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              Máx: {comp.maxValue}
+                            </div>
                           </td>
                           {/* Calificación */}
                           <td className="py-4 px-4 text-center">
@@ -637,7 +674,10 @@ export default function CompetenciasPage() {
                               type="number"
                               value={comp.userValue}
                               onChange={(e) =>
-                                handleCompetencyChange(index, parseInt(e.target.value, 10) || 0)
+                                handleCompetencyChange(
+                                  index,
+                                  parseInt(e.target.value, 10) || 0
+                                )
                               }
                               className="w-16 text-center border border-[#21498E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#21498E] transition-shadow duration-300"
                               min="0"
@@ -652,7 +692,9 @@ export default function CompetenciasPage() {
                                 style={{ width: `${progress}%` }}
                               ></div>
                             </div>
-                            <div className="text-xs text-center text-gray-600 mt-1">{progress.toFixed(0)}%</div>
+                            <div className="text-xs text-center text-gray-600 mt-1">
+                              {progress.toFixed(0)}%
+                            </div>
                           </td>
                         </tr>
                       );
@@ -664,10 +706,16 @@ export default function CompetenciasPage() {
               {/* Resumen final */}
               <div className="mt-8 text-gray-700 space-y-2">
                 <p>
-                  <span className="font-semibold text-[#21498E]">Suma de calificaciones:</span> {competenciesState.reduce((acc, cur) => acc + cur.userValue, 0)}
+                  <span className="font-semibold text-[#21498E]">
+                    Suma de calificaciones:
+                  </span>{' '}
+                  {competenciesState.reduce((acc, cur) => acc + cur.userValue, 0)}
                 </p>
                 <p>
-                  <span className="font-semibold text-[#21498E]">Suma de máximos:</span> {competenciesState.reduce((acc, cur) => acc + cur.maxValue, 0)}
+                  <span className="font-semibold text-[#21498E]">
+                    Suma de máximos:
+                  </span>{' '}
+                  {competenciesState.reduce((acc, cur) => acc + cur.maxValue, 0)}
                 </p>
               </div>
 
@@ -762,7 +810,9 @@ export default function CompetenciasPage() {
               {/* Mostrar Recomendación de la IA */}
               {competencies_comment && (
                 <div className="mt-6 p-5 bg-blue-50 border border-blue-200 rounded-lg shadow-inner">
-                  <h3 className="text-lg font-semibold text-[#21498E] mb-3">Recomendación</h3>
+                  <h3 className="text-lg font-semibold text-[#21498E] mb-3">
+                    Recomendación
+                  </h3>
                   <p className="text-gray-700">{competencies_comment}</p>
                 </div>
               )}
@@ -770,7 +820,9 @@ export default function CompetenciasPage() {
               {/* Mostrar Error de la IA */}
               {iaError && (
                 <div className="mt-6 p-5 bg-red-100 rounded-lg shadow-inner">
-                  <h3 className="text-lg font-semibold text-red-700 mb-3">Error de la IA</h3>
+                  <h3 className="text-lg font-semibold text-red-700 mb-3">
+                    Error de la IA
+                  </h3>
                   <p className="text-red-700">
                     {iaError.response
                       ? iaError.response.data.error || 'Error desconocido.'
@@ -782,9 +834,11 @@ export default function CompetenciasPage() {
 
             {/* Columna Derecha: CV */}
             <div className="bg-white shadow-xl rounded-lg p-8 transform hover:scale-105 transition-transform duration-300">
-              <h2 className="text-2xl font-bold text-[#21498E] mb-6">Competencias del CV</h2>
+              <h2 className="text-2xl font-bold text-[#21498E] mb-6">
+                Competencias del CV
+              </h2>
 
-              {/* Si hay algún mensaje (cargando, error, etc.) */}
+              {/* Mensaje (cargando, error, etc.) */}
               {cvMessage && !cvData && (
                 <p className="text-gray-500 mb-4 animate-pulse">{cvMessage}</p>
               )}
@@ -794,17 +848,24 @@ export default function CompetenciasPage() {
                 <div className="space-y-8">
                   {/* COMPETENCIAS */}
                   <div>
-                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">Competencias</h3>
+                    <h3 className="text-xl font-semibold text-[#21498E] mb-3">
+                      Competencias
+                    </h3>
                     {cvCompetencies.length > 0 ? (
                       <ul className="list-disc list-inside text-gray-700 space-y-1">
                         {cvCompetencies.map((comp, i) => (
-                          <li key={i} className="hover:text-[#21498E] transition-colors duration-300">
+                          <li
+                            key={i}
+                            className="hover:text-[#21498E] transition-colors duration-300"
+                          >
                             {comp}
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-gray-600">No hay competencias registradas.</p>
+                      <p className="text-gray-600">
+                        No hay competencias registradas.
+                      </p>
                     )}
                   </div>
                 </div>

@@ -14,14 +14,14 @@ logger = logging.getLogger(__name__)
 AZURE_API_ENDPOINT = "https://mychatbot.openai.azure.com/openai/deployments/gpt-35-turbo/chat/completions?api-version=2024-08-01-preview"
 AZURE_API_KEY = "c068c560e2774b0a9318651e846455d6"
      
-@app.route('/')
+@app.route('/cv-analyzer/')
 def index():
     return render_template('index.html')
      
-@app.route('/procesar_cv', methods=['POST'])
+@app.route('/cv-analyzer/procesar_cv', methods=['POST'])
 def procesar_cv():
     try:
-        logger.debug("Recibiendo solicitud POST en /procesar_cv")
+        logger.debug("Recibiendo solicitud POST en /cv-analyzer/procesar_cv")
         data = request.get_json()
         logger.debug(f"Datos recibidos: {data}")
  
@@ -131,4 +131,5 @@ Proporciona **SOLO** la respuesta en formato JSON, sin texto adicional.
         return jsonify({"error": str(e)}), 500
  
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Configurar el puerto 5001 en lugar del puerto predeterminado 5000
+    app.run(debug=True, port=5001)
