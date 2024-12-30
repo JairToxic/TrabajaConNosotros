@@ -466,12 +466,20 @@ export default function RequisitosPage() {
       setIaError(null);
       setIaResponse(null);
       setRequirementsComment('');
-
       const response = await axios.post(
         `http://51.222.110.107:5012/applicant/calculate_requirements_gaps/${id}`,
-        { job_requirements, cv_text },
-        { headers: { 'Content-Type': 'application/json' } }
+        {
+          job_requirements,
+          cv_text,
+        },
+        {
+          headers: {
+            Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
+            'Content-Type': 'application/json',
+          },
+        }
       );
+      
 
       setIaResponse(response.data);
 
