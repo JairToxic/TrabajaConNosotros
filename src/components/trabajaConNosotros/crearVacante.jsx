@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Componente HoverButton para efectos de hover
 const HoverButton = ({ children, style, ...props }) => {
@@ -27,6 +29,7 @@ const HoverButton = ({ children, style, ...props }) => {
 const NuevaVacante = () => {
   const [completado, setCompletado] = useState(0);
   const { data: session } = useSession();
+  
   // Estado para campos estáticos
   const [formData, setFormData] = useState({
     departamento: "",
@@ -46,7 +49,7 @@ const NuevaVacante = () => {
 
   // Estados para la sección dinámica
   const [formacionAcademica, setFormacionAcademica] = useState([]);
-  const [tiempoExperienciaCargo, setTiempoExperienciaCargo] = useState([]);
+  const [experienciaCargo, setExperienciaCargo] = useState([]);
   const [certificacionesCargo, setCertificacionesCargo] = useState([]);
   const [competenciasCargo, setCompetenciasCargo] = useState([]);
 
@@ -70,30 +73,17 @@ const NuevaVacante = () => {
   // Perfil seleccionado
   const [selectedPerfil, setSelectedPerfil] = useState(null);
 
-  // Cálculos de campos
-  const totalCamposDinamicos =
-    formacionAcademica.length +
-    certificacionesCargo.length +
-    competenciasCargo.length +
-    beneficios.length;
-  const [totalCampos, setTotalCampos] = useState(15);
-
   // Sumas para validar
   const [sumEncajePerfil, setSumEncajePerfil] = useState(0);
   const [sumCompetencias, setSumCompetencias] = useState(0);
-  const [sumTiempoExperiencia, setSumTiempoExperiencia] = useState(0);
-
-  // Efecto para total campos
-  useEffect(() => {
-    setTotalCampos(15 + totalCamposDinamicos * 2);
-  }, [totalCamposDinamicos]);
 
   // Efecto para encaje perfil
   useEffect(() => {
     const sumaFormacion = formacionAcademica.reduce((acc, cur) => acc + Number(cur.porcentaje || 0), 0);
     const sumaCertificaciones = certificacionesCargo.reduce((acc, cur) => acc + Number(cur.porcentaje || 0), 0);
-    setSumEncajePerfil(sumaFormacion + sumaCertificaciones);
-  }, [formacionAcademica, certificacionesCargo]);
+    const sumaExperiencia = experienciaCargo.reduce((acc, cur) => acc + Number(cur.porcentaje || 0), 0);
+    setSumEncajePerfil(sumaFormacion + sumaCertificaciones + sumaExperiencia);
+  }, [formacionAcademica, certificacionesCargo, experienciaCargo]);
 
   // Efecto para competencias
   useEffect(() => {
@@ -101,31 +91,21 @@ const NuevaVacante = () => {
     setSumCompetencias(totalComp);
   }, [competenciasCargo]);
 
-  // Efecto para tiempo de experiencia
-  useEffect(() => {
-    const sumaExp = tiempoExperienciaCargo.reduce((acc, cur) => acc + Number(cur.porcentaje || 0), 0);
-    setSumTiempoExperiencia(sumaExp);
-    setFormData((prev) => ({
-      ...prev,
-      nivelExperiencia: sumaExp ? `${sumaExp} años` : "",
-    }));
-  }, [tiempoExperienciaCargo]);
-
   // Efecto para progreso
   useEffect(() => {
     const inputs = document.querySelectorAll(
       "input[required], textarea[required], select[required]"
     );
     const llenos = Array.from(inputs).filter((i) => i.value.trim() !== "").length;
-    setCompletado(Math.round((llenos / totalCampos) * 100));
+    const total = inputs.length;
+    setCompletado(total > 0 ? Math.round((llenos / total) * 100) : 0);
   }, [
     formData,
     formacionAcademica,
-    tiempoExperienciaCargo,
+    experienciaCargo,
     certificacionesCargo,
     competenciasCargo,
     beneficios,
-    totalCampos,
     perfiles,
   ]);
 
@@ -147,7 +127,7 @@ const NuevaVacante = () => {
     }
   };
 
-  // *** Aquí definimos handleDynamicChange ***
+  // Manejo de cambios en campos dinámicos
   const handleDynamicChange = (e, tipo, index) => {
     const { name, value } = e.target;
     // Por ejemplo, si en el input tenemos name="nombre" o name="porcentaje"
@@ -161,9 +141,9 @@ const NuevaVacante = () => {
         copia = [...formacionAcademica];
         setStateFn = setFormacionAcademica;
         break;
-      case "tiempoExperienciaCargo":
-        copia = [...tiempoExperienciaCargo];
-        setStateFn = setTiempoExperienciaCargo;
+      case "experienciaCargo":
+        copia = [...experienciaCargo];
+        setStateFn = setExperienciaCargo;
         break;
       case "certificacionesCargo":
         copia = [...certificacionesCargo];
@@ -197,7 +177,7 @@ const NuevaVacante = () => {
     setErrorPerfiles(null);
     try {
       const url = `http://51.222.110.107:5011/perfiles/by_department/${departmentId}`;
-      const token = session.user.data.token
+      const token = session.user.data.token;
       const authorization = "7zXnBjF5PBl7EzG/WhATQw==";
 
       const resp = await fetch(url, {
@@ -250,7 +230,7 @@ const NuevaVacante = () => {
 
     const arrFormacion = [];
     const arrCerts = [];
-    const arrTiempo = [];
+    const arrExperiencia = [];
     const arrCompetencias =
       perfil.competencias_requeridas?.[0]?.competencias.map((comp) => ({
         nombre: comp.descripcion,
@@ -277,9 +257,9 @@ const NuevaVacante = () => {
             if (match) {
               const anios = parseInt(match[0], 10);
               sumaExp += anios;
-              arrTiempo.push({
+              arrExperiencia.push({
                 nombre: item.experiencia,
-                porcentaje: anios,
+                porcentaje: "", // Ahora se trata como porcentaje
               });
             }
           }
@@ -296,9 +276,9 @@ const NuevaVacante = () => {
           if (match) {
             const anios = parseInt(match[0], 10);
             sumaExp += anios;
-            arrTiempo.push({
+            arrExperiencia.push({
               nombre: f.experiencia,
-              porcentaje: anios,
+              porcentaje: "", // Ahora se trata como porcentaje
             });
           }
         }
@@ -315,7 +295,7 @@ const NuevaVacante = () => {
     if (arrFormacion.length > 0) setFormacionAcademica(arrFormacion);
     if (arrCerts.length > 0) setCertificacionesCargo(arrCerts);
     if (arrCompetencias.length > 0) setCompetenciasCargo(arrCompetencias);
-    if (arrTiempo.length > 0) setTiempoExperienciaCargo(arrTiempo);
+    if (arrExperiencia.length > 0) setExperienciaCargo(arrExperiencia);
   };
 
   // Agregar campo
@@ -328,8 +308,8 @@ const NuevaVacante = () => {
       case "formacionAcademica":
         setFormacionAcademica((prev) => [...prev, nuevoCampo]);
         break;
-      case "tiempoExperienciaCargo":
-        setTiempoExperienciaCargo((prev) => [...prev, nuevoCampo]);
+      case "experienciaCargo":
+        setExperienciaCargo((prev) => [...prev, nuevoCampo]);
         break;
       case "certificacionesCargo":
         setCertificacionesCargo((prev) => [...prev, nuevoCampo]);
@@ -351,8 +331,8 @@ const NuevaVacante = () => {
       case "formacionAcademica":
         setFormacionAcademica((prev) => prev.filter((_, i) => i !== index));
         break;
-      case "tiempoExperienciaCargo":
-        setTiempoExperienciaCargo((prev) => prev.filter((_, i) => i !== index));
+      case "experienciaCargo":
+        setExperienciaCargo((prev) => prev.filter((_, i) => i !== index));
         break;
       case "certificacionesCargo":
         setCertificacionesCargo((prev) => prev.filter((_, i) => i !== index));
@@ -364,7 +344,15 @@ const NuevaVacante = () => {
         if (beneficios.length > 1) {
           setBeneficios((prev) => prev.filter((_, i) => i !== index));
         } else {
-          window.alert("Debe haber al menos un beneficio.");
+          toast.error("Debe haber al menos un beneficio.", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
         break;
       default:
@@ -401,11 +389,15 @@ const NuevaVacante = () => {
     let nuevosErrores = {};
     let nuevosSumErrors = { encajePerfil: false, competencias: false };
 
-    // Validar campos
+    // Validar campos estáticos
     Object.keys(formData).forEach((key) => {
       if (formData[key].trim() === "") {
         valid = false;
         nuevosErrores[key] = true;
+        toast.error(`El campo "${key}" es requerido.`, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     });
 
@@ -413,7 +405,10 @@ const NuevaVacante = () => {
     if (!selectedPerfil) {
       valid = false;
       nuevosErrores.perfilDescriptivo = true;
-      alert("Por favor, selecciona un Perfil Descriptivo.");
+      toast.error("Por favor, selecciona un Perfil Descriptivo.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
 
     // Validar beneficios
@@ -421,67 +416,67 @@ const NuevaVacante = () => {
       if (b.texto.trim() === "") {
         valid = false;
         nuevosErrores[`beneficios_${i}_texto`] = true;
+        toast.error(`El beneficio ${i + 1} es requerido.`, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     });
 
     // Validar campos dinámicos
     const validarCamposDinamicos = (campos, tipo) => {
       campos.forEach((c, i) => {
-        if (tipo !== "tiempoExperienciaCargo") {
-          if (c.nombre && c.nombre.trim() === "") {
-            valid = false;
-            nuevosErrores[`${tipo}_${i}_nombre`] = true;
-          }
-          if (
-            c.porcentaje === "" ||
-            isNaN(c.porcentaje) ||
-            Number(c.porcentaje) < 0 ||
-            Number(c.porcentaje) > 100
-          ) {
-            valid = false;
-            nuevosErrores[`${tipo}_${i}_porcentaje`] = true;
-          }
-        } else {
-          // Para tiempoExperienciaCargo, solo validamos que no esté vacío
-          // y que sea >= 0 (igual a la idea).
-          if (c.nombre && c.nombre.trim() === "") {
-            valid = false;
-            nuevosErrores[`${tipo}_${i}_nombre`] = true;
-          }
-          if (
-            c.porcentaje === "" ||
-            isNaN(c.porcentaje) ||
-            Number(c.porcentaje) < 0
-          ) {
-            valid = false;
-            nuevosErrores[`${tipo}_${i}_porcentaje`] = true;
-          }
+        if (c.nombre && c.nombre.trim() === "") {
+          valid = false;
+          nuevosErrores[`${tipo}_${i}_nombre`] = true;
+          toast.error(`El campo "${tipo} - Nombre" en el ítem ${i + 1} es requerido.`, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        }
+        if (
+          c.porcentaje === "" ||
+          isNaN(c.porcentaje) ||
+          Number(c.porcentaje) < 0 ||
+          Number(c.porcentaje) > 100
+        ) {
+          valid = false;
+          nuevosErrores[`${tipo}_${i}_porcentaje`] = true;
+          toast.error(`El campo "${tipo} - Porcentaje" en el ítem ${i + 1} debe ser un número entre 0 y 100.`, {
+            position: "top-right",
+            autoClose: 3000,
+          });
         }
       });
     };
 
-    validarCamposDinamicos(formacionAcademica, "formacionAcademica");
-    validarCamposDinamicos(certificacionesCargo, "certificacionesCargo");
-    validarCamposDinamicos(competenciasCargo, "competenciasCargo");
-    validarCamposDinamicos(tiempoExperienciaCargo, "tiempoExperienciaCargo");
+    validarCamposDinamicos(formacionAcademica, "Formación Académica");
+    validarCamposDinamicos(certificacionesCargo, "Certificaciones");
+    validarCamposDinamicos(competenciasCargo, "Competencias");
+    validarCamposDinamicos(experienciaCargo, "Experiencia");
 
     // Validar sumas
-    if (sumEncajePerfil !== 100) {
+    if (sumEncajePerfil > 100) {
       valid = false;
       nuevosSumErrors.encajePerfil = true;
-      alert("La suma de los porcentajes en 'Análisis de Encaje de Perfil' debe ser 100.");
+      toast.error("La suma de los porcentajes en 'Análisis de Encaje de Perfil' no debe exceder 100%.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
     if (sumCompetencias !== 100) {
       valid = false;
       nuevosSumErrors.competencias = true;
-      alert("La suma de los porcentajes en 'Competencias' debe ser 100.");
+      toast.error("La suma de los porcentajes en 'Competencias' debe ser exactamente 100%.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
 
     setErrors(nuevosErrores);
     setSumErrors(nuevosSumErrors);
 
     if (!valid) {
-      alert("Corrige los errores antes de enviar el formulario.");
       return;
     }
 
@@ -493,7 +488,7 @@ const NuevaVacante = () => {
       requirements_percentages:
         construirPorcentajes(formacionAcademica) +
         ", " +
-        construirPorcentajes(tiempoExperienciaCargo) +
+        construirPorcentajes(experienciaCargo) +
         ", " +
         construirPorcentajes(certificacionesCargo),
       competencies_percentages: construirPorcentajes(competenciasCargo),
@@ -505,7 +500,7 @@ const NuevaVacante = () => {
       benefits: beneficios.map((x) => x.texto).join(", "),
     };
 
-    const token = session.user.data.token
+    const token = session.user.data.token;
     const authorization = "7zXnBjF5PBl7EzG/WhATQw==";
 
     try {
@@ -527,7 +522,10 @@ const NuevaVacante = () => {
 
       const resData = await response.json();
       console.log("Respuesta del servidor:", resData);
-      alert("Vacante creada exitosamente.");
+      toast.success("Vacante creada exitosamente.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
 
       // Reset
       setFormData({
@@ -544,50 +542,52 @@ const NuevaVacante = () => {
       });
       setBeneficios([{ id: Date.now(), texto: "" }]);
       setFormacionAcademica([]);
-      setTiempoExperienciaCargo([]);
+      setExperienciaCargo([]);
       setCertificacionesCargo([]);
       setCompetenciasCargo([]);
       setSumEncajePerfil(0);
       setSumCompetencias(0);
-      setSumTiempoExperiencia(0);
       setCompletado(0);
       setSelectedPerfil(null);
       setPerfiles([]);
     } catch (error) {
       console.error("Error al enviar el formulario:", error);
-      alert(`Hubo un problema al crear la vacante: ${error.message}`);
+      toast.error(`Hubo un problema al crear la vacante: ${error.message}`, {
+        position: "top-right",
+        autoClose: 5000,
+      });
     }
   };
 
   // Al montar, obtener departamentos
   useEffect(() => {
     const fetchDepartamentos = async () => {
-        if (session){
-            const url = "http://51.222.110.107:5000/departments/list";
-            const token = session.user.data.token
-            const authorization = "7zXnBjF5PBl7EzG/WhATQw==";
-      
-            try {
-              const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                  Token: token,
-                  Authorization: authorization,
-                },
-              });
-              if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
-              }
-              const data = await response.json();
-              setDepartamentos(data.departments);
-              setLoadingDepartamentos(false);
-            } catch (error) {
-              console.error("Error al obtener departamentos:", error);
-              setErrorDepartamentos(error.message);
-              setLoadingDepartamentos(false);
-            }
+      if (session) {
+        const url = "http://51.222.110.107:5000/departments/list";
+        const token = session.user.data.token;
+        const authorization = "7zXnBjF5PBl7EzG/WhATQw==";
+
+        try {
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Token: token,
+              Authorization: authorization,
+            },
+          });
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+          }
+          const data = await response.json();
+          setDepartamentos(data.departments);
+          setLoadingDepartamentos(false);
+        } catch (error) {
+          console.error("Error al obtener departamentos:", error);
+          setErrorDepartamentos(error.message);
+          setLoadingDepartamentos(false);
         }
+      }
     };
 
     fetchDepartamentos();
@@ -595,6 +595,9 @@ const NuevaVacante = () => {
 
   return (
     <div style={styles.container}>
+      {/* Contenedor de Notificaciones */}
+      <ToastContainer />
+
       {/* Encabezado */}
       <header style={styles.header}>
         <h1 style={styles.headerTitle}>Gestión de Vacantes</h1>
@@ -640,6 +643,9 @@ const NuevaVacante = () => {
                       ))
                     )}
                   </select>
+                  {errors.departamento && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
 
                 {/* Perfil Descriptivo (Cargo) */}
@@ -679,6 +685,9 @@ const NuevaVacante = () => {
                   ) : (
                     <p>Seleccione un departamento primero.</p>
                   )}
+                  {errors.perfilDescriptivo && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -704,6 +713,9 @@ const NuevaVacante = () => {
                     }}
                     required
                   />
+                  {errors.nombreVacante && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
 
                 {/* Número Vacantes */}
@@ -724,6 +736,9 @@ const NuevaVacante = () => {
                     min="1"
                     required
                   />
+                  {errors.numeroVacantes && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
 
                 {/* Solicitado Por */}
@@ -743,6 +758,9 @@ const NuevaVacante = () => {
                     }}
                     required
                   />
+                  {errors.solicitadoPor && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
 
                 {/* Aprobado Por */}
@@ -762,6 +780,9 @@ const NuevaVacante = () => {
                     }}
                     required
                   />
+                  {errors.aprobadoPor && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
 
                 {/* Tipo */}
@@ -782,6 +803,9 @@ const NuevaVacante = () => {
                     placeholder="Tiempo Completo, Medio Tiempo, etc."
                     required
                   />
+                  {errors.tipo && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
 
                 {/* Modalidad */}
@@ -802,6 +826,9 @@ const NuevaVacante = () => {
                     placeholder="Presencial, Remoto, etc."
                     required
                   />
+                  {errors.modalidadTrabajo && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
 
                 {/* Nivel Experiencia */}
@@ -822,6 +849,9 @@ const NuevaVacante = () => {
                     placeholder="Ej. 3 años"
                     required
                   />
+                  {errors.nivelExperiencia && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
 
                 {/* Fecha Fin */}
@@ -841,6 +871,9 @@ const NuevaVacante = () => {
                     }}
                     required
                   />
+                  {errors.fechaFin && (
+                    <span style={styles.errorText}>Este campo es requerido.</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -863,6 +896,9 @@ const NuevaVacante = () => {
                   }}
                   required
                 />
+                {errors.descripcion && (
+                  <span style={styles.errorText}>Este campo es requerido.</span>
+                )}
               </div>
 
               {/* Beneficios */}
@@ -875,6 +911,7 @@ const NuevaVacante = () => {
                       display: "flex",
                       alignItems: "center",
                       marginBottom: "10px",
+                      flexWrap: "wrap",
                     }}
                   >
                     <input
@@ -892,6 +929,11 @@ const NuevaVacante = () => {
                       placeholder={`Beneficio ${i + 1}`}
                       required
                     />
+                    {errors[`beneficios_${i}_texto`] && (
+                      <span style={styles.errorText}>
+                        Este campo es requerido.
+                      </span>
+                    )}
                     {beneficios.length > 1 && (
                       <button
                         type="button"
@@ -937,7 +979,7 @@ const NuevaVacante = () => {
                       }
                       style={{
                         ...styles.dynamicInput,
-                        ...(errors[`formacionAcademica_${index}_nombre`]
+                        ...(errors[`Formación Académica_${index}_nombre`]
                           ? styles.dynamicInputError
                           : {}),
                       }}
@@ -953,7 +995,7 @@ const NuevaVacante = () => {
                       }
                       style={{
                         ...styles.dynamicInput,
-                        ...(errors[`formacionAcademica_${index}_porcentaje`]
+                        ...(errors[`Formación Académica_${index}_porcentaje`]
                           ? styles.dynamicInputError
                           : {}),
                       }}
@@ -961,6 +1003,16 @@ const NuevaVacante = () => {
                       max="100"
                       required
                     />
+                    {errors[`Formación Académica_${index}_nombre`] && (
+                      <span style={styles.errorText}>
+                        Este campo es requerido.
+                      </span>
+                    )}
+                    {errors[`Formación Académica_${index}_porcentaje`] && (
+                      <span style={styles.errorText}>
+                        Debe ser un número entre 0 y 100.
+                      </span>
+                    )}
                     {formacionAcademica.length > 1 && (
                       <button
                         type="button"
@@ -983,12 +1035,12 @@ const NuevaVacante = () => {
                 </button>
               </div>
 
-              {/* Tiempo de Experiencia */}
+              {/* Experiencia */}
               <div style={styles.dynamicSection}>
                 <h4 style={{ color: "#2b6cb0", marginBottom: "10px" }}>
-                  Tiempo de Experiencia en el Cargo
+                  Experiencia
                 </h4>
-                {tiempoExperienciaCargo.map((campo, index) => (
+                {experienciaCargo.map((campo, index) => (
                   <div key={index} style={styles.dynamicField}>
                     <input
                       type="text"
@@ -996,11 +1048,11 @@ const NuevaVacante = () => {
                       placeholder="Descripción de la Experiencia"
                       value={campo.nombre}
                       onChange={(e) =>
-                        handleDynamicChange(e, "tiempoExperienciaCargo", index)
+                        handleDynamicChange(e, "experienciaCargo", index)
                       }
                       style={{
                         ...styles.dynamicInput,
-                        ...(errors[`tiempoExperienciaCargo_${index}_nombre`]
+                        ...(errors[`Experiencia_${index}_nombre`]
                           ? styles.dynamicInputError
                           : {}),
                       }}
@@ -1009,28 +1061,37 @@ const NuevaVacante = () => {
                     <input
                       type="number"
                       name="porcentaje"
-                      placeholder="Años de Experiencia"
+                      placeholder="Porcentaje (%)"
                       value={campo.porcentaje}
                       onChange={(e) =>
-                        handleDynamicChange(e, "tiempoExperienciaCargo", index)
+                        handleDynamicChange(e, "experienciaCargo", index)
                       }
                       style={{
                         ...styles.dynamicInput,
-                        ...(errors[
-                          `tiempoExperienciaCargo_${index}_porcentaje`
-                        ]
+                        ...(errors[`Experiencia_${index}_porcentaje`]
                           ? styles.dynamicInputError
                           : {}),
                       }}
                       min="0"
+                      max="100"
                       required
                     />
-                    {tiempoExperienciaCargo.length > 1 && (
+                    {errors[`Experiencia_${index}_nombre`] && (
+                      <span style={styles.errorText}>
+                        Este campo es requerido.
+                      </span>
+                    )}
+                    {errors[`Experiencia_${index}_porcentaje`] && (
+                      <span style={styles.errorText}>
+                        Debe ser un número entre 0 y 100.
+                      </span>
+                    )}
+                    {experienciaCargo.length > 1 && (
                       <button
                         type="button"
                         style={styles.removeButton}
                         onClick={() =>
-                          eliminarCampo("tiempoExperienciaCargo", index)
+                          eliminarCampo("experienciaCargo", index)
                         }
                       >
                         Eliminar
@@ -1041,19 +1102,10 @@ const NuevaVacante = () => {
                 <button
                   type="button"
                   style={styles.addButton}
-                  onClick={() => agregarCampo("tiempoExperienciaCargo")}
+                  onClick={() => agregarCampo("experienciaCargo")}
                 >
                   Agregar Experiencia
                 </button>
-                <p
-                  style={{
-                    marginTop: "10px",
-                    color: "#38a169",
-                    fontWeight: "600",
-                  }}
-                >
-                  Suma Total de Experiencia: {sumTiempoExperiencia} años
-                </p>
               </div>
 
               {/* Certificaciones */}
@@ -1073,7 +1125,7 @@ const NuevaVacante = () => {
                       }
                       style={{
                         ...styles.dynamicInput,
-                        ...(errors[`certificacionesCargo_${index}_nombre`]
+                        ...(errors[`Certificaciones_${index}_nombre`]
                           ? styles.dynamicInputError
                           : {}),
                       }}
@@ -1089,7 +1141,7 @@ const NuevaVacante = () => {
                       }
                       style={{
                         ...styles.dynamicInput,
-                        ...(errors[`certificacionesCargo_${index}_porcentaje`]
+                        ...(errors[`Certificaciones_${index}_porcentaje`]
                           ? styles.dynamicInputError
                           : {}),
                       }}
@@ -1097,6 +1149,16 @@ const NuevaVacante = () => {
                       max="100"
                       required
                     />
+                    {errors[`Certificaciones_${index}_nombre`] && (
+                      <span style={styles.errorText}>
+                        Este campo es requerido.
+                      </span>
+                    )}
+                    {errors[`Certificaciones_${index}_porcentaje`] && (
+                      <span style={styles.errorText}>
+                        Debe ser un número entre 0 y 100.
+                      </span>
+                    )}
                     {certificacionesCargo.length > 1 && (
                       <button
                         type="button"
@@ -1136,7 +1198,7 @@ const NuevaVacante = () => {
                       }
                       style={{
                         ...styles.dynamicInput,
-                        ...(errors[`competenciasCargo_${index}_nombre`]
+                        ...(errors[`Competencias_${index}_nombre`]
                           ? styles.dynamicInputError
                           : {}),
                       }}
@@ -1152,7 +1214,7 @@ const NuevaVacante = () => {
                       }
                       style={{
                         ...styles.dynamicInput,
-                        ...(errors[`competenciasCargo_${index}_porcentaje`]
+                        ...(errors[`Competencias_${index}_porcentaje`]
                           ? styles.dynamicInputError
                           : {}),
                       }}
@@ -1160,6 +1222,16 @@ const NuevaVacante = () => {
                       max="100"
                       required
                     />
+                    {errors[`Competencias_${index}_nombre`] && (
+                      <span style={styles.errorText}>
+                        Este campo es requerido.
+                      </span>
+                    )}
+                    {errors[`Competencias_${index}_porcentaje`] && (
+                      <span style={styles.errorText}>
+                        Debe ser un número entre 0 y 100.
+                      </span>
+                    )}
                     {competenciasCargo.length > 1 && (
                       <button
                         type="button"
@@ -1189,6 +1261,19 @@ const NuevaVacante = () => {
                 >
                   Suma Total: {sumCompetencias}%{" "}
                   {sumCompetencias !== 100 && " (Debe ser exactamente 100%)"}
+                </p>
+              </div>
+
+              {/* Suma Total de Encaje de Perfil */}
+              <div style={styles.sumSection}>
+                <p
+                  style={{
+                    color: sumEncajePerfil <= 100 ? "#38a169" : "#e53e3e",
+                    fontWeight: "600",
+                  }}
+                >
+                  Suma Total de Encaje de Perfil: {sumEncajePerfil}%{" "}
+                  {sumEncajePerfil > 100 && " (No debe exceder 100%)"}
                 </p>
               </div>
             </div>
@@ -1380,6 +1465,7 @@ const styles = {
     gap: "10px",
     alignItems: "center",
     marginBottom: "10px",
+    flexWrap: "wrap",
   },
   dynamicInput: {
     flex: "1",
@@ -1411,6 +1497,15 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s ease",
     fontSize: "0.9em",
+  },
+  errorText: {
+    color: "#e53e3e",
+    fontSize: "0.8em",
+    marginTop: "5px",
+  },
+  sumSection: {
+    marginTop: "20px",
+    textAlign: "right",
   },
 };
 
