@@ -473,7 +473,7 @@ export default function CompetenciasPage() {
 
       // Llamada a tu endpoint en Flask
       const response = await axios.post(
-        'http://127.0.0.1:5001/cv-analyzer/procesar_cv', // Ajusta la URL/puerto a tu entorno
+        `http://51.222.110.107:5012/applicant/calculate_compentencies_gaps/${id}`, // Ajusta la URL/puerto a tu entorno
         {
           job_competencies,
           cv_text,
@@ -481,6 +481,7 @@ export default function CompetenciasPage() {
         {
           headers: {
             'Content-Type': 'application/json',
+            'Authorization':'7zXnBjF5PBl7EzG/WhATQw=='
           },
         }
       );
@@ -518,6 +519,7 @@ export default function CompetenciasPage() {
           setCompetenciesComment(response.data.summary.comentario);
         }
       }
+      window.location.reload();
     } catch (error) {
       console.error('Error al generar con IA:', error);
       setIaError(error);

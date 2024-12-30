@@ -790,19 +790,24 @@ const NuevaVacante = () => {
                   <label style={styles.label} htmlFor="tipo">
                     Tipo
                   </label>
-                  <input
-                    type="text"
+                  <select
                     name="tipo"
                     id="tipo"
                     value={formData.tipo}
                     onChange={handleStaticChange}
                     style={{
-                      ...styles.input,
+                      ...styles.select,
                       ...(errors.tipo ? styles.inputError : {}),
                     }}
-                    placeholder="Tiempo Completo, Medio Tiempo, etc."
                     required
-                  />
+                  >
+                    <option value="" disabled={formData.tipo !== ""}>
+                      Seleccione un tipo
+                    </option>
+                    <option value="Interno">Interno</option>
+                    <option value="Externo">Externo</option>
+                    <option value="Mixto">Mixto</option>
+                  </select>
                   {errors.tipo && (
                     <span style={styles.errorText}>Este campo es requerido.</span>
                   )}

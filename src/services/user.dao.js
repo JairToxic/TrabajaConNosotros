@@ -1,8 +1,8 @@
-export async function getAplicacionById(id) {
+export async function getUserInfoById(id) {
   
     try {
       const response = await fetch(
-        `${process.env.NEXT_CV_URL}/applicant/${id}`,
+        `${process.env.NEXT_PUBLIC_AUTH_BACKEND_URL}/users/${id}`,
         {
           method: "GET",
           headers: {
@@ -14,7 +14,7 @@ export async function getAplicacionById(id) {
   
       // Parsear la respuesta
       const data = await response.json();
-      console.log("Información del proceso por id:", data);
+      console.log("Información del usuario por token:", data);
   
       return data;
     } catch (error) {

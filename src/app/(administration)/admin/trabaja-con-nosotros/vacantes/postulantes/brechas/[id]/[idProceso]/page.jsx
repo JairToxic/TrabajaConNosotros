@@ -468,7 +468,7 @@ export default function RequisitosPage() {
       setRequirementsComment('');
 
       const response = await axios.post(
-        'http://localhost:5000/procesar_cv',
+        `http://51.222.110.107:5012/applicant/calculate_requirements_gaps/${id}`,
         { job_requirements, cv_text },
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -490,6 +490,7 @@ export default function RequisitosPage() {
         if (response.data.summary && typeof response.data.summary.comentario === 'string') {
           setRequirementsComment(response.data.summary.comentario);
         }
+        window.location.reload();
       }
     } catch (error) {
       console.error('Error al generar con IA:', error);

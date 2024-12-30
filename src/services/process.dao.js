@@ -1,8 +1,8 @@
-export async function getAplicacionById(id) {
+export async function getProcessById(id) {
   
     try {
       const response = await fetch(
-        `${process.env.NEXT_CV_URL}/applicant/${id}`,
+        `${process.env.NEXT_CV_URL}/process/${id}`,
         {
           method: "GET",
           headers: {

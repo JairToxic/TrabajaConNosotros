@@ -2,9 +2,13 @@
 'use client';
 import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { Dialog, Transition } from '@headlessui/react'; // Para modales y transiciones
 import { FaCheck, FaExclamationCircle, FaTrash, FaEye, FaPlus } from 'react-icons/fa';
+import {getUserInfoById} from '../../../../../../../../../services/user.dao.js'
+import { getPositionInfoById } from '../../../../../../../../../services/position.dao.js'
+import { getProcessById } from '../../../../../../../../../services/process.dao.js'
+import { useSession } from "next-auth/react";
 
 /**
  * Funciones auxiliares para parsear fechas y calcular experiencia.
@@ -123,11 +127,17 @@ function getAllDegrees(educacion) {
  */
 export default function AnalisisCompleto() {
   const { id, idProceso } = useParams();
+  const { data: session } = useSession();
+  const pathname = usePathname(); 
 
   // Estados para data (requisitos y competencias) y su carga
   const [data, setData] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
   const [errorData, setErrorData] = useState(null);
+  const [positionId, setPositionId]=useState(null)
+  const [positionName, setPositionName]=useState('')
+  const [departmentName, setDepartmentName]=useState('')
+  const [image, setImage]=useState('https://th.bing.com/th/id/OIP.LvkRLCqjbi4eEPoq9tblFwHaFl?rs=1&pid=ImgDetMain')
 
   // Estados para CV
   const [cvData, setCvData] = useState(null);
@@ -157,19 +167,30 @@ export default function AnalisisCompleto() {
   const [brechaFinal, setBrechaFinal] = useState(0);
   const [totalCandidato, setTotalCandidato] = useState(0);
 
+  //Datos usuario
+  const [userId, setUserId]=useState(null)
+  const [userName, setUserName]=useState(null)
+  const [errorUser, setErrorUser] = useState(null);
+
   /**
    * Fetch de datos: Requisitos y Competencias del Proceso
    */
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://51.222.110.107:5012/process/${idProceso}`, {
-          headers: {
-            Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
-            'Content-Type': 'application/json',
-          },
-        });
-        setData(response.data);
+        if (session){
+          const response = await axios.get(`http://51.222.110.107:5012/process/${idProceso}`, {
+            headers: {
+              Authorization: '7zXnBjF5PBl7EzG/WhATQw==',
+              'Content-Type': 'application/json',
+            },
+          });
+          setData(response.data);
+          setPositionName(response.data.position_name)
+          setPositionId(response.data.position_id)
+          const positionInfo = await getPositionInfoById(session, response.data.position_id)
+          setDepartmentName(positionInfo.position.department_name)
+        }
       } catch (err) {
         setErrorData(err);
       } finally {
@@ -177,7 +198,7 @@ export default function AnalisisCompleto() {
       }
     };
     fetchData();
-  }, [idProceso]);
+  }, [idProceso, session]);
 
   /**
    * Fetch del CV del Solicitante
@@ -192,6 +213,11 @@ export default function AnalisisCompleto() {
           },
         });
         setCvData(response.data);
+        setUserName(`${response.data.personalInfo.nombre} ${response.data.personalInfo.apellido}`);
+        const image = response.data.personalInfo.foto;
+        if (image !== null && image !== "") {
+          setImage(image);
+        }
       } catch (err) {
         setErrorCv(err);
       } finally {
@@ -215,7 +241,7 @@ export default function AnalisisCompleto() {
         });
         setApplicantData(response.data);
       } catch (err) {
-        setErrorApplicant(err);
+        setErrorUser(err);
       } finally {
         setLoadingApplicant(false);
       }
@@ -402,6 +428,58 @@ export default function AnalisisCompleto() {
           </div>
         </div>
       </header>
+
+      <div className="mx-auto px-6 mt-10 w-[90%]">
+        <div className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center border" style={{ borderColor: '#1e40af', width: '80%' }}>
+        <h2 className="text-2xl font-semibold text-blue-800 mb-4">Datos Candidato</h2>
+          
+          <div className="w-full">
+            {/* Upper Row */}
+            <div className="flex flex-col md:flex-row gap-4 mb-4">
+              <div className="flex-1 p-4" style={{ margin: '5px' }}>
+              <h2 className="text-3xl font-semibold text-[#1e40af] mb-4">{userName}</h2> 
+              </div>
+              <div className="flex-1 p-4" style={{ margin: '5px' }}>
+                <button
+                  onClick={() => window.location.href = `${pathname}/cv/${id}`}
+                  className="bg-blue-800 text-white px-6 py-2 rounded-[5px] font-semibold shadow-md hover:bg-blue-700 transition-colors duration-200 w-full text-center"
+                >
+                  Ver Currículum
+                </button>
+              </div>
+            </div>
+            
+            {/* Lower Row */}
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="w-full md:w-1/4 p-4">
+                <img src={image} alt="Candidate" className="w-full h-auto" />
+              </div>
+              
+              <div className="flex-1 p-4 flex flex-col justify-between">
+                {/* Departamento and Posición with split columns */}
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <p className="text-[#1e40af] text-xl font-medium">Departamento:</p>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-black text-xl font-medium">{departmentName}</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 mt-2">
+                  <div className="flex-1">
+                    <p className="text-[#1e40af] text-xl font-medium">Posición:</p>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-black text-xl font-medium">{positionName}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       {/* Contenido Principal */}
       <main className="flex-grow py-10">
