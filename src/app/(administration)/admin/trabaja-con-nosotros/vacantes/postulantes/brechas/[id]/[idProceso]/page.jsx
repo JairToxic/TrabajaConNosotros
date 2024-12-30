@@ -498,8 +498,8 @@ export default function RequisitosPage() {
         if (response.data.summary && typeof response.data.summary.comentario === 'string') {
           setRequirementsComment(response.data.summary.comentario);
         }
-        window.location.reload();
       }
+      window.location.reload();
     } catch (error) {
       console.error('Error al generar con IA:', error);
       setIaError(error);
